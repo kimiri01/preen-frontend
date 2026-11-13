@@ -1,0 +1,44 @@
+.stay {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.photo {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+}
+.photo > img {
+  width: 100%;
+  aspect-ratio: 1;
+}
+.favorite {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--paper);
+  color: var(--muted);
+}
+.stay h3 {
+  font-size: 20px;
+}
+.stay small {
+  font-size: 12px;
+}
+.stay p {
+  font-size: 19px;
+}
+@media (max-width: 640px) {
+  .stay h3 {
+    font-size: 18px;
+  }
+  .stay p {
+    font-size: 17px;
+  }
+}

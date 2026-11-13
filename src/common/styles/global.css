@@ -1,0 +1,183 @@
+:root {
+  --text: #30363d;
+  --muted: #7b828a;
+  --border: #e5e7eb;
+  --surface: #f5f6f7;
+  --paper: #fff;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--paper);
+  font-family: 'Gowun Dodum', sans-serif;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+button:hover {
+  opacity: 0.75;
+}
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  font-weight: 400;
+}
+img {
+  display: block;
+  max-width: 100%;
+  object-fit: cover;
+}
+small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.page {
+  max-width: 1440px;
+  margin: auto;
+}
+header {
+  min-height: 96px;
+  padding: 20px 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  border-bottom: 1px solid var(--border);
+}
+h1 {
+  font-family: Manrope, sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+}
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+header button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+.banner {
+  min-height: 56px;
+  padding: 12px 64px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.banner > img {
+  width: 36px;
+  height: 28px;
+  object-fit: contain;
+}
+.banner > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.banner span {
+  font-size: 16px;
+}
+main {
+  padding: 40px 64px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 54px;
+}
+footer {
+  padding: 0 64px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.footer-top {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+}
+.footer-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.footer-links strong {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 27px;
+  font-weight: 800;
+}
+.footer-links nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.company {
+  display: block;
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 30px;
+}
+.contact p {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.contact small {
+  font-size: 12px;
+}
+.copyright {
+  font-size: 11px;
+}
+@media (max-width: 1100px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-top {
+    flex-direction: column;
+  }
+}
+@media (max-width: 640px) {
+  header,
+  .banner {
+    padding: 20px;
+  }
+  .banner > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  header nav {
+    gap: 16px;
+  }
+  main {
+    padding: 32px 20px 40px;
+  }
+  h2 {
+    font-size: 23px;
+  }
+  footer {
+    padding: 0 20px 30px;
+  }
+}
