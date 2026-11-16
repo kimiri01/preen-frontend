@@ -1,4 +1,12 @@
-export function SearchSection() {
+import { CategoryBar } from '@/features/accommodation/public'
+import type { AccommodationFilter } from '@/features/accommodation/public'
+
+interface SearchSectionProps {
+  filter: AccommodationFilter
+  onChangeFilter: (filter: AccommodationFilter) => void
+}
+
+export function SearchSection({ filter, onChangeFilter }: SearchSectionProps) {
   return (
     <section className="search-section" aria-label="검색과 카테고리">
       <div className="search">
@@ -18,56 +26,7 @@ export function SearchSection() {
           검색하기
         </button>
       </div>
-      <nav className="categories" aria-label="숙박 유형">
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-1.png" alt="" />
-          </span>
-          전체 숙소
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-2.png" alt="" />
-          </span>
-          호텔·리조트
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-3.png" alt="" />
-          </span>
-          독채·풀빌라
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-4.png" alt="" />
-          </span>
-          한옥
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-5.png" alt="" />
-          </span>
-          감성 스테이
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-6.png" alt="" />
-          </span>
-          게스트하우스
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-7.png" alt="" />
-          </span>
-          이번 주말
-        </button>
-        <button type="button">
-          <span className="category-image">
-            <img src="/images/category-signature-8.png" alt="" />
-          </span>
-          지역으로 찾기
-        </button>
-      </nav>
+      <CategoryBar filter={filter} onChangeFilter={onChangeFilter} />
     </section>
   )
 }
