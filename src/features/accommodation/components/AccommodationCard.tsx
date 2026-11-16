@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Accommodation } from '@/features/accommodation/types'
 
 interface AccommodationCardProps {
@@ -11,10 +12,19 @@ export function AccommodationCard({
   isFavorite,
   onToggleFavorite,
 }: AccommodationCardProps) {
+  const roomPath = accommodation.roomAccommodationId
+    ? `/accommodations/${encodeURIComponent(accommodation.roomAccommodationId)}/rooms`
+    : null
   return (
     <article className="stay">
       <div className="photo">
-        <img src={accommodation.image} alt={`${accommodation.name} 전경`} />
+        {roomPath ? (
+          <Link to={roomPath} aria-label={`${accommodation.name} 객실 보기`}>
+            <img src={accommodation.image} alt={`${accommodation.name} 전경`} />
+          </Link>
+        ) : (
+          <img src={accommodation.image} alt={`${accommodation.name} 전경`} />
+        )}
         <button
           type="button"
           className="favorite"
@@ -37,9 +47,20 @@ export function AccommodationCard({
           </svg>
         </button>
       </div>
-      <h3>{accommodation.name}</h3>
+      <h3>
+        {roomPath ? (
+          <Link to={roomPath}>{accommodation.name}</Link>
+        ) : (
+          accommodation.name
+        )}
+      </h3>
       <small>{accommodation.location}</small>
       <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
+      {roomPath && (
+        <Link className="stay-room-link" to={roomPath}>
+          객실 보기 →
+        </Link>
+      )}
     </article>
   )
 }

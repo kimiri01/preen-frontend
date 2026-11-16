@@ -4,3 +4,24 @@ dist/
 .env
 .env.local
 .DS_Store
+
+# Local credentials and machine-specific files
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+application-local.yml
+application-local.yaml
+application-local.properties
+application.properties
+application.yml
+application.yaml
+application-*.properties
+application-*.yml
+application-*.yaml
+!application*.example.properties
+!application*.example.yml
+!application*.example.yaml

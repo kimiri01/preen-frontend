@@ -4,8 +4,9 @@ import type { Accommodation } from '@/features/accommodation/types'
 export const accommodations: Accommodation[] = [
   {
     id: 1,
-    name: '온유 스테이 제주',
-    location: '제주 애월',
+    roomAccommodationId: '900001',
+    name: '프린 스테이',
+    location: '객실 및 시설 안내',
     pricePerNight: 180000,
     image: '/images/generated.png',
   },
