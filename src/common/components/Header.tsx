@@ -1,7 +1,13 @@
+import { Link } from 'react-router-dom'
+
 export function Header() {
   return (
     <header>
-      <h1>PREEN</h1>
+      <h1>
+        <Link to="/" className="brand-link">
+          PREEN
+        </Link>
+      </h1>
       <nav aria-label="주 메뉴">
         <button type="button">
           <svg
@@ -102,7 +108,7 @@ export function Header() {
           </svg>
           로그인
         </button>
-        <button type="button">
+        <Link to="/signup">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -122,7 +128,7 @@ export function Header() {
             <line x1="22" x2="16" y1="11" y2="11"></line>
           </svg>
           회원가입
-        </button>
+        </Link>
       </nav>
     </header>
   )
