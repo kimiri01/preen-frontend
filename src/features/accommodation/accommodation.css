@@ -42,3 +42,36 @@
     font-size: 17px;
   }
 }
+
+/* 카테고리 바: 선택된 버튼 */
+.categories button[aria-pressed='true'] .category-image {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+/* "지역으로 찾기"를 눌렀을 때 카테고리 바 아래에 나오는 지역 버튼 */
+.region-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.region-filter button {
+  padding: 10px 22px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  font-size: 14px;
+}
+.region-filter button[aria-pressed='true'] {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--paper);
+}
+
+/* 숙소 목록: 로딩 · 오류 · 빈 결과 안내 */
+.stay-status {
+  padding: 48px 0;
+  text-align: center;
+  font-size: 15px;
+  color: var(--muted);
+}

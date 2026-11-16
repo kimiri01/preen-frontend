@@ -1,2 +1,6 @@
 export { AccommodationSection } from '@/features/accommodation/components/AccommodationSection'
-export type { Accommodation } from '@/features/accommodation/types'
+export { CategoryBar } from '@/features/accommodation/components/CategoryBar'
+export type {
+  Accommodation,
+  AccommodationFilter,
+} from '@/features/accommodation/types'
