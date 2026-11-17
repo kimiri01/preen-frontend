@@ -4,6 +4,7 @@ import type {
   Accommodation,
   AccommodationSummaryResponse,
   Category,
+  CategoryAccommodationsResponse,
   Region,
 } from '@/features/accommodation/types'
 
@@ -15,8 +16,16 @@ function toAccommodation(item: AccommodationSummaryResponse): Accommodation {
     location: item.address,
     pricePerNight: item.minNightlyPrice,
     image: item.thumbnailUrl ?? '',
+    regionName: item.regionName,
+    categoryName: item.categoryName,
   }
 }
+
+/** 카드 뷰에서 카테고리마다 보여 줄 숙소 수 */
+export const CARDS_PER_CATEGORY = 6
+
+/** 서버가 한 번에 돌려주는 최대 숙소 수 (기능명세서 COMMON-004: size 최대 50) */
+export const MAX_PAGE_SIZE = 50
 
 /** 숙박 유형 카테고리 목록 조회 */
 export async function fetchCategories(): Promise<Category[]> {
@@ -61,6 +70,24 @@ export async function fetchAccommodations({
     ...response.data,
     content: response.data.content.map(toAccommodation),
   }
+}
+
+/** "전체 숙소"용 카테고리 묶음 조회. 카테고리마다 숙소를 size개씩 한 번의 요청으로 받아옵니다. */
+export async function fetchAccommodationsByCategory(size: number): Promise<
+  Array<{
+    categoryCode: string
+    categoryName: string
+    accommodations: Accommodation[]
+  }>
+> {
+  const response = await http.get<
+    ApiResponse<CategoryAccommodationsResponse[]>
+  >(`/api/accommodations/by-category?size=${size}`)
+  return response.data.map((group) => ({
+    categoryCode: group.categoryCode,
+    categoryName: group.categoryName,
+    accommodations: group.accommodations.map(toAccommodation),
+  }))
 }
 
 /** 최근 본 숙소 조회. ids는 최근에 본 순서이며, 서버도 같은 순서로 돌려줍니다. */

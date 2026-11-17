@@ -1,5 +1,9 @@
 import '@/features/accommodation/accommodation.css'
 import { useRecentlyViewedAccommodations } from '@/features/accommodation/hooks/useRecentlyViewed'
+import {
+  getImageSrc,
+  handleImageError,
+} from '@/features/accommodation/utils/imageFallback'
 
 /**
  * 헤더의 "최근 본 숙소"를 눌렀을 때 펼쳐지는 목록입니다.
@@ -27,7 +31,11 @@ export function RecentlyViewedPanel() {
         <ul>
           {accommodations.map((accommodation) => (
             <li key={accommodation.id}>
-              <img src={accommodation.image} alt="" />
+              <img
+                src={getImageSrc(accommodation.image)}
+                alt=""
+                onError={handleImageError}
+              />
               <div>
                 <span>{accommodation.name}</span>
                 <small>{accommodation.location}</small>

@@ -1,4 +1,8 @@
 import type { Accommodation } from '@/features/accommodation/types'
+import {
+  getImageSrc,
+  handleImageError,
+} from '@/features/accommodation/utils/imageFallback'
 
 interface AccommodationCardProps {
   accommodation: Accommodation
@@ -8,6 +12,11 @@ interface AccommodationCardProps {
   onView: (id: number) => void
 }
 
+/**
+ * 숙소 카드 한 장 (기능명세서 STAY-001 "숙소 카드 표시")
+ * 대표 사진 · 숙소명 · 지역/주소 · 최저 1박 요금을 보여 줍니다.
+ * 사진이 없거나 깨지면 "이미지 업로드" 안내 이미지가 나옵니다.
+ */
 export function AccommodationCard({
   accommodation,
   isFavorite,
@@ -18,8 +27,10 @@ export function AccommodationCard({
     <article className="stay">
       <div className="photo">
         <img
-          src={accommodation.image}
+          src={getImageSrc(accommodation.image)}
           alt={`${accommodation.name} 전경`}
+          loading="lazy"
+          onError={handleImageError}
           onClick={() => onView(accommodation.id)}
         />
         <button
@@ -49,8 +60,15 @@ export function AccommodationCard({
           {accommodation.name}
         </button>
       </h3>
-      <small>{accommodation.location}</small>
-      <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
+      <small>
+        {accommodation.regionName
+          ? `${accommodation.regionName} · ${accommodation.location}`
+          : accommodation.location}
+      </small>
+      <p className="stay-price">
+        <strong>{accommodation.pricePerNight.toLocaleString('ko-KR')}원</strong>
+        <span> / 1박</span>
+      </p>
     </article>
   )
 }
