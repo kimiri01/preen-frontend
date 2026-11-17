@@ -27,6 +27,10 @@ export const CARDS_PER_CATEGORY = 6
 /** 서버가 한 번에 돌려주는 최대 숙소 수 (기능명세서 COMMON-004: size 최대 50) */
 export const MAX_PAGE_SIZE = 50
 
+
+export const SERVER_SUPPORTS_KEYWORD_AND_DATES = true
+
+
 /** 숙박 유형 카테고리 목록 조회 */
 export async function fetchCategories(): Promise<Category[]> {
   const response = await http.get<ApiResponse<Category[]>>('/api/categories')

@@ -4,6 +4,7 @@ import {
   CategoryMenuPanel,
   RecentlyViewedPanel,
 } from '@/features/accommodation/public'
+import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
 
 const router = createBrowserRouter([
@@ -20,6 +21,8 @@ const router = createBrowserRouter([
       />
     ),
     children: mainRoutes,
+    Component: Layout,
+    children: [...mainRoutes, ...accommodationRoutes],
   },
 ])
 

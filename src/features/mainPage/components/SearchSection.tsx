@@ -1,4 +1,8 @@
-import { CategoryBar } from '@/features/accommodation/public'
+import { useNavigate } from 'react-router-dom'
+import {
+  CategoryBar,
+  accommodationListPath,
+} from '@/features/accommodation/public'
 import type { AccommodationFilter } from '@/features/accommodation/public'
 
 interface SearchSectionProps {
@@ -7,6 +11,8 @@ interface SearchSectionProps {
 }
 
 export function SearchSection({ filter, onChangeFilter }: SearchSectionProps) {
+  const navigate = useNavigate()
+
   return (
     <section className="search-section" aria-label="검색과 카테고리">
       <div className="search">
@@ -22,7 +28,11 @@ export function SearchSection({ filter, onChangeFilter }: SearchSectionProps) {
           <small>인원 · 객실</small>
           <span>성인 2명 · 객실 1개</span>
         </button>
-        <button type="button" className="search-submit">
+        <button
+          type="button"
+          className="search-submit"
+          onClick={() => navigate(accommodationListPath())}
+        >
           검색하기
         </button>
       </div>
