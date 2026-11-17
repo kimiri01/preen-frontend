@@ -2,7 +2,8 @@ export interface Accommodation {
   id: number
   name: string
   location: string
-  pricePerNight: number
+  /** 판매 중인 객실이 없으면 서버가 null을 준다. */
+  pricePerNight: number | null
   image: string
 }
 
@@ -10,16 +11,18 @@ export interface Accommodation {
 export interface Category {
   id: number
   /** 프론트·백엔드가 약속한 고정 코드 (예: HOTEL) */
-  code: string
+  code: string | null
   name: string
 }
 
 /** 지역 (GET /api/regions 응답 항목) */
 export interface Region {
   id: number
+  parentId? : number | null
   /** 프론트·백엔드가 약속한 고정 코드 (예: SEOUL) */
-  code: string
+  code: string | null
   name: string
+  level: number
 }
 
 /** 숙소 목록 항목 (GET /api/accommodations 응답 항목) */
@@ -32,7 +35,7 @@ export interface AccommodationSummaryResponse {
   categoryId: number
   categoryName: string
   thumbnailUrl: string | null
-  minNightlyPrice: number
+  minNightlyPrice: number | null
 }
 
 /**
@@ -45,3 +48,38 @@ export type AccommodationFilter =
   | { type: 'all' }
   | { type: 'category'; categoryCode: string }
   | { type: 'region'; regionCode: string | null }
+
+
+
+  
+/** URL 쿼리 스트링이 유일한 상태다. page는 1부터. */
+export interface SearchConditions {
+  regionId?: number
+  categoryId?: number
+  keyword?: string
+  checkIn?: string
+  checkOut?: string
+  guestCount?: number
+  /** 타일로 들어온 탐색 화면. 서버로는 보내지 않는다. */
+  view?: SearchView
+  page: number
+}
+export interface SearchRequest {
+  categoryId?: number
+  regionId?: number
+  keyword?: string
+  guestCount?: number
+  checkIn?: string  // yyyy-MM-dd
+  checkOut?: string // yyyy-MM-dd
+  page: number      // 0부터
+  size: number
+}
+
+export type SearchView = 'weekend' | 'region'
+
+
+/** 찜 상태와 토글 핸들러. 카드와 상세는 props로 받는다. */
+export interface FavoriteBinding {
+  isFavorite: (accommodationId: number) => boolean
+  toggle: (accommodationId: number) => void
+}

@@ -39,7 +39,11 @@ export function AccommodationCard({
       </div>
       <h3>{accommodation.name}</h3>
       <small>{accommodation.location}</small>
-      <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
+      {accommodation.pricePerNight != null ? (
+        <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
+      ) : (
+        <p>가격 정보 없음</p>
+      )}
     </article>
   )
 }
