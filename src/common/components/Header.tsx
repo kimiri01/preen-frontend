@@ -1,4 +1,9 @@
+
+import { useNavigate } from 'react-router-dom'
+
 export function Header() {
+  const navigate = useNavigate()
+
   return (
     <header>
       <h1>PREEN</h1>
@@ -24,6 +29,7 @@ export function Header() {
           </svg>
           전체 카테고리
         </button>
+
         <button type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +50,7 @@ export function Header() {
           </svg>
           최근 본 숙소
         </button>
+
         <button type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -62,6 +69,7 @@ export function Header() {
           </svg>
           찜
         </button>
+
         <button type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -82,6 +90,7 @@ export function Header() {
           </svg>
           장바구니
         </button>
+
         <button type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +111,11 @@ export function Header() {
           </svg>
           로그인
         </button>
-        <button type="button">
+
+        <button
+          type="button"
+          onClick={() => navigate('/signup/verification')}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
