@@ -2,6 +2,7 @@ import '@/features/accommodation/accommodation.css'
 import { AccommodationCard } from '@/features/accommodation/components/AccommodationCard'
 import { useAccommodations } from '@/features/accommodation/hooks/useAccommodations'
 import { useFavorites } from '@/features/accommodation/hooks/useFavorites'
+import { addRecentlyViewed } from '@/features/accommodation/hooks/useRecentlyViewed'
 import type { AccommodationFilter } from '@/features/accommodation/types'
 
 interface AccommodationSectionProps {
@@ -35,6 +36,7 @@ export function AccommodationSection({ filter }: AccommodationSectionProps) {
               accommodation={accommodation}
               isFavorite={favorites.has(accommodation.id)}
               onToggleFavorite={toggleFavorite}
+              onView={addRecentlyViewed}
             />
           ))}
         </div>

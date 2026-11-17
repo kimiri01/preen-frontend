@@ -1,9 +1,64 @@
-export function Header() {
+import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
+
+/**
+ * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
+ * 내용은 각 Feature가 만들고 App에서 넣어 줍니다. (Common은 Feature를 import하지 않음)
+ */
+export interface HeaderMenuPanels {
+  /** "전체 카테고리"를 눌렀을 때 */
+  category?: ReactNode
+  /** "최근 본 숙소"를 눌렀을 때 */
+  recent?: ReactNode
+}
+
+type MenuKey = keyof HeaderMenuPanels
+
+interface HeaderProps {
+  menuPanels?: HeaderMenuPanels
+}
+
+const MENU_PANEL_ID = 'header-menu-panel'
+
+export function Header({ menuPanels = {} }: HeaderProps) {
+  // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
+  const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
+  const navRef = useRef<HTMLElement>(null)
+
+  // 메뉴가 열려 있는 동안: 메뉴 바깥을 누르거나 Esc 키를 누르면 닫습니다.
+  useEffect(() => {
+    if (openMenu === null) return
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) setOpenMenu(null)
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenMenu(null)
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [openMenu])
+
+  // 같은 버튼을 다시 누르면 닫고, 다른 버튼을 누르면 그 메뉴로 바꿉니다.
+  const toggleMenu = (menu: MenuKey) => {
+    setOpenMenu((current) => (current === menu ? null : menu))
+  }
+
+  const openPanel = openMenu === null ? null : menuPanels[openMenu]
+
   return (
     <header>
       <h1>PREEN</h1>
-      <nav aria-label="주 메뉴">
-        <button type="button">
+      <nav aria-label="주 메뉴" ref={navRef}>
+        <button
+          type="button"
+          aria-expanded={openMenu === 'category'}
+          aria-controls={MENU_PANEL_ID}
+          onClick={() => toggleMenu('category')}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -24,7 +79,12 @@ export function Header() {
           </svg>
           전체 카테고리
         </button>
-        <button type="button">
+        <button
+          type="button"
+          aria-expanded={openMenu === 'recent'}
+          aria-controls={MENU_PANEL_ID}
+          onClick={() => toggleMenu('recent')}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -123,6 +183,18 @@ export function Header() {
           </svg>
           회원가입
         </button>
+        {openPanel && (
+          <div
+            id={MENU_PANEL_ID}
+            className="header-menu-panel"
+            // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
+            }}
+          >
+            {openPanel}
+          </div>
+        )}
       </nav>
     </header>
   )

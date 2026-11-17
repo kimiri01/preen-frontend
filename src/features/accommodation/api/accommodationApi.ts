@@ -7,6 +7,17 @@ import type {
   Region,
 } from '@/features/accommodation/types'
 
+/** 서버 응답 항목 이름을 화면(숙소 카드)에서 쓰는 이름으로 바꿉니다. */
+function toAccommodation(item: AccommodationSummaryResponse): Accommodation {
+  return {
+    id: item.id,
+    name: item.name,
+    location: item.address,
+    pricePerNight: item.minNightlyPrice,
+    image: item.thumbnailUrl ?? '',
+  }
+}
+
 /** 숙박 유형 카테고리 목록 조회 */
 export async function fetchCategories(): Promise<Category[]> {
   const response = await http.get<ApiResponse<Category[]>>('/api/categories')
@@ -46,15 +57,18 @@ export async function fetchAccommodations({
     ApiResponse<PageResponse<AccommodationSummaryResponse>>
   >(`/api/accommodations?${params}`)
 
-  // 서버 응답 항목 이름을 화면(숙소 카드)에서 쓰는 이름으로 바꿉니다.
   return {
     ...response.data,
-    content: response.data.content.map((item) => ({
-      id: item.id,
-      name: item.name,
-      location: item.address,
-      pricePerNight: item.minNightlyPrice,
-      image: item.thumbnailUrl ?? '',
-    })),
+    content: response.data.content.map(toAccommodation),
   }
+}
+
+/** 최근 본 숙소 조회. ids는 최근에 본 순서이며, 서버도 같은 순서로 돌려줍니다. */
+export async function fetchRecentAccommodations(
+  ids: number[],
+): Promise<Accommodation[]> {
+  const response = await http.get<ApiResponse<AccommodationSummaryResponse[]>>(
+    `/api/accommodations/recent?ids=${ids.join(',')}`,
+  )
+  return response.data.map(toAccommodation)
 }

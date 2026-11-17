@@ -75,3 +75,80 @@
   font-size: 15px;
   color: var(--muted);
 }
+
+/* 숙소 카드: 사진·이름을 누르면 "최근 본 숙소"에 기록됩니다. */
+.photo > img {
+  cursor: pointer;
+}
+.stay h3 button {
+  text-align: left;
+}
+
+/* 헤더 "전체 카테고리" 메뉴 */
+.category-menu {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.category-menu strong,
+.recent-menu strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.category-menu ul,
+.recent-menu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.category-menu ul {
+  gap: 4px;
+}
+.category-menu a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: inherit;
+  text-decoration: none;
+}
+.category-menu a:hover,
+.category-menu a[aria-current='true'] {
+  background: var(--surface);
+}
+
+/* 헤더 "최근 본 숙소" 메뉴 */
+.recent-menu ul {
+  gap: 14px;
+  max-height: 360px;
+  overflow-y: auto;
+}
+.recent-menu li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.recent-menu li > img {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+.recent-menu li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  font-size: 15px;
+}
+.recent-menu small {
+  font-size: 12px;
+}
+.recent-menu p {
+  font-size: 14px;
+  color: var(--muted);
+}

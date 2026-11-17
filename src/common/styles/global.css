@@ -75,6 +75,26 @@ header button {
   gap: 8px;
   font-size: 13px;
 }
+/* 헤더 메뉴(전체 카테고리, 최근 본 숙소)를 눌렀을 때 버튼 아래에 펼쳐지는 패널 */
+header nav {
+  position: relative;
+}
+header button[aria-expanded='true'] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+.header-menu-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 0;
+  z-index: 20;
+  width: min(380px, calc(100vw - 40px));
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: 0 12px 32px #26332c1f;
+}
 .banner {
   min-height: 56px;
   padding: 12px 64px;

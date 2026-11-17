@@ -4,17 +4,24 @@ interface AccommodationCardProps {
   accommodation: Accommodation
   isFavorite: boolean
   onToggleFavorite: (id: number) => void
+  /** 숙소(사진 또는 이름)를 눌렀을 때 호출됩니다. "최근 본 숙소" 기록에 씁니다. */
+  onView: (id: number) => void
 }
 
 export function AccommodationCard({
   accommodation,
   isFavorite,
   onToggleFavorite,
+  onView,
 }: AccommodationCardProps) {
   return (
     <article className="stay">
       <div className="photo">
-        <img src={accommodation.image} alt={`${accommodation.name} 전경`} />
+        <img
+          src={accommodation.image}
+          alt={`${accommodation.name} 전경`}
+          onClick={() => onView(accommodation.id)}
+        />
         <button
           type="button"
           className="favorite"
@@ -37,7 +44,11 @@ export function AccommodationCard({
           </svg>
         </button>
       </div>
-      <h3>{accommodation.name}</h3>
+      <h3>
+        <button type="button" onClick={() => onView(accommodation.id)}>
+          {accommodation.name}
+        </button>
+      </h3>
       <small>{accommodation.location}</small>
       <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
     </article>
