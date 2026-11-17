@@ -66,16 +66,18 @@ export function AccommodationCard({
           : accommodation.location}
       </small>
       <p className="stay-price">
-        <strong>{accommodation.pricePerNight.toLocaleString('ko-KR')}원</strong>
-        <span> / 1박</span>
+        {accommodation.pricePerNight != null ? (
+          <>
+            <strong>
+              {accommodation.pricePerNight.toLocaleString('ko-KR')}원
+            </strong>
+            <span> / 1박</span>
+          </>
+        ) : (
+          // 서버가 아직 요금을 주지 않는 숙소(판매 중인 객실 없음)
+          <span>가격 정보 없음</span>
+        )}
       </p>
-      <h3>{accommodation.name}</h3>
-      <small>{accommodation.location}</small>
-      {accommodation.pricePerNight != null ? (
-        <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
-      ) : (
-        <p>가격 정보 없음</p>
-      )}
     </article>
   )
 }

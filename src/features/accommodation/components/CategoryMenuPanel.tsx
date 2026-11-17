@@ -1,30 +1,14 @@
 import { Link } from 'react-router-dom'
 import '@/features/accommodation/accommodation.css'
-import { categoryBarItems } from '@/features/accommodation/data/categoryBarItems'
-import { regionItems } from '@/features/accommodation/data/regionItems'
 import {
   getFilterSearch,
   useAccommodationFilter,
 } from '@/features/accommodation/hooks/useAccommodationFilter'
-import { useCategories } from '@/features/accommodation/hooks/useCategories'
-import { useRegions } from '@/features/accommodation/hooks/useRegions'
+import {
+  useCategoryMenuItems,
+  useRegionMenuItems,
+} from '@/features/accommodation/hooks/useCategoryOptions'
 import type { AccommodationFilter } from '@/features/accommodation/types'
-
-interface MenuItem {
-  code: string
-  label: string
-}
-
-// 서버 목록을 아직 못 받았거나 서버가 꺼져 있을 때 대신 보여 줄 고정 목록입니다.
-const fallbackCategories: MenuItem[] = categoryBarItems.flatMap((item) =>
-  item.kind === 'category'
-    ? [{ code: item.categoryCode, label: item.label }]
-    : [],
-)
-const fallbackRegions: MenuItem[] = regionItems.map((item) => ({
-  code: item.regionCode,
-  label: item.label,
-}))
 
 /** 메인 페이지에서 해당 조건으로 숙소 목록을 보여 주는 링크 주소 */
 function toMainPage(filter: AccommodationFilter) {
@@ -37,15 +21,9 @@ function toMainPage(filter: AccommodationFilter) {
  */
 export function CategoryMenuPanel() {
   const { filter } = useAccommodationFilter()
-  const { data: serverCategories } = useCategories()
-  const { data: serverRegions } = useRegions()
-
-  const categories: MenuItem[] =
-    serverCategories?.map((item) => ({ code: item.code, label: item.name })) ??
-    fallbackCategories
-  const regions: MenuItem[] =
-    serverRegions?.map((item) => ({ code: item.code, label: item.name })) ??
-    fallbackRegions
+  // 서버 목록 중 코드가 있는 항목만 (없으면 고정 목록). 팀원 데이터의 다른 카테고리·지역은 보이지 않습니다.
+  const categories = useCategoryMenuItems()
+  const regions = useRegionMenuItems()
 
   return (
     <div className="category-menu">

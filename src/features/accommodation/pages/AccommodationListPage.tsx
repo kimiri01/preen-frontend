@@ -2,7 +2,8 @@ import { Pagination } from '@/common/components/Pagination'
 import { AsyncView, EmptyState } from '@/common/components/StatusViews'
 import { SERVER_SUPPORTS_KEYWORD_AND_DATES } from '@/features/accommodation/api/accommodationApi'
 import { AccommodationRow } from '@/features/accommodation/components/AccommodationRow'
-import { CategoryTiles } from '@/features/accommodation/components/CategoryTiles'
+// [kny] 숙박 유형 타일은 메인 카테고리 바와 겹쳐서 숨김 (파일은 그대로 보관)
+// import { CategoryTiles } from '@/features/accommodation/components/CategoryTiles'
 import { SearchBar } from '@/features/accommodation/components/SearchBar'
 import { useFavoriteBinding } from '@/features/accommodation/favoriteBinding'
 import {
@@ -122,7 +123,8 @@ export function AccommodationListPage() {
         <p>{heading.description}</p>
       </div>
 
-      <CategoryTiles conditions={conditions} />
+      {/* [kny] 숨김: 메인 카테고리 바와 같은 역할이라 화면에서 뺌. 다시 쓰려면 주석 해제 */}
+      {/* <CategoryTiles conditions={conditions} /> */}
 
       {conditions.view === 'region' && (
         <section className="region-picker" aria-label="지역 선택">

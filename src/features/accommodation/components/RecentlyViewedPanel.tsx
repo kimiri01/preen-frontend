@@ -40,7 +40,9 @@ export function RecentlyViewedPanel() {
                 <span>{accommodation.name}</span>
                 <small>{accommodation.location}</small>
                 <span>
-                  ₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박
+                  {accommodation.pricePerNight != null
+                    ? `₩${accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박`
+                    : '가격 정보 없음'}
                 </span>
               </div>
             </li>

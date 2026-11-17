@@ -149,6 +149,10 @@
   font-size: 12px;
 }
 .recent-menu p {
+  font-size: 14px;
+  color: var(--muted);
+}
+
 /* ===== 숙소 목록 페이지 (/accommodations) ===== */
 
 /* 숙박 유형 타일: 목록에서는 <a>(Link)와 비활성 <button>이 섞여 있다 */
@@ -313,6 +317,9 @@
   }
   .stay-group-title {
     font-size: 19px;
+  }
+}
+
 /* 필터 + 결과 2단 레이아웃 */
 .list-layout {
   display: grid;

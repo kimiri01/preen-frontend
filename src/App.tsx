@@ -20,8 +20,6 @@ const router = createBrowserRouter([
         }}
       />
     ),
-    children: mainRoutes,
-    Component: Layout,
     children: [...mainRoutes, ...accommodationRoutes],
   },
 ])
