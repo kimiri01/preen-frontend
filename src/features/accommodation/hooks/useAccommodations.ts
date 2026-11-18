@@ -1,5 +1,9 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { fetchAccommodations } from '@/features/accommodation/api/accommodationApi'
+import {
+  CARDS_PER_CATEGORY,
+  fetchAccommodations,
+  MAX_PAGE_SIZE,
+} from '@/features/accommodation/api/accommodationApi'
 import { useCategories } from '@/features/accommodation/hooks/useCategories'
 import { useRegions } from '@/features/accommodation/hooks/useRegions'
 import type {
@@ -48,11 +52,14 @@ export function useAccommodations(
   }
 
   // 2) 숙소 조회. ID를 찾은 뒤에만 요청합니다.
-  //    조건(categoryId, regionId)이 Query Key에 있어, 조건이 바뀌면 자동으로 다시 조회합니다.
+  //    조건(categoryId, regionId, size)이 Query Key에 있어, 조건이 바뀌면 자동으로 다시 조회합니다.
+  //    카테고리는 6개만, 지역은 최대 50개까지 받아옵니다.
+  //    "전체 숙소"는 카테고리별 묶음(useAccommodationsByCategory)으로 보여 주므로 여기서는 요청하지 않습니다.
+  const size = filter.type === 'category' ? CARDS_PER_CATEGORY : MAX_PAGE_SIZE
   const accommodationsQuery = useQuery({
-    queryKey: ['accommodations', { categoryId, regionId }],
-    queryFn: () => fetchAccommodations({ categoryId, regionId }),
-    enabled: lookup === 'success' && !isCodeMissing,
+    queryKey: ['accommodations', { categoryId, regionId, size }],
+    queryFn: () => fetchAccommodations({ categoryId, regionId, size }),
+    enabled: filter.type !== 'all' && lookup === 'success' && !isCodeMissing,
     // 새 목록을 받아오는 동안 이전 목록을 유지해 화면 깜빡임을 줄입니다.
     placeholderData: keepPreviousData,
   })

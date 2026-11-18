@@ -18,6 +18,8 @@ npm run preview
 
 ```text
 public/images/                  기존 시안 이미지
+├── stays/                      숙소 카드 사진 36장 (카테고리별 6장, 출처는 아래 "이미지 출처 및 저작권")
+└── image-upload-placeholder.png  숙소 사진이 없거나 깨졌을 때 보여 주는 "이미지 업로드" 안내 이미지
 src/
 ├── common/
 │   ├── api/http.ts              공통 HTTP 클라이언트와 HttpError
@@ -29,6 +31,7 @@ src/
 │   │   ├── components/          숙소 카드 및 목록 섹션
 │   │   ├── data/                시안용 예시 숙소 데이터
 │   │   ├── hooks/               화면 내 찜 상태
+│   │   ├── utils/               사진 대체 이미지 처리 (imageFallback.ts)
 │   │   ├── public.ts            다른 Feature에 공개하는 진입점
 │   │   └── types.ts             숙소 타입
 │   └── mainPage/
@@ -66,3 +69,22 @@ TanStack Query Provider는 설정되어 있으며, 정적 예시 데이터에 �
 토큰 저장·갱신은 인증 API 계약 확정 후 공통 클라이언트에 통합해야 합니다.
 
 정적 호스팅에서 하위 경로를 추가한다면 SPA fallback을 `index.html`로 설정해야 합니다.
+
+## 이미지 출처 및 저작권
+
+숙소 카드 사진(`public/images/stays/` 폴더의 36장)은 **핀터레스트(Pinterest, https://www.pinterest.com)** 에서 내려받은 이미지입니다.
+
+- 이 사진들의 저작권은 각 원작자(사진 작가, 숙소, 원 게시자)에게 있습니다.
+- 이 프로젝트는 학원 교육용 팀 프로젝트이며, 사진은 화면 구성을 확인하기 위한 예시로만 사용합니다. 상업적으로 사용하지 않습니다.
+- 저작권자가 삭제를 요청하면 해당 사진을 바로 삭제하거나 교체합니다.
+- 실제 서비스로 운영할 때는 숙소(호스트)가 직접 등록한 사진이나 사용 허락을 받은 사진으로 교체해야 합니다.
+
+| 폴더                                         | 내용                        | 출처         |
+| -------------------------------------------- | --------------------------- | ------------ |
+| `public/images/stays/motel-1~6.jpg`          | 모텔 숙소 사진              | Pinterest    |
+| `public/images/stays/hotel-1~6.jpg`          | 호텔 숙소 사진              | Pinterest    |
+| `public/images/stays/private-house-1~6.jpg`  | 독채 숙소 사진              | Pinterest    |
+| `public/images/stays/pool-villa-1~6.jpg`     | 풀빌라 숙소 사진            | Pinterest    |
+| `public/images/stays/emotional-stay-1~6.jpg` | 감성스테이 숙소 사진        | Pinterest    |
+| `public/images/stays/guesthouse-1~6.jpg`     | 게스트하우스 숙소 사진      | Pinterest    |
+| `public/images/image-upload-placeholder.png` | "이미지 업로드" 안내 이미지 | 팀 자체 제작 |
