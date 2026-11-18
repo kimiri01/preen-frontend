@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
@@ -51,7 +52,17 @@ export function Header({ menuPanels = {} }: HeaderProps) {
 
   return (
     <header>
-      <h1>PREEN</h1>
+      {/* 로고를 누르면 첫 홈페이지(조건 없는 "/")로 이동합니다. 열린 메뉴도 닫습니다. */}
+      <h1>
+        <Link
+          to="/"
+          className="header-logo"
+          aria-label="PREEN 홈으로"
+          onClick={() => setOpenMenu(null)}
+        >
+          PREEN
+        </Link>
+      </h1>
       <nav aria-label="주 메뉴" ref={navRef}>
         <button
           type="button"
