@@ -83,3 +83,10 @@ export interface FavoriteBinding {
   isFavorite: (accommodationId: number) => boolean
   toggle: (accommodationId: number) => void
 }
+
+export interface RefundRule {
+  /** 체크인 N일 전까지 */
+  daysBefore: number
+  /** 0~1 */
+  refundRate: number
+}

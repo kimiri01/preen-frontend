@@ -1,0 +1,1 @@
+export { reservationRoutes } from '@/features/reservation/routes'
