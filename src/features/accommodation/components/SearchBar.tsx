@@ -1,6 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { addDays, todayKst } from '@/common/utils/date'
+import { regionItems } from '@/features/accommodation/data/regionItems'
+import type { SearchScope } from '@/features/accommodation/hooks/useFilterIds'
 import { useRegions } from '@/features/accommodation/hooks/useRegions'
 import { accommodationListPath } from '@/features/accommodation/hooks/useSearchConditions'
 import { regionOptions } from '@/features/accommodation/regionUtils'
@@ -15,10 +17,16 @@ interface SearchBarProps {
    * 없으면(홈) 오늘 1박·성인 2명으로 시작한다.
    */
   conditions?: Partial<SearchConditions>
+  /**
+   * [kny] 홈 전용. 카테고리 바에서 고른 탭(숙박 유형 또는 지역)의 ID.
+   * 검색할 때 함께 보내서 "고른 탭 안에서" 검색되게 한다.
+   * 입력칸에 지역을 직접 쓰면 그 지역이 탭의 지역보다 우선한다.
+   */
+  scope?: SearchScope
 }
 
 /** 홈과 목록이 함께 쓰는 지역·일정·인원 검색 */
-export function SearchBar({ conditions }: SearchBarProps) {
+export function SearchBar({ conditions, scope }: SearchBarProps) {
   const navigate = useNavigate()
   const regions = useRegions()
   const today = todayKst()
@@ -50,7 +58,12 @@ export function SearchBar({ conditions }: SearchBarProps) {
     event.preventDefault()
     // 입력이 지역 이름과 같으면 지역 조건, 아니면 숙소명 조건이다.
     const text = place.trim()
-    const region = options.find((option) => option.label === text)
+    // [kny] 카테고리 바와 같은 이름(예: 강원도, 제주도)으로 써도 지역으로 인식한다.
+    const fixedCode = regionItems.find((item) => item.label === text)?.regionCode
+    const fixedRegion = regions.data?.find((item) => item.code === fixedCode)
+    const region =
+      options.find((option) => option.label === text) ??
+      (fixedRegion ? { id: fixedRegion.id, label: text } : undefined)
     // 날짜를 바꾸면 더 이상 "이번 주말" 화면이 아니다.
     const keepView =
       conditions?.view === 'region' ||
@@ -60,8 +73,8 @@ export function SearchBar({ conditions }: SearchBarProps) {
     navigate(
       accommodationListPath({
         view: keepView ? conditions?.view : undefined,
-        categoryId: conditions?.categoryId,
-        regionId: region?.id,
+        categoryId: conditions?.categoryId ?? scope?.categoryId,
+        regionId: region?.id ?? (conditions ? undefined : scope?.regionId),
         keyword: region ? undefined : text || undefined,
         checkIn: checkIn || undefined,
         checkOut: (checkIn && checkOut) || undefined,

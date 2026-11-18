@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
@@ -23,6 +24,8 @@ const MENU_PANEL_ID = 'header-menu-panel'
 export function Header({ menuPanels = {} }: HeaderProps) {
   // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
+  // 패널을 누른 버튼 바로 아래에 맞추기 위한 왼쪽 위치(px, nav 기준)
+  const [panelLeft, setPanelLeft] = useState(0)
   const navRef = useRef<HTMLElement>(null)
 
   // 메뉴가 열려 있는 동안: 메뉴 바깥을 누르거나 Esc 키를 누르면 닫습니다.
@@ -43,7 +46,8 @@ export function Header({ menuPanels = {} }: HeaderProps) {
   }, [openMenu])
 
   // 같은 버튼을 다시 누르면 닫고, 다른 버튼을 누르면 그 메뉴로 바꿉니다.
-  const toggleMenu = (menu: MenuKey) => {
+  const toggleMenu = (menu: MenuKey, button: HTMLButtonElement) => {
+    setPanelLeft(button.offsetLeft)
     setOpenMenu((current) => (current === menu ? null : menu))
   }
 
@@ -51,13 +55,23 @@ export function Header({ menuPanels = {} }: HeaderProps) {
 
   return (
     <header>
-      <h1>PREEN</h1>
+      {/* 로고를 누르면 첫 홈페이지(조건 없는 "/")로 이동합니다. 열린 메뉴도 닫습니다. */}
+      <h1>
+        <Link
+          to="/"
+          className="header-logo"
+          aria-label="PREEN 홈으로"
+          onClick={() => setOpenMenu(null)}
+        >
+          PREEN
+        </Link>
+      </h1>
       <nav aria-label="주 메뉴" ref={navRef}>
         <button
           type="button"
           aria-expanded={openMenu === 'category'}
           aria-controls={MENU_PANEL_ID}
-          onClick={() => toggleMenu('category')}
+          onClick={(event) => toggleMenu('category', event.currentTarget)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -83,7 +97,7 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           type="button"
           aria-expanded={openMenu === 'recent'}
           aria-controls={MENU_PANEL_ID}
-          onClick={() => toggleMenu('recent')}
+          onClick={(event) => toggleMenu('recent', event.currentTarget)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +176,7 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           </svg>
           로그인
         </button>
-        <button type="button">
+        <Link to="/signup">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -182,11 +196,12 @@ export function Header({ menuPanels = {} }: HeaderProps) {
             <line x1="22" x2="16" y1="11" y2="11"></line>
           </svg>
           회원가입
-        </button>
+        </Link>
         {openPanel && (
           <div
             id={MENU_PANEL_ID}
             className="header-menu-panel"
+            style={{ left: panelLeft }}
             // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
             onClick={(event) => {
               if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
