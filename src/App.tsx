@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Layout } from '@/common/components/Layout'
 import {
@@ -7,12 +8,12 @@ import {
 import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
 import { authRoutes } from '@/features/auth/public'
+import { SignupVerificationPage } from '@/features/signup/pages/SignupVerificationPage'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    // 헤더(Common)는 Feature를 직접 import하지 않으므로,
-    // 헤더 메뉴에 펼쳐질 내용을 여기(App)에서 조합해 넣어 줍니다.
+    // 헤더 메뉴에 펼쳐질 내용은 App에서 조합합니다.
     element: (
       <Layout
         headerMenuPanels={{
@@ -21,7 +22,15 @@ const router = createBrowserRouter([
         }}
       />
     ),
-    children: [...mainRoutes, ...accommodationRoutes, ...authRoutes],
+    children: [
+      ...mainRoutes,
+      ...accommodationRoutes,
+      ...authRoutes,
+      {
+        path: 'signup/verification',
+        Component: SignupVerificationPage,
+      },
+    ],
   },
 ])
 
