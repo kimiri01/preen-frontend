@@ -1,7 +1,11 @@
 import { isIsoDate, nightsBetween } from '@/common/utils/date'
 import { addRecentlyViewed } from '@/features/accommodation/hooks/useRecentlyViewed'
 import { useEffect, useRef, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
+import {
+  accommodationListPath,
+  parseSearchConditions,
+} from '@/features/accommodation/hooks/useSearchConditions'
 import {
   MusicReviewSection,
   useMusicReviews,
@@ -64,7 +68,9 @@ export function RoomListPage() {
     const id = Number(accommodationId)
     if (query.data && Number.isSafeInteger(id) && id > 0) addRecentlyViewed(id)
   }, [accommodationId, query.data?.accommodationId])
+  const listPath = accommodationListPath(parseSearchConditions(searchParams))
   const [copyMessage, setCopyMessage] = useState('')
+  useEffect(() => setCopyMessage(''), [accommodationId])
   const list = useRef<HTMLElement>(null)
   let message = ''
   if (!isValidStayId(accommodationId)) message = '올바른 숙소 주소가 아닙니다.'
@@ -106,6 +112,9 @@ export function RoomListPage() {
   ]
   return (
     <main className="rooms-page stay-detail">
+      <Link className="room-list-back" to={listPath}>
+        ← 숙소 목록으로
+      </Link>
       {message ? (
         <section className="room-state" role="alert">
           <p>{message}</p>
@@ -213,7 +222,7 @@ export function RoomListPage() {
                   <img
                     key={photo}
                     src={photo}
-                    alt={`${stay.accommodationName} 객실 사진 ${index + 1}`}
+                    alt={`${stay.accommodationName} 숙소 사진 ${index + 1}`}
                     referrerPolicy="no-referrer"
                     onError={(event) => {
                       event.currentTarget.style.visibility = 'hidden'
@@ -280,6 +289,7 @@ export function RoomListPage() {
             </nav>
             {musicTab ? (
               <MusicReviewSection
+                key={accommodationId}
                 accommodationId={accommodationId}
                 onBack={() => changeTab(false)}
               />
@@ -295,7 +305,7 @@ export function RoomListPage() {
                       선택 일정 {schedule} · 기본 1박 요금 표시
                     </p>
                   )}
-                  <RoomListSection rooms={stay.rooms} />
+                  <RoomListSection key={accommodationId} rooms={stay.rooms} />
                 </section>
                 <section id="stay-intro" className="stay-info">
                   <h2>{stay.accommodationName}에서 머무는 시간</h2>
@@ -303,19 +313,11 @@ export function RoomListPage() {
                   <dl className="stay-overview-grid">
                     <div>
                       <dt>숙박 유형</dt>
-                      <dd>
-                        {[
-                          ...new Set(
-                            stay.rooms
-                              .map((room) => room.roomType)
-                              .filter(Boolean),
-                          ),
-                        ].join(' · ') || '안내 준비 중'}
-                      </dd>
+                      <dd>{stay.categoryName || '안내 준비 중'}</dd>
                     </div>
                     <div>
-                      <dt>객실 구성</dt>
-                      <dd>객실별 스펙 확인</dd>
+                      <dt>지역</dt>
+                      <dd>{stay.regionName || '안내 준비 중'}</dd>
                     </div>
                     <div>
                       <dt>기준 / 최대 인원</dt>

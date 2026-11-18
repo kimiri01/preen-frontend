@@ -34,6 +34,10 @@ export interface Room {
   images: RoomImage[]
 }
 export interface RoomList {
+  categoryCode: string
+  categoryName: string
+  regionCode: string
+  regionName: string
   images: RoomImage[]
   accommodationId: string
   description: string | null

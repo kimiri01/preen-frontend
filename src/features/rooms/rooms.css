@@ -1645,10 +1645,31 @@
   color: var(--muted);
 }
 
-:where(.stay-detail) .stay-gallery[data-count='1'] { grid-template-columns: 1fr; grid-template-rows: 290px; }
-:where(.stay-detail) .stay-gallery[data-count='1'] img { grid-row: auto; }
-:where(.stay-detail) .stay-gallery[data-count='2'] { grid-template-columns: 1fr 1fr; grid-template-rows: 290px; }
-:where(.stay-detail) .stay-gallery[data-count='2'] img:first-child { grid-row: auto; }
+:where(.stay-detail) .stay-gallery[data-count='1'] {
+  grid-template-columns: 1fr;
+  grid-template-rows: 290px;
+}
+:where(.stay-detail) .stay-gallery[data-count='1'] img {
+  grid-row: auto;
+}
+:where(.stay-detail) .stay-gallery[data-count='2'] {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 290px;
+}
+:where(.stay-detail) .stay-gallery[data-count='2'] img:first-child {
+  grid-row: auto;
+}
 @media (max-width: 640px) {
- :where(.stay-detail) .stay-gallery[data-count='1'], :where(.stay-detail) .stay-gallery[data-count='2'] { grid-template-rows: 200px; }
+  :where(.stay-detail) .stay-gallery[data-count='1'],
+  :where(.stay-detail) .stay-gallery[data-count='2'] {
+    grid-template-rows: 200px;
+  }
+}
+
+:where(.stay-detail) .room-list-back {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #486e63;
+  font-size: 13px;
+  text-decoration: none;
 }
