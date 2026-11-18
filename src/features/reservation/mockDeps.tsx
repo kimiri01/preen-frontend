@@ -144,7 +144,7 @@ const mockAvailability = (checkIn: string, checkOut: string): MockRoomAvailabili
   const nights = nightsBetween(checkIn, checkOut)
   return [
     {
-      roomId: 101,
+      roomId: 2,
       roomName: '오션뷰 스탠다드',
       capacity: 2,
       maxCapacity: 3,

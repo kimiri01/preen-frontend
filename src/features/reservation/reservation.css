@@ -271,3 +271,456 @@
     font-size: 26px;
   }
 }
+
+/* ===== 내 예약 & 예약 목록 공통 스타일 ===== */
+main.medium {
+  max-width: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 예약 상태 필터 탭 바 */
+.reservation-filter-tabs {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: 100%;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+  margin: 20px 0 24px 0;
+  padding: 0;
+}
+
+.reservation-tab-item {
+  background: none;
+  border: none;
+  padding: 12px 2px;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 400;
+  color: var(--muted, #7b828a);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.reservation-tab-item:hover {
+  color: var(--text, #30363d);
+}
+
+.reservation-tab-item.active {
+  color: var(--text, #30363d);
+  font-weight: 500;
+  border-bottom-color: var(--text, #30363d);
+}
+
+.plain-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.list-card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 24px;
+  background: var(--paper, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 10px;
+  gap: 26px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.list-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.list-card-thumb {
+  width: 140px;
+  height: 105px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--surface, #f5f6f7);
+}
+
+.list-card-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.list-card-info .list-card-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--text, #30363d);
+}
+
+.list-card-info small {
+  display: block;
+  font-size: 13.5px;
+  color: var(--muted, #7b828a);
+  line-height: 1.5;
+}
+
+.list-card-side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.list-card-side .list-card-price {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--text, #30363d);
+}
+
+/* 상태 뱃지 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  background: #f1f3f5;
+  color: #495057;
+}
+
+.badge-ok {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.badge-warn {
+  background: #fef7e0;
+  color: #b06000;
+}
+
+.badge-off {
+  background: #fce8e6;
+  color: #c5221f;
+}
+
+/* 버튼 및 액션 */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-small {
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--text, #30363d);
+  color: #fff;
+  border: 1px solid var(--text, #30363d);
+}
+
+.btn-primary:hover {
+  background: #1f2328;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .list-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .list-card-thumb {
+    width: 100%;
+    height: 180px;
+  }
+  .list-card-side {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border, #e5e7eb);
+    padding-top: 14px;
+  }
+}
+
+/* ===== 예약 상세 (Must 20) 시안 레이아웃 ===== */
+.reservation-detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.reservation-detail-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reservation-detail-header h2 {
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--text, #30363d);
+}
+
+.reservation-detail-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.reservation-detail-main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.detail-status-text {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.detail-accommodation-title {
+  font-size: 27px;
+  font-weight: 600;
+  color: var(--text, #30363d);
+}
+
+.detail-address {
+  font-size: 14px;
+  color: var(--muted, #7b828a);
+}
+
+.detail-divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--border, #e5e7eb);
+  border: none;
+  margin: 0;
+}
+
+.detail-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.detail-rows > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detail-rows span {
+  font-size: 14px;
+  color: var(--muted, #7b828a);
+}
+
+.detail-rows strong {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text, #30363d);
+  text-align: right;
+}
+
+.refund-section h4 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text, #30363d);
+}
+
+.refund-section p {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted, #7b828a);
+}
+
+.refund-highlight {
+  font-size: 15px !important;
+  color: var(--green, #4d7764) !important;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 1100px) {
+  .reservation-detail-body {
+    flex-direction: column;
+    gap: 32px;
+  }
+}
+
+/* ===== 이용 완료 (Must 21) 음악 리뷰 스타일 ===== */
+.music-review-box {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e5e7eb);
+  padding: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.music-review-box.reviewed {
+  background-color: #f3f7f4;
+  border: none;
+  gap: 16px;
+}
+
+.music-review-box h3 {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text, #30363d);
+  margin: 0;
+}
+
+.music-review-desc {
+  font-size: 15px;
+  line-height: 26px;
+  color: var(--muted, #7b828a);
+  margin: 0;
+}
+
+.music-track-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: #ffffff;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 8px;
+  padding: 14px 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.music-track-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background-color: #eff1f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4d7764;
+  flex-shrink: 0;
+}
+
+.music-track-info {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.music-track-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text, #30363d);
+  margin: 0;
+}
+
+.music-track-artist {
+  font-size: 13.5px;
+  color: var(--muted, #7b828a);
+  margin: 0;
+}
+
+.music-player-preview {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.music-play-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #30363d;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.music-progress-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.music-progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.music-progress-fill {
+  width: 30%;
+  height: 100%;
+  background-color: #4d7764;
+}
+
+.music-time-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted, #7b828a);
+}
+
+.star-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 18px;
+}
+
+.star-filled {
+  color: #b08a40;
+}
+
+.star-empty {
+  color: #b7bdb9;
+}
+
+.star-score-text {
+  font-size: 13.5px;
+  color: var(--muted, #7b828a);
+  margin-left: 6px;
+}
+
+

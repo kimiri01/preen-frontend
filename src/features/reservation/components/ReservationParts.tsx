@@ -7,6 +7,23 @@ import {
 import { nightsBetween } from '@/common/utils/date'
 import { isHoldExpired } from '@/features/reservation/hooks/useReservations'
 import type { PriceItem, Reservation } from '@/features/reservation/types'
+import { accommodations } from '@/features/accommodation/data/accommodations'
+import '@/features/reservation/reservation.css'
+
+const FALLBACK_IMAGES = [
+  '/images/generated.png',
+  '/images/generated-1.png',
+  '/images/generated-2.png',
+  '/images/generated-3.png',
+]
+
+export function getAccommodationImage(accommodationId?: number): string {
+  if (!accommodationId) return FALLBACK_IMAGES[0]
+  const matched = accommodations.find((a) => a.id === accommodationId)
+  if (matched?.image) return matched.image
+  const idx = Math.abs(accommodationId) % FALLBACK_IMAGES.length
+  return FALLBACK_IMAGES[idx]
+}
 
 const STATUS_LABELS = {
   PENDING: { label: '결제 대기', className: 'badge badge-warn' },
@@ -86,23 +103,33 @@ export function ReservationListItem({
   actions?: ReactNode
   showGuest?: boolean
 }) {
+  const imageUrl = getAccommodationImage(reservation.accommodationId)
+  const nights = nightsBetween(reservation.checkIn, reservation.checkOut)
+
   return (
     <li className="list-card">
-      <div>
-        <span>
+      <img
+        src={imageUrl}
+        alt={reservation.accommodationName}
+        className="list-card-thumb"
+      />
+      <div className="list-card-info">
+        <div>
           <ReservationStatusBadge reservation={reservation} />
-        </span>
-        <p>
+        </div>
+        <p className="list-card-title">
           {reservation.accommodationName} · {reservation.roomName}
         </p>
-        <small>{stayText(reservation)}</small>
-        <small>
-          예약번호 {reservation.reservationNo}
+        <small className="list-card-date">
+          {formatShortDate(reservation.checkIn)} — {formatShortDate(reservation.checkOut)} · {nights}박
+        </small>
+        <small className="list-card-meta">
+          성인 {reservation.guestCount}명 · 예약번호 {reservation.reservationNo}
           {showGuest && ` · 예약자 ${reservation.guestName}`}
         </small>
       </div>
-      <div>
-        <p>{formatPrice(reservation.totalPrice)}</p>
+      <div className="list-card-side">
+        <p className="list-card-price">{formatPrice(reservation.totalPrice)}</p>
         {actions && <div className="actions">{actions}</div>}
       </div>
     </li>
