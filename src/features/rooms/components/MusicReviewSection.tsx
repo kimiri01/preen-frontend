@@ -1,5 +1,6 @@
 import type { ApiResponse } from '@/common/types/api'
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { http, HttpError } from '@/common/api/http'
 import { isValidStayId } from '../hooks/useRooms'
@@ -51,9 +52,35 @@ export function MusicReviewSection({
   accommodationId: string
   onBack: () => void
 }) {
-  const [rating, setRating] = useState(0)
-  const [sort, setSort] = useState('latest')
-  const [page, setPage] = useState(0)
+  const [params, setParams] = useSearchParams()
+  const rawRating = params.get('rating') ?? ''
+  const rating = /^[1-5]$/.test(rawRating) ? Number(rawRating) : 0
+  const rawSort = params.get('reviewSort') ?? ''
+  const sort = ['rating-desc', 'rating-asc'].includes(rawSort)
+    ? rawSort
+    : 'latest'
+  const rawPage = params.get('reviewPage') ?? ''
+  const page =
+    /^\d{1,5}$/.test(rawPage) && Number(rawPage) <= 10000 ? Number(rawPage) : 0
+  const update = (patch: { rating?: number; sort?: string; page?: number }) => {
+    setParams((previous) => {
+      const next = new URLSearchParams(previous)
+      const nextRating = patch.rating ?? rating
+      const nextSort = patch.sort ?? sort
+      const nextPage = patch.page ?? 0
+      if (nextRating) next.set('rating', String(nextRating))
+      else next.delete('rating')
+      if (nextSort !== 'latest') next.set('reviewSort', nextSort)
+      else next.delete('reviewSort')
+      if (nextPage) next.set('reviewPage', String(nextPage))
+      else next.delete('reviewPage')
+      return next
+    })
+    setPlaying(null)
+  }
+  const setRating = (value: number) => update({ rating: value })
+  const setSort = (value: string) => update({ sort: value })
+  const setPage = (value: number) => update({ page: value })
   const [playing, setPlaying] = useState<string | null>(null)
   const query = useMusicReviews(accommodationId, rating, sort, page)
   const trackIds = [
@@ -89,6 +116,11 @@ export function MusicReviewSection({
         음악 리뷰 {query.data?.total ?? '—'}개 · 한 곡과 별점으로 남기는
         머무름입니다. 텍스트 리뷰는 작성하지 않습니다.
       </p>
+      <p className="music-filter-count" role="status" aria-live="polite">
+        {query.data
+          ? `전체 ${query.data.total}개 · ${rating ? `${rating}점` : '전체 별점'} 리뷰 ${query.data.filteredTotal}개`
+          : '리뷰 건수를 확인하고 있습니다.'}
+      </p>
       <div className="music-review-toolbar">
         <div
           className="music-rating-filter"
@@ -102,7 +134,6 @@ export function MusicReviewSection({
               aria-pressed={rating === value}
               onClick={() => {
                 setRating(value)
-                setPage(0)
                 setPlaying(null)
               }}
             >
@@ -116,7 +147,6 @@ export function MusicReviewSection({
             value={sort}
             onChange={(event) => {
               setSort(event.target.value)
-              setPage(0)
               setPlaying(null)
             }}
           >
@@ -236,16 +266,22 @@ export function MusicReviewSection({
             ) : (
               <div className="music-review-empty" role="status">
                 <p>
-                  {rating
-                    ? '해당 별점의 리뷰가 없습니다.'
-                    : '아직 등록된 음악 리뷰가 없습니다.'}
+                  {query.data.filteredTotal > 0
+                    ? '이 페이지에는 리뷰가 없습니다. 첫 페이지에서 확인해주세요.'
+                    : rating
+                      ? `아직 ${rating}점 리뷰가 없습니다.`
+                      : '아직 등록된 음악 리뷰가 없습니다.'}
                 </p>
+                {page > 0 && query.data.filteredTotal > 0 && (
+                  <button type="button" onClick={() => setPage(0)}>
+                    첫 페이지로
+                  </button>
+                )}
                 {rating > 0 && (
                   <button
                     type="button"
                     onClick={() => {
                       setRating(0)
-                      setPage(0)
                     }}
                   >
                     전체 리뷰 보기
