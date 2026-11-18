@@ -1757,3 +1757,103 @@
 :where(.stay-detail) .room-capacity-status[data-fits='false'] {
   color: #94583d;
 }
+
+:where(.stay-detail) .review-write-link {
+  display: inline-block;
+  color: #3f6a59;
+  margin-top: 12px;
+}
+:where(.stay-detail).review-write-page h1 {
+  margin: 10px 0 18px;
+  font-size: 28px;
+}
+:where(.stay-detail) .review-write-form {
+  margin: 28px 0;
+}
+:where(.stay-detail) .review-write-form fieldset {
+  min-width: 0;
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid #e1e6e3;
+  border-radius: 8px;
+}
+:where(.stay-detail) .review-write-form legend {
+  padding: 0 8px;
+  color: #34453e;
+  font-weight: 600;
+}
+:where(.stay-detail) .review-write-form label {
+  display: block;
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .review-write-form input[type='text'],
+:where(.stay-detail) .review-write-form select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0 14px;
+  border: 1px solid #dbe1de;
+  border-radius: 6px;
+  font-size: 14px;
+}
+:where(.stay-detail) .review-write-form button,
+:where(.stay-detail) .review-write-notice button {
+  padding: 10px 16px;
+  border: 1px solid #d6dfda;
+  border-radius: 6px;
+  background: #f4f7f5;
+  color: #355648;
+  cursor: pointer;
+}
+:where(.stay-detail) .review-write-stars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+:where(.stay-detail) .review-write-stars label {
+  padding: 10px 14px;
+  border: 1px solid #dce2df;
+  border-radius: 6px;
+  cursor: pointer;
+}
+:where(.stay-detail) .review-write-stars label[data-selected='true'] {
+  color: #996b20;
+  background: #fff8e9;
+}
+:where(.stay-detail) .review-write-stars input {
+  margin-right: 6px;
+  accent-color: #49705f;
+}
+:where(.stay-detail) .review-write-stars span {
+  margin-right: 5px;
+}
+:where(.stay-detail) .review-write-notice,
+:where(.stay-detail) .review-write-success {
+  margin: 20px 0;
+  padding: 18px;
+  border-radius: 8px;
+  background: #f0f6f2;
+  color: #3b5d4c;
+}
+:where(.stay-detail) .review-write-form p {
+  line-height: 1.7;
+  font-size: 13px;
+}
+:where(.stay-detail) .review-write-submit {
+  background: #30393b !important;
+  color: white !important;
+}
+:where(.stay-detail) .review-write-submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+:where(.stay-detail) .review-write-error {
+  color: #9a4f36;
+}
+:where(.stay-detail) .review-write-preview {
+  margin-top: 16px;
+}
+:where(.stay-detail) .review-write-preview iframe {
+  border: 0;
+  border-radius: 10px;
+}

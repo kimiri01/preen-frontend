@@ -1,6 +1,6 @@
 import type { ApiResponse } from '@/common/types/api'
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { http, HttpError } from '@/common/api/http'
 import { isValidStayId } from '../hooks/useRooms'
@@ -326,11 +326,17 @@ export function MusicReviewSection({
         )
       )}
       <aside className="music-review-guide">
-        <h3>나의 음악 리뷰는 예약 상세에서 등록해요.</h3>
+        <h3>나의 머무름도 음악으로 남겨보세요.</h3>
         <p>
           체크아웃 완료 후 이용한 예약에서 한 곡과 별점을 남길 수 있습니다. 리뷰
-          작성은 예약 상세 기능과 연결할 예정입니다.
+          작성은 로그인 사용자와 이용 완료 예약 확인 후 가능합니다.
         </p>
+        <Link
+          className="review-write-link"
+          to={`/accommodations/${encodeURIComponent(accommodationId)}/reviews/new?${params}`}
+        >
+          음악 리뷰 작성 →
+        </Link>
       </aside>
       <p className="music-review-hint">
         재생 범위는 Spotify 로그인 상태와 이용 조건에 따라 달라질 수 있습니다.
