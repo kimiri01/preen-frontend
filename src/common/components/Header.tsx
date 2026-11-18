@@ -24,6 +24,8 @@ const MENU_PANEL_ID = 'header-menu-panel'
 export function Header({ menuPanels = {} }: HeaderProps) {
   // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
+  // 패널을 누른 버튼 바로 아래에 맞추기 위한 왼쪽 위치(px, nav 기준)
+  const [panelLeft, setPanelLeft] = useState(0)
   const navRef = useRef<HTMLElement>(null)
 
   // 메뉴가 열려 있는 동안: 메뉴 바깥을 누르거나 Esc 키를 누르면 닫습니다.
@@ -44,7 +46,8 @@ export function Header({ menuPanels = {} }: HeaderProps) {
   }, [openMenu])
 
   // 같은 버튼을 다시 누르면 닫고, 다른 버튼을 누르면 그 메뉴로 바꿉니다.
-  const toggleMenu = (menu: MenuKey) => {
+  const toggleMenu = (menu: MenuKey, button: HTMLButtonElement) => {
+    setPanelLeft(button.offsetLeft)
     setOpenMenu((current) => (current === menu ? null : menu))
   }
 
@@ -68,7 +71,7 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           type="button"
           aria-expanded={openMenu === 'category'}
           aria-controls={MENU_PANEL_ID}
-          onClick={() => toggleMenu('category')}
+          onClick={(event) => toggleMenu('category', event.currentTarget)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +97,7 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           type="button"
           aria-expanded={openMenu === 'recent'}
           aria-controls={MENU_PANEL_ID}
-          onClick={() => toggleMenu('recent')}
+          onClick={(event) => toggleMenu('recent', event.currentTarget)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -195,7 +198,15 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           회원가입
         </Link>
         {openPanel && (
-          <div id={MENU_PANEL_ID}>
+          <div
+            id={MENU_PANEL_ID}
+            className="header-menu-panel"
+            style={{ left: panelLeft }}
+            // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
+            }}
+          >
             {openPanel}
           </div>
         )}
