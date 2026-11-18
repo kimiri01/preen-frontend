@@ -1,0 +1,66 @@
+
+.payment-page {
+  max-width: 480px;
+  margin: 60px auto;
+  padding: 24px;
+}
+
+.payment-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.payment-description {
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.payment-card {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.payment-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.payment-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.payment-label {
+  color: #666;
+}
+
+.payment-value {
+  font-weight: 600;
+  text-align: right;
+}
+
+.payment-timer-section {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.payment-timer {
+  font-size: 40px;
+  font-weight: 700;
+  color: #d9534f;
+  margin: 16px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.payment-timer.expired {
+  color: #777;
+}
+
+.payment-notice {
+  color: #666;
+  font-size: 14px;
+}
