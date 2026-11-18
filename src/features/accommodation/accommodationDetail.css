@@ -1,0 +1,128 @@
+/* [kny] 숙소 상세페이지. 다른 화면에 영향이 없도록 .stay-detail 아래로만 적용합니다. */
+.stay-detail {
+  padding: 32px 64px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.stay-detail .stay-detail-back {
+  margin-bottom: -16px;
+}
+
+/* 사진 */
+.stay-detail-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stay-detail-main-photo {
+  aspect-ratio: 16 / 7;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+}
+.stay-detail-main-photo img {
+  width: 100%;
+  height: 100%;
+}
+.stay-detail-thumbnails {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stay-detail-thumbnails button {
+  width: 112px;
+  height: 76px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+.stay-detail-thumbnails button[aria-pressed='true'] {
+  border-color: var(--text);
+}
+.stay-detail-thumbnails img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 유형/지역 · 이름 · 주소 */
+.stay-detail-summary {
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.stay-detail-summary h1 {
+  margin: 8px 0;
+  font-size: 32px;
+}
+.stay-detail-summary p {
+  margin: 0;
+}
+.stay-detail-badges {
+  display: flex;
+  gap: 8px;
+}
+.stay-detail-badges span {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 13px;
+}
+
+/* 숙소 소개 · 시설/서비스 공통 */
+.stay-detail-section h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+.stay-detail-section > p.muted {
+  margin: 0;
+}
+
+/* 숙소 소개: 강조 문구(회색 박스) + 본문 */
+.stay-detail-headline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: var(--surface);
+  font-weight: 700;
+}
+.stay-detail-headline span {
+  color: var(--muted);
+}
+.stay-detail-description p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+/* 시설/서비스: 체크 표시 2열 목록 */
+.stay-detail-amenities {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 32px;
+  max-width: 640px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stay-detail-amenities li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.stay-detail-amenities li::before {
+  content: '✓';
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .stay-detail {
+    padding: 24px 20px 64px;
+  }
+  .stay-detail-main-photo {
+    aspect-ratio: 4 / 3;
+  }
+}
