@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom'
 import {
   CategoryBar,
-  accommodationListPath,
+  SearchBar,
+  useFilterIds,
 } from '@/features/accommodation/public'
 import type { AccommodationFilter } from '@/features/accommodation/public'
 
@@ -11,31 +11,14 @@ interface SearchSectionProps {
 }
 
 export function SearchSection({ filter, onChangeFilter }: SearchSectionProps) {
-  const navigate = useNavigate()
+  // [kny] 고른 카테고리 탭(코드)을 서버 ID로 바꿔 검색 바에 넘깁니다.
+  // 예) "호텔" 탭에서 "제주" 검색 → 제주의 호텔만 검색
+  const scope = useFilterIds(filter)
 
   return (
     <section className="search-section" aria-label="검색과 카테고리">
-      <div className="search">
-        <button type="button" className="search-field">
-          <small>여행 지역</small>
-          <span>지역 또는 숙소명</span>
-        </button>
-        <button type="button" className="search-field">
-          <small>체크인 · 체크아웃</small>
-          <span>11.20 (금) — 11.21 (토)</span>
-        </button>
-        <button type="button" className="search-field">
-          <small>인원 · 객실</small>
-          <span>성인 2명 · 객실 1개</span>
-        </button>
-        <button
-          type="button"
-          className="search-submit"
-          onClick={() => navigate(accommodationListPath())}
-        >
-          검색하기
-        </button>
-      </div>
+      {/* 기존 버튼과 같은 모양(.search / .search-field / .search-submit)의 실제 검색 폼 */}
+      <SearchBar scope={scope} />
       <CategoryBar filter={filter} onChangeFilter={onChangeFilter} />
     </section>
   )

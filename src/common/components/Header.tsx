@@ -52,7 +52,17 @@ export function Header({ menuPanels = {} }: HeaderProps) {
 
   return (
     <header>
-      <h1>PREEN</h1>
+      {/* 로고를 누르면 첫 홈페이지(조건 없는 "/")로 이동합니다. 열린 메뉴도 닫습니다. */}
+      <h1>
+        <Link
+          to="/"
+          className="header-logo"
+          aria-label="PREEN 홈으로"
+          onClick={() => setOpenMenu(null)}
+        >
+          PREEN
+        </Link>
+      </h1>
       <nav aria-label="주 메뉴" ref={navRef}>
         <button
           type="button"
