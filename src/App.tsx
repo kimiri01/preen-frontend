@@ -5,6 +5,7 @@ import {
   RecentlyViewedPanel,
 } from '@/features/accommodation/public'
 import { accommodationRoutes } from '@/features/accommodation/public'
+import { roomRoutes } from '@/features/rooms/public'
 import { mainRoutes } from '@/features/mainPage/public'
 
 const router = createBrowserRouter([
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         }}
       />
     ),
-    children: [...mainRoutes, ...accommodationRoutes],
+    children: [...mainRoutes, ...accommodationRoutes, ...roomRoutes],
   },
 ])
 

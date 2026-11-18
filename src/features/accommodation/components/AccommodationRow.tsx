@@ -1,3 +1,4 @@
+import { addRecentlyViewed } from '../hooks/useRecentlyViewed'
 import { Link } from 'react-router-dom'
 import { formatPrice } from '@/common/utils/format'
 import { FALLBACK_IMAGE } from '@/features/accommodation/components/AccommodationSearchCard'
@@ -21,7 +22,12 @@ export function AccommodationRow({
   return (
     <li className="stay-row">
       <div className="photo stay-row-photo">
-        <Link to={to} tabIndex={-1} aria-hidden="true">
+        <Link
+          onClick={() => addRecentlyViewed(accommodation.id)}
+          to={to}
+          tabIndex={-1}
+          aria-hidden="true"
+        >
           <img
             loading="lazy"
             src={accommodation.thumbnailUrl ?? FALLBACK_IMAGE}
@@ -55,7 +61,9 @@ export function AccommodationRow({
           {accommodation.regionName} · {accommodation.categoryName}
         </small>
         <h3>
-          <Link to={to}>{accommodation.name}</Link>
+          <Link onClick={() => addRecentlyViewed(accommodation.id)} to={to}>
+            {accommodation.name}
+          </Link>
         </h3>
         <p>{accommodation.address}</p>
       </div>
@@ -65,7 +73,11 @@ export function AccommodationRow({
         ) : (
           <p className="muted">판매 중인 객실 없음</p>
         )}
-        <Link to={to} className="stay-row-button">
+        <Link
+          onClick={() => addRecentlyViewed(accommodation.id)}
+          to={to}
+          className="stay-row-button"
+        >
           객실 보기
         </Link>
       </div>

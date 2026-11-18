@@ -1,3 +1,4 @@
+import { addRecentlyViewed } from '../hooks/useRecentlyViewed'
 import { Link } from 'react-router-dom'
 import { formatPrice } from '@/common/utils/format'
 import type { AccommodationSummaryResponse } from '@/features/accommodation/types'
@@ -21,7 +22,12 @@ export function AccommodationSearchCard({
   return (
     <article className="stay">
       <div className="photo">
-        <Link to={to} tabIndex={-1} aria-hidden="true">
+        <Link
+          onClick={() => addRecentlyViewed(accommodation.id)}
+          to={to}
+          tabIndex={-1}
+          aria-hidden="true"
+        >
           <img
             loading="lazy"
             src={accommodation.thumbnailUrl ?? FALLBACK_IMAGE}
@@ -51,7 +57,9 @@ export function AccommodationSearchCard({
         </button>
       </div>
       <h3>
-        <Link to={to}>{accommodation.name}</Link>
+        <Link onClick={() => addRecentlyViewed(accommodation.id)} to={to}>
+          {accommodation.name}
+        </Link>
       </h3>
       <small>
         {accommodation.regionName} · {accommodation.categoryName}

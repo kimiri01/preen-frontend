@@ -1,0 +1,1654 @@
+.rooms-page.stay-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  gap: 32px;
+  color: #30363d;
+}
+:where(.stay-detail) .room-heading {
+  display: grid;
+  gap: 14px;
+  padding: 12px 0 32px;
+  border-bottom: 1px solid var(--border);
+}
+:where(.stay-detail) .room-heading > a {
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+:where(.stay-detail) .room-heading h1 {
+  font-family: inherit;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+:where(.stay-detail) .room-heading > p:last-child {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+:where(.stay-detail) .room-eyebrow {
+  font-family: Manrope, sans-serif;
+  letter-spacing: 2px;
+  font-size: 11px;
+  color: #53766b;
+}
+:where(.stay-detail) .rooms-section {
+  min-width: 0;
+}
+:where(.stay-detail) .room-section-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+:where(.stay-detail) .room-section-top h2 {
+  font-size: 23px;
+}
+:where(.stay-detail) .room-section-top p {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+:where(.stay-detail) .room-count {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+:where(.stay-detail) .room-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin: 24px 0 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-toolbar strong {
+  font-weight: 400;
+  color: var(--text);
+}
+:where(.stay-detail) .room-toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .room-toolbar select {
+  font: inherit;
+  border: 1px solid var(--border);
+  padding: 9px 10px;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--text);
+}
+:where(.stay-detail) .room-list {
+  display: grid;
+  gap: 16px;
+}
+:where(.stay-detail) .room-card {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 180px;
+  align-items: start;
+  gap: 24px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 18px;
+  background: var(--paper);
+}
+:where(.stay-detail) .room-photo {
+  position: relative;
+  min-width: 0;
+}
+:where(.stay-detail) .room-photo-open {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+  border-radius: 4px;
+}
+:where(.stay-detail) .room-photo-open:hover {
+  opacity: 1;
+}
+:where(.stay-detail) .room-photo-open > img,
+:where(.stay-detail) .room-photo-empty {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+:where(.stay-detail) .room-photo-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  padding: 14px;
+  background: #f3f4f3;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+:where(.stay-detail) .room-photo-empty > span {
+  font-size: 27px;
+  color: #a0aca6;
+}
+:where(.stay-detail) .room-photo-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(35, 42, 41, 0.8);
+  color: white;
+  border-radius: 3px;
+  padding: 5px 7px;
+  font-size: 10px;
+}
+:where(.stay-detail) .room-photo-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+:where(.stay-detail) .room-photo-controls button {
+  border: 1px solid var(--border);
+  padding: 5px 9px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+:where(.stay-detail) .room-photo-controls button[aria-pressed='true'] {
+  border-color: #547568;
+  color: #547568;
+  background: #f1f6f3;
+}
+:where(.stay-detail) .room-details {
+  padding-top: 8px;
+  min-width: 0;
+}
+:where(.stay-detail) .room-details h3 {
+  font-size: 20px;
+  line-height: 1.5;
+  margin-top: 7px;
+  overflow-wrap: anywhere;
+}
+:where(.stay-detail) .room-capacity {
+  font-size: 13px;
+  color: #66766d;
+  margin-top: 13px;
+}
+:where(.stay-detail) .room-capacity > span {
+  margin: 0 6px;
+}
+:where(.stay-detail) .room-extra {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+:where(.stay-detail) .room-specs {
+  margin-top: 18px;
+  font-size: 12px;
+}
+:where(.stay-detail) .room-specs summary {
+  cursor: pointer;
+  list-style-position: inside;
+  color: #536a60;
+  padding: 5px 0;
+}
+:where(.stay-detail) .room-specs dl {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+:where(.stay-detail) .room-specs dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+:where(.stay-detail) .room-specs dt {
+  color: var(--muted);
+}
+:where(.stay-detail) .room-specs dd {
+  margin: 0;
+  text-align: right;
+}
+:where(.stay-detail) .room-specs > p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-pricing {
+  text-align: right;
+  padding-top: 14px;
+}
+:where(.stay-detail) .room-price-label {
+  font-size: 11px;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-price {
+  font-size: 25px;
+  margin-top: 7px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .room-price > span {
+  font-size: 15px;
+  margin-left: 3px;
+}
+:where(.stay-detail) .room-price-note {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 12px;
+}
+:where(.stay-detail) .room-notice {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: #f5f7f6;
+  border-radius: 4px;
+}
+:where(.stay-detail) .room-notice h3 {
+  font-size: 14px;
+}
+:where(.stay-detail) .room-notice ul {
+  padding-left: 17px;
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-state {
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--surface);
+  line-height: 1.8;
+}
+:where(.stay-detail) .room-state button {
+  border: 1px solid var(--border);
+  padding: 9px 18px;
+  background: white;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+:where(.stay-detail) .room-dialog {
+  width: min(900px, 92vw);
+  max-height: 90vh;
+  padding: 20px;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 18px 80px #0004;
+  color: var(--text);
+}
+:where(.stay-detail) .room-dialog::backdrop {
+  background: #101918b8;
+}
+:where(.stay-detail) .room-dialog-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+:where(.stay-detail) .room-dialog-heading h3 {
+  font-size: 18px;
+}
+:where(.stay-detail) .room-dialog-heading button {
+  font-size: 14px;
+  padding: 8px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .room-dialog-image img {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  background: #f3f4f3;
+}
+:where(.stay-detail) .room-dialog-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  margin-top: 16px;
+}
+:where(.stay-detail) .room-dialog-nav button {
+  border: 1px solid var(--border);
+  padding: 9px;
+  border-radius: 4px;
+}
+:where(.stay-detail) .room-dialog-nav span {
+  white-space: nowrap;
+}
+@media (max-width: 950px) {
+  :where(.stay-detail) .room-card {
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 18px;
+  }
+  :where(.stay-detail) .room-pricing {
+    grid-column: 2;
+    padding-top: 0;
+  }
+  :where(.stay-detail) .room-photo {
+    grid-row: span 2;
+  }
+  :where(.stay-detail) .room-photo-open > img,
+  :where(.stay-detail) .room-photo-empty {
+    height: 160px;
+  }
+  :where(.stay-detail) .room-price-note br {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .rooms-page.stay-detail {
+    gap: 24px;
+  }
+  :where(.stay-detail) .room-heading {
+    padding-bottom: 24px;
+  }
+  :where(.stay-detail) .room-heading h1 {
+    font-size: 26px;
+  }
+  :where(.stay-detail) .room-section-top h2 {
+    font-size: 20px;
+  }
+  :where(.stay-detail) .room-section-top {
+    align-items: start;
+  }
+  :where(.stay-detail) .room-toolbar {
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  :where(.stay-detail) .room-toolbar label {
+    align-self: flex-end;
+  }
+  :where(.stay-detail) .room-card {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 16px;
+  }
+  :where(.stay-detail) .room-photo {
+    grid-row: auto;
+  }
+  :where(.stay-detail) .room-photo-open > img,
+  :where(.stay-detail) .room-photo-empty {
+    height: 200px;
+  }
+  :where(.stay-detail) .room-details {
+    padding-top: 0;
+  }
+  :where(.stay-detail) .room-pricing {
+    grid-column: auto;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+  :where(.stay-detail) .room-price-note {
+    margin-top: 7px;
+  }
+  :where(.stay-detail) .room-notice {
+    padding: 18px;
+  }
+  :where(.stay-detail) .room-dialog {
+    padding: 14px;
+  }
+  :where(.stay-detail) .room-dialog-heading h3 {
+    font-size: 16px;
+  }
+}
+
+:where(.stay-detail) .room-type-area {
+  font-size: 12px;
+  color: #697d72;
+  margin-top: 9px;
+}
+:where(.stay-detail) .room-bed-summary {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.7;
+}
+:where(.stay-detail) .room-facility-tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 14px 0 0;
+}
+:where(.stay-detail) .room-facility-tags li {
+  font-size: 10px;
+  color: #597165;
+  padding: 5px 8px;
+  background: #f0f5f2;
+  border-radius: 3px;
+}
+:where(.stay-detail) .room-facility-detail {
+  border-top: 1px solid var(--border);
+  margin: 14px 0;
+  padding-top: 14px;
+}
+:where(.stay-detail) .room-facility-detail h4 {
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0 0 8px;
+}
+:where(.stay-detail) .room-facility-detail ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.7;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-specs dd {
+  overflow-wrap: anywhere;
+}
+:where(.stay-detail) .room-details {
+  padding-bottom: 8px;
+}
+
+:where(.stay-detail) .room-card-labels {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+:where(.stay-detail) .room-audio-badge {
+  font-size: 10px;
+  color: #4a6955;
+  background: #eaf2e9;
+  border: 1px solid #d9e6d7;
+  padding: 4px 7px;
+  border-radius: 3px;
+}
+:where(.stay-detail) .room-music-banner {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  margin-top: 24px;
+  padding: 26px 30px;
+  border-radius: 6px;
+  background: #263e36;
+  color: #f5f3ec;
+  overflow: hidden;
+}
+:where(.stay-detail) .room-music-eyebrow {
+  font-family: Manrope, sans-serif;
+  letter-spacing: 3px;
+  font-size: 10px;
+  color: #c2d4bd;
+}
+:where(.stay-detail) .room-music-banner h3 {
+  font-size: 22px;
+  margin: 10px 0 12px;
+  line-height: 1.5;
+}
+:where(.stay-detail) .room-music-banner p:not(.room-music-eyebrow) {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #d2ddd6;
+}
+:where(.stay-detail) .room-music-banner span:not(.room-vinyl span) {
+  display: inline-block;
+  margin-top: 14px;
+  color: #dbe9c7;
+  font-size: 11px;
+}
+:where(.stay-detail) .room-vinyl {
+  flex-shrink: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: repeating-radial-gradient(
+    circle,
+    #182720 0px,
+    #182720 3px,
+    #334e40 4px,
+    #182720 5px
+  );
+  box-shadow: 0 4px 18px #0003;
+}
+:where(.stay-detail) .room-vinyl span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #bec9a5;
+  color: #243c30;
+  font-size: 21px;
+}
+:where(.stay-detail) .room-audio-filter {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #4e665a;
+}
+:where(.stay-detail) .room-audio-filter label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+:where(.stay-detail) .room-audio-filter input {
+  accent-color: #4e665a;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+}
+:where(.stay-detail) .room-audio-filter span {
+  font-size: 11px;
+  background: #edf2ee;
+  border-radius: 10px;
+  padding: 2px 7px;
+}
+:where(.stay-detail) .room-audio-info {
+  margin-top: 14px;
+  border: 1px solid #dce6de;
+  border-radius: 4px;
+  background: #f7faf6;
+}
+:where(.stay-detail) .room-audio-info summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px;
+  font-size: 11px;
+  color: #45634b;
+}
+:where(.stay-detail) .room-audio-info summary::-webkit-details-marker {
+  display: none;
+}
+:where(.stay-detail) .room-audio-body {
+  padding: 0 12px 14px;
+  color: #59675d;
+}
+:where(.stay-detail) .room-audio-included {
+  font-size: 10px;
+  color: #527448;
+}
+:where(.stay-detail) .room-audio-body h4 {
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 10px 0;
+  font-weight: 400;
+}
+:where(.stay-detail) .room-audio-body dl {
+  margin: 12px 0;
+  font-size: 11px;
+  line-height: 1.8;
+}
+:where(.stay-detail) .room-audio-body dl > div {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+:where(.stay-detail) .room-audio-body dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+:where(.stay-detail) .room-audio-body > p:not(.room-audio-included) {
+  font-size: 11px;
+  line-height: 1.8;
+}
+:where(.stay-detail) .room-audio-body small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.8;
+  margin-top: 10px;
+  color: #7a867e;
+}
+@media (max-width: 600px) {
+  :where(.stay-detail) .room-music-banner {
+    padding: 22px 18px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  :where(.stay-detail) .room-music-banner h3 {
+    font-size: 18px;
+  }
+  :where(.stay-detail) .room-vinyl {
+    width: 54px;
+    height: 54px;
+    margin-top: 6px;
+  }
+  :where(.stay-detail) .room-vinyl span {
+    width: 24px;
+    height: 24px;
+    font-size: 15px;
+  }
+  :where(.stay-detail) .room-music-banner p:not(.room-music-eyebrow) {
+    font-size: 11px;
+  }
+  :where(.stay-detail) .room-audio-info summary {
+    flex-wrap: wrap;
+  }
+}
+
+:where(.stay-detail) .room-booking-status {
+  font-size: 11px;
+  color: #697e72;
+  margin-top: 10px;
+  line-height: 1.7;
+}
+:where(.stay-detail) .room-reserve-button {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 11px 16px;
+  background: #30363d;
+  color: #fff;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  font-size: 12px;
+}
+:where(.stay-detail) .room-reserve-button:disabled {
+  background: #f8f9f8;
+  border-color: #e0e5e1;
+  color: #7b8580;
+  cursor: not-allowed;
+}
+:where(.stay-detail) .room-reserve-button:disabled:hover {
+  opacity: 1;
+}
+:where(.stay-detail) .room-price > span {
+  font-size: 12px;
+}
+
+:where(.stay-detail) .room-spotify {
+  margin-top: 16px;
+  border: 1px solid #d9e6d9;
+  border-radius: 5px;
+  padding: 13px;
+  background: #f5faf5;
+}
+:where(.stay-detail) .room-spotify-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #274b36;
+  font-size: 12px;
+}
+:where(.stay-detail) .room-spotify-title > span:last-child {
+  font-family: Manrope, sans-serif;
+  color: #287344;
+  font-size: 10px;
+}
+:where(.stay-detail) .room-spotify > p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: #6a796e;
+  margin-top: 9px;
+}
+:where(.stay-detail) .room-spotify-open {
+  background: #244c35;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-top: 12px;
+}
+:where(.stay-detail) .room-spotify-embed {
+  margin-top: 12px;
+}
+:where(.stay-detail) .room-spotify iframe {
+  border: 0;
+  border-radius: 8px;
+  display: block;
+  width: 100%;
+}
+:where(.stay-detail) .room-spotify a {
+  display: inline-block;
+  font-size: 11px;
+  color: #355d43;
+  margin: 8px 0;
+  text-underline-offset: 3px;
+}
+:where(.stay-detail) .room-spotify form {
+  margin-top: 12px;
+}
+:where(.stay-detail) .room-spotify label {
+  display: block;
+  font-size: 10px;
+  color: #657b6c;
+  margin-bottom: 6px;
+}
+:where(.stay-detail) .room-spotify-input {
+  display: flex;
+  gap: 6px;
+}
+:where(.stay-detail) .room-spotify-input input {
+  width: 100%;
+  min-width: 0;
+  font: inherit;
+  font-size: 10px;
+  padding: 9px 7px;
+  border: 1px solid #dbe2db;
+  border-radius: 4px;
+  background: white;
+}
+:where(.stay-detail) .room-spotify-input button {
+  white-space: nowrap;
+  font-size: 10px;
+  border: 1px solid #b7cdbb;
+  border-radius: 4px;
+  padding: 7px;
+  color: #355d43;
+}
+:where(.stay-detail) .room-spotify > small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.8;
+  color: #7c897e;
+  margin-top: 12px;
+}
+:where(.stay-detail) .room-spotify-error {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #a54236;
+  margin-top: 7px;
+}
+
+/* Must 12: 숙소 상세 안에 객실 목록을 배치한다. */
+.stay-detail {
+  max-width: 1320px;
+  gap: 26px;
+  padding-top: 34px;
+}
+:where(.stay-detail) .stay-title {
+  display: grid;
+  gap: 20px;
+}
+:where(.stay-detail) .stay-kicker {
+  color: #8b9690;
+  font-size: 11px;
+}
+:where(.stay-detail) .stay-title > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: start;
+}
+:where(.stay-detail) .stay-title h1 {
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+:where(.stay-detail) .stay-title > div > p {
+  text-align: right;
+  font-size: 18px;
+}
+:where(.stay-detail) .stay-title small {
+  display: block;
+  margin-top: 8px;
+  font-size: 10px;
+}
+:where(.stay-detail) .stay-address {
+  color: var(--muted);
+  font-size: 12px;
+}
+:where(.stay-detail) .stay-search h2 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+:where(.stay-detail) .stay-search form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: end;
+  gap: 14px;
+}
+:where(.stay-detail) .stay-search label {
+  display: grid;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+:where(.stay-detail) .stay-search input,
+:where(.stay-detail) .stay-search select {
+  min-width: 0;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: white;
+  color: var(--text);
+  font: inherit;
+}
+:where(.stay-detail) .stay-search button {
+  background: #30363d;
+  color: white;
+  padding: 13px 22px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+:where(.stay-detail) .stay-search-note {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+:where(.stay-detail) .stay-gallery {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  grid-template-rows: 145px 145px;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+:where(.stay-detail) .stay-gallery img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+:where(.stay-detail) .stay-gallery img:first-child {
+  grid-row: span 2;
+}
+:where(.stay-detail) .stay-tabs {
+  display: flex;
+  gap: 26px;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+:where(.stay-detail) .stay-tabs a {
+  font-size: 12px;
+  text-decoration: none;
+  color: #7b828a;
+  padding: 8px 0 14px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .stay-tabs a[href='#stay-rooms'] {
+  color: var(--text);
+  border-bottom: 2px solid var(--text);
+}
+:where(.stay-detail) .stay-room-anchor,
+:where(.stay-detail) .stay-info {
+  scroll-margin-top: 24px;
+}
+.stay-detail .room-section-top h2 {
+  font-size: 20px;
+}
+.stay-detail .room-section-top p {
+  display: none;
+}
+.stay-detail .room-toolbar {
+  margin: 10px 0 14px;
+  border-top: 0;
+  padding: 6px 0;
+}
+.stay-detail .room-audio-filter {
+  margin-top: 16px;
+  font-size: 11px;
+}
+.stay-detail .room-card {
+  grid-template-columns: 170px minmax(0, 1fr) 185px;
+  gap: 22px;
+  padding: 18px;
+}
+.stay-detail .room-photo-open > img,
+.stay-detail .room-photo-empty {
+  height: 116px;
+}
+.stay-detail .room-details {
+  padding-top: 0;
+}
+.stay-detail .room-details h3 {
+  font-size: 18px;
+  margin-top: 0;
+}
+.stay-detail .room-card-labels .room-eyebrow,
+.stay-detail .room-price-label {
+  display: none;
+}
+.stay-detail .room-capacity,
+.stay-detail .room-type-area,
+.stay-detail .room-bed-summary {
+  display: inline;
+  font-size: 11px;
+  line-height: 2;
+  margin-right: 9px;
+}
+.stay-detail .room-extra {
+  font-size: 10px;
+}
+.stay-detail .room-price {
+  font-size: 21px;
+  margin-top: 0;
+}
+.stay-detail .room-pricing {
+  padding-top: 4px;
+}
+.stay-detail .room-facility-tags {
+  margin-top: 8px;
+}
+:where(.stay-detail) .room-more {
+  margin-top: 10px;
+}
+:where(.stay-detail) .room-more > summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: #526d60;
+  padding: 5px 0;
+}
+.stay-detail .room-notice {
+  padding: 16px 20px;
+  margin-top: 18px;
+}
+.stay-detail .room-notice h3 {
+  font-size: 12px;
+}
+.stay-detail .room-notice ul {
+  font-size: 11px;
+}
+:where(.stay-detail) .stay-info {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
+}
+:where(.stay-detail) .stay-info h2 {
+  font-size: 21px;
+  margin-bottom: 16px;
+}
+:where(.stay-detail) .stay-info h3 {
+  font-size: 14px;
+  margin: 16px 0 10px;
+}
+:where(.stay-detail) .stay-info p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+  white-space: pre-line;
+}
+:where(.stay-detail) .stay-info ul {
+  display: flex;
+  gap: 12px 30px;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+  color: #58786a;
+  font-size: 12px;
+}
+:where(.stay-detail) .stay-location-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+:where(.stay-detail) .stay-location-grid dl {
+  font-size: 12px;
+  line-height: 2.4;
+}
+:where(.stay-detail) .stay-location-grid dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+:where(.stay-detail) .stay-location-grid dt {
+  color: var(--muted);
+}
+:where(.stay-detail) .stay-location-grid dd {
+  margin: 0;
+  text-align: right;
+}
+:where(.stay-detail) .stay-policy {
+  margin-top: 20px;
+  background: #f5f6f6;
+  padding: 8px 20px 20px;
+  border-radius: 5px;
+}
+:where(.stay-detail) .stay-music-note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+:where(.stay-detail) .stay-music-note h2 {
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .stay-music-note a {
+  font-size: 12px;
+  color: #526d60;
+  white-space: nowrap;
+}
+:where(.stay-detail) .stay-schedule {
+  text-align: right;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 12px;
+}
+@media (max-width: 950px) {
+  .stay-detail .room-card {
+    grid-template-columns: 140px minmax(0, 1fr);
+  }
+  :where(.stay-detail) .stay-search form {
+    grid-template-columns: 1fr 1fr;
+  }
+  :where(.stay-detail) .stay-gallery {
+    grid-template-rows: 110px 110px;
+  }
+}
+@media (max-width: 600px) {
+  :where(.stay-detail) .stay-title > div {
+    flex-direction: column;
+    gap: 16px;
+  }
+  :where(.stay-detail) .stay-title > div > p {
+    text-align: left;
+  }
+  :where(.stay-detail) .stay-gallery {
+    grid-template-rows: 90px 90px;
+    gap: 6px;
+  }
+  :where(.stay-detail) .stay-tabs {
+    gap: 20px;
+  }
+  .stay-detail .room-card {
+    grid-template-columns: 1fr;
+  }
+  .stay-detail .room-photo-open > img,
+  .stay-detail .room-photo-empty {
+    height: 200px;
+  }
+  :where(.stay-detail) .stay-location-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  :where(.stay-detail) .stay-music-note {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+:where(.stay-detail) .stay-tabs button {
+  font-size: 12px;
+  color: #7b828a;
+  padding: 8px 0 14px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .stay-tabs button[aria-current='page'] {
+  color: var(--text);
+  border-bottom: 2px solid var(--text);
+}
+:where(.stay-detail) .music-reviews > h2 {
+  font-size: 23px;
+  margin-bottom: 20px;
+}
+:where(.stay-detail) .music-review-caption {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+:where(.stay-detail) .music-review-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  margin-top: 18px;
+}
+:where(.stay-detail) .music-rating-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+:where(.stay-detail) .music-rating-filter button {
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  min-width: 40px;
+  padding: 9px 12px;
+  font-size: 12px;
+}
+:where(.stay-detail) .music-rating-filter button[aria-pressed='true'] {
+  background: #eef5f0;
+  border-color: #668475;
+  color: #456953;
+}
+:where(.stay-detail) .music-review-toolbar label {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+:where(.stay-detail) .music-review-toolbar select {
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: var(--text);
+  font: inherit;
+  margin-left: 8px;
+}
+:where(.stay-detail) .music-review-hint {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin: 12px 0;
+}
+:where(.stay-detail) .music-spotify-notice,
+:where(.stay-detail) .music-review-guide {
+  background: #f0f6f2;
+  color: #638371;
+  border-radius: 4px;
+  padding: 14px 18px;
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 16px 0;
+}
+:where(.stay-detail) .music-review-list {
+  display: grid;
+  gap: 14px;
+}
+:where(.stay-detail) .music-review-card {
+  border: 1px solid var(--border);
+  padding: 18px;
+  border-radius: 5px;
+}
+:where(.stay-detail) .music-review-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 14px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+:where(.stay-detail) .music-review-meta b {
+  font-weight: 400;
+  color: #ab8037;
+  letter-spacing: 2px;
+}
+:where(.stay-detail) .music-review-meta > span {
+  white-space: nowrap;
+}
+:where(.stay-detail) .music-review-track {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+:where(.stay-detail) .music-track-icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  background: #edf3ef;
+  border-radius: 5px;
+  color: #547b65;
+  font-size: 28px;
+}
+:where(.stay-detail) .music-review-track h3 {
+  font-size: 16px;
+}
+:where(.stay-detail) .music-review-track p {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 8px;
+}
+:where(.stay-detail) .music-review-play {
+  margin-left: auto;
+  font-size: 11px;
+  white-space: nowrap;
+  background: #30363d;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 4px;
+}
+:where(.stay-detail) .music-review-player {
+  margin-top: 16px;
+}
+:where(.stay-detail) .music-review-player iframe {
+  border: 0;
+  border-radius: 8px;
+  display: block;
+}
+:where(.stay-detail) .music-review-player a {
+  display: inline-block;
+  color: #547b65;
+  font-size: 11px;
+  margin-top: 10px;
+}
+:where(.stay-detail) .music-review-empty {
+  padding: 42px 20px;
+  background: #f7f8f8;
+  color: var(--muted);
+  text-align: center;
+  font-size: 14px;
+  border-radius: 5px;
+}
+:where(.stay-detail) .music-review-empty button {
+  margin-top: 14px;
+  text-decoration: underline;
+  font-size: 12px;
+}
+:where(.stay-detail) .music-review-guide h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .music-review-guide p {
+  font-size: 11px;
+}
+:where(.stay-detail) .music-back-button,
+:where(.stay-detail) .music-review-pagination button {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 12px;
+  background: white;
+}
+:where(.stay-detail) .music-review-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-size: 12px;
+  margin-top: 22px;
+}
+:where(.stay-detail) .music-review-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+@media (max-width: 600px) {
+  :where(.stay-detail) .music-review-toolbar {
+    align-items: start;
+    flex-direction: column;
+  }
+  :where(.stay-detail) .music-review-track {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  :where(.stay-detail) .music-review-play {
+    margin-left: 0;
+  }
+  :where(.stay-detail) .music-review-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+  :where(.stay-detail) .music-review-card {
+    padding: 14px;
+  }
+}
+
+/* Pencil Must 12/13 원본: 1440px 프레임, 본문 좌우 64px, 간격 28px. */
+.stay-detail {
+  max-width: 1440px;
+  padding: 40px 64px 48px;
+  gap: 28px;
+}
+:where(.stay-detail) .stay-title {
+  gap: 28px;
+}
+:where(.stay-detail) .stay-kicker {
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+:where(.stay-detail) .stay-title h1 {
+  font-size: 32px;
+}
+:where(.stay-detail) .stay-title > div > p {
+  font-size: 23px;
+}
+:where(.stay-detail) .stay-title small {
+  font-size: 12px;
+  margin-top: 6px;
+}
+:where(.stay-detail) .stay-address {
+  font-size: 15px;
+}
+:where(.stay-detail) .stay-search-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+:where(.stay-detail) .stay-search-heading h2 {
+  font-size: 18px;
+  margin-bottom: 0;
+}
+:where(.stay-detail) .stay-search-heading > span {
+  font-size: 14px;
+  color: var(--muted);
+}
+:where(.stay-detail) .stay-search form {
+  gap: 16px;
+}
+:where(.stay-detail) .stay-search label {
+  font-size: 13px;
+}
+:where(.stay-detail) .stay-search input,
+:where(.stay-detail) .stay-search select {
+  padding: 15px 16px;
+  font-size: 15px;
+  height: 52px;
+  border-radius: 6px;
+}
+:where(.stay-detail) .stay-search button {
+  padding: 14px 22px;
+  font-size: 15px;
+  border-radius: 7px;
+  min-height: 50px;
+}
+:where(.stay-detail) .stay-gallery {
+  grid-template-columns: 820fr 474fr;
+  grid-template-rows: 138px 138px;
+  gap: 14px 18px;
+  border-radius: 12px;
+}
+:where(.stay-detail) .stay-gallery img {
+  border-radius: 12px;
+}
+:where(.stay-detail) .stay-tabs {
+  gap: 32px;
+  border-bottom: 0;
+}
+:where(.stay-detail) .stay-tabs button {
+  font-size: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.stay-detail .room-section-top h2 {
+  font-size: 25px;
+}
+.stay-detail .room-list {
+  gap: 24px;
+  margin-top: 28px;
+}
+.stay-detail .room-card {
+  grid-template-columns: 200px minmax(0, 1fr) 230px;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 8px;
+  align-items: center;
+}
+.stay-detail .room-photo-open > img,
+.stay-detail .room-photo-empty {
+  height: 126px;
+  border-radius: 12px;
+}
+.stay-detail .room-photo-controls,
+.stay-detail .room-photo-count {
+  display: none;
+}
+.stay-detail .room-details h3 {
+  font-size: 23px;
+}
+:where(.stay-detail) .room-summary-line {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-top: 10px;
+}
+.stay-detail .room-booking-status {
+  font-size: 14px;
+  margin-top: 10px;
+  color: #4d7764;
+}
+.stay-detail .room-price {
+  font-size: 23px;
+}
+.stay-detail .room-price > span {
+  font-size: 15px;
+}
+.stay-detail .room-price-note {
+  font-size: 12px;
+  margin-top: 6px;
+}
+:where(.stay-detail) .room-comparison-options {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--muted);
+}
+:where(.stay-detail) .room-comparison-options summary {
+  cursor: pointer;
+}
+.stay-detail .room-notice {
+  display: none;
+}
+:where(.stay-detail) .stay-info {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0 24px;
+}
+:where(.stay-detail) .stay-info h2 {
+  font-size: 25px;
+  margin-bottom: 18px;
+}
+:where(.stay-detail) .stay-info p {
+  font-size: 14px;
+}
+:where(.stay-detail) .stay-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 22px 0;
+}
+:where(.stay-detail) .stay-overview-grid dt {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .stay-overview-grid dd {
+  font-size: 14px;
+  margin: 0;
+}
+:where(.stay-detail) .stay-facility-row ul {
+  gap: 20px 38px;
+  font-size: 14px;
+}
+:where(.stay-detail) .stay-location-grid dl {
+  font-size: 14px;
+}
+:where(.stay-detail) .stay-location-grid h3 {
+  font-size: 18px;
+  margin-top: 0;
+}
+:where(.stay-detail) .stay-location-grid .music-back-button {
+  margin: 16px 0 6px;
+}
+:where(.stay-detail) .stay-policy {
+  padding: 24px;
+  margin-top: 28px;
+}
+:where(.stay-detail) .stay-policy h3 {
+  font-size: 18px;
+  margin-top: 0;
+}
+:where(.stay-detail) .stay-music-note {
+  padding: 24px;
+}
+:where(.stay-detail) .stay-music-note h2 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+:where(.stay-detail) .music-reviews {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+}
+:where(.stay-detail) .music-reviews > h2 {
+  font-size: 25px;
+  margin-bottom: 18px;
+}
+:where(.stay-detail) .music-review-caption {
+  font-size: 14px;
+}
+:where(.stay-detail) .music-review-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+:where(.stay-detail) .music-review-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+:where(.stay-detail) .music-review-meta b {
+  font-size: 16px;
+  color: #b08a40;
+  letter-spacing: 3px;
+  font-weight: 400;
+}
+:where(.stay-detail) .music-review-track {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 18px;
+}
+:where(.stay-detail) .music-track-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  background: #eff1f0;
+  color: #4d7764;
+  border-radius: 8px;
+  font-size: 26px;
+}
+:where(.stay-detail) .music-review-track > div {
+  flex: 1;
+}
+:where(.stay-detail) .music-review-track h3 {
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .music-review-track p {
+  font-size: 13px;
+  color: var(--muted);
+}
+:where(.stay-detail) .music-review-play {
+  background: #30363d;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+:where(.stay-detail) .music-review-player {
+  margin-top: 18px;
+}
+:where(.stay-detail) .music-review-player iframe {
+  border: 0;
+  border-radius: 8px;
+  display: block;
+}
+:where(.stay-detail) .music-review-player a {
+  display: inline-block;
+  font-size: 12px;
+  color: #4d7764;
+  margin-top: 10px;
+}
+:where(.stay-detail) .music-review-empty {
+  padding: 36px 20px;
+  background: #f5f6f6;
+  text-align: center;
+  color: var(--muted);
+  border-radius: 6px;
+  font-size: 15px;
+}
+:where(.stay-detail) .music-review-empty button {
+  margin-top: 14px;
+  text-decoration: underline;
+}
+:where(.stay-detail) .music-review-guide h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+:where(.stay-detail) .music-review-guide p {
+  font-size: 13px;
+  color: var(--muted);
+}
+@media (max-width: 1100px) {
+  .stay-detail .room-card {
+    grid-template-columns: 170px minmax(0, 1fr);
+  }
+  :where(.stay-detail) .stay-overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .stay-detail {
+    padding: 32px 20px 40px;
+  }
+  :where(.stay-detail) .stay-title h1 {
+    font-size: 26px;
+  }
+  :where(.stay-detail) .stay-title > div > p {
+    font-size: 19px;
+  }
+  :where(.stay-detail) .stay-search-heading {
+    align-items: start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  :where(.stay-detail) .stay-gallery {
+    grid-template-rows: 90px 90px;
+    gap: 8px;
+  }
+  :where(.stay-detail) .stay-tabs {
+    gap: 22px;
+  }
+  :where(.stay-detail) .stay-tabs button {
+    font-size: 13px;
+  }
+  .stay-detail .room-card {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+  .stay-detail .room-photo {
+    grid-row: auto;
+  }
+  .stay-detail .room-photo-open > img {
+    height: 200px;
+  }
+  .stay-detail .room-pricing {
+    grid-column: auto;
+  }
+  :where(.stay-detail) .stay-location-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  :where(.stay-detail) .stay-music-note {
+    flex-direction: column;
+    align-items: start;
+  }
+  :where(.stay-detail) .music-review-meta {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (max-width: 640px) {
+}
+:where(.stay-detail) .room-show-more {
+  display: block;
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+:where(.stay-detail) .stay-gallery[data-count='1'] { grid-template-columns: 1fr; grid-template-rows: 290px; }
+:where(.stay-detail) .stay-gallery[data-count='1'] img { grid-row: auto; }
+:where(.stay-detail) .stay-gallery[data-count='2'] { grid-template-columns: 1fr 1fr; grid-template-rows: 290px; }
+:where(.stay-detail) .stay-gallery[data-count='2'] img:first-child { grid-row: auto; }
+@media (max-width: 640px) {
+ :where(.stay-detail) .stay-gallery[data-count='1'], :where(.stay-detail) .stay-gallery[data-count='2'] { grid-template-rows: 200px; }
+}

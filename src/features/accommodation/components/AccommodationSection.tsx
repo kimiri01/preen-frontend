@@ -1,3 +1,8 @@
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import {
+  accommodationDetailPath,
+  parseSearchConditions,
+} from '../hooks/useSearchConditions'
 import '@/features/accommodation/accommodation.css'
 import { AccommodationCard } from '@/features/accommodation/components/AccommodationCard'
 import { useAccommodations } from '@/features/accommodation/hooks/useAccommodations'
@@ -22,6 +27,12 @@ interface AccommodationSectionProps {
  */
 export function AccommodationSection({ filter }: AccommodationSectionProps) {
   const { favorites, toggleFavorite } = useFavorites()
+  const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const viewAccommodation = (id: number) => {
+    addRecentlyViewed(id)
+    navigate(accommodationDetailPath(id, parseSearchConditions(params)))
+  }
   const isAll = filter.type === 'all'
 
   // 두 Hook 모두 항상 호출하되(React Hook 규칙), 실제 요청은 필요한 쪽만 보냅니다.
@@ -41,7 +52,7 @@ export function AccommodationSection({ filter }: AccommodationSectionProps) {
           accommodation={accommodation}
           isFavorite={favorites.has(accommodation.id)}
           onToggleFavorite={toggleFavorite}
-          onView={addRecentlyViewed}
+          onView={viewAccommodation}
         />
       ))}
     </div>

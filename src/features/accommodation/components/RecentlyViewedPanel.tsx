@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { accommodationDetailPath } from '../hooks/useSearchConditions'
 import '@/features/accommodation/accommodation.css'
 import { useRecentlyViewedAccommodations } from '@/features/accommodation/hooks/useRecentlyViewed'
 import {
@@ -37,7 +39,9 @@ export function RecentlyViewedPanel() {
                 onError={handleImageError}
               />
               <div>
-                <span>{accommodation.name}</span>
+                <Link to={accommodationDetailPath(accommodation.id)}>
+                  {accommodation.name}
+                </Link>
                 <small>{accommodation.location}</small>
                 <span>
                   {accommodation.pricePerNight != null

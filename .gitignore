@@ -4,3 +4,11 @@ dist/
 .env
 .env.local
 .DS_Store
+
+# Local credentials and private keys
+.env.*
+!.env.example
+/application-local.properties
+/application-moon.properties
+*.pem
+*.key
