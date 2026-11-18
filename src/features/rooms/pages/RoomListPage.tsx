@@ -1,4 +1,11 @@
-import { isIsoDate, nightsBetween } from '@/common/utils/date'
+import {
+  addDays,
+  isIsoDate,
+  nightsBetween,
+  todayKst,
+  upcomingWeekend,
+} from '@/common/utils/date'
+import { validateStaySelection, roomGuestLimit } from '../utils/staySelection'
 import { addRecentlyViewed } from '@/features/accommodation/hooks/useRecentlyViewed'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
@@ -29,17 +36,18 @@ export function RoomListPage() {
       return next
     })
   }
+  const [today, setToday] = useState(todayKst)
+  useEffect(() => {
+    const timer = window.setInterval(() => setToday(todayKst()), 60_000)
+    return () => window.clearInterval(timer)
+  }, [])
   const rawIn = searchParams.get('checkIn')
   const rawOut = searchParams.get('checkOut')
   const checkIn = isIsoDate(rawIn) ? rawIn : ''
-  const checkOut =
-    isIsoDate(rawOut) && (!checkIn || rawOut > checkIn) ? rawOut : ''
-  const rawGuests = Number(searchParams.get('guestCount'))
-  const guests = String(
-    Number.isInteger(rawGuests) && rawGuests > 0 && rawGuests <= 1000
-      ? rawGuests
-      : 2,
-  )
+  const checkOut = isIsoDate(rawOut) ? rawOut : ''
+  const maxGuests = roomGuestLimit(query.data?.rooms ?? [])
+  const guests =
+    searchParams.get('guestCount') ?? String(Math.min(2, maxGuests))
   const updateConditions = (patch: Record<string, string>) => {
     setSearchParams(
       (previous) => {
@@ -56,14 +64,21 @@ export function RoomListPage() {
   const setCheckIn = (value: string) =>
     updateConditions({
       checkIn: value,
-      ...(checkOut && checkOut <= value ? { checkOut: '' } : {}),
+      ...(!value || (checkOut && checkOut <= value) ? { checkOut: '' } : {}),
     })
   const setCheckOut = (value: string) => updateConditions({ checkOut: value })
   const setGuests = (value: string) => updateConditions({ guestCount: value })
-  const schedule =
-    checkIn && checkOut
-      ? `${checkIn} — ${checkOut} · ${nightsBetween(checkIn, checkOut)}박 · 성인 ${guests}명`
-      : ''
+  const selectionError = validateStaySelection(
+    checkIn,
+    checkOut,
+    guests,
+    today,
+    maxGuests,
+  )
+  const [selectionMessage, setSelectionMessage] = useState('')
+  const schedule = !selectionError
+    ? `${checkIn} — ${checkOut} · ${nightsBetween(checkIn, checkOut)}박 · 성인 ${guests}명`
+    : ''
   useEffect(() => {
     const id = Number(accommodationId)
     if (query.data && Number.isSafeInteger(id) && id > 0) addRecentlyViewed(id)
@@ -155,9 +170,58 @@ export function RoomListPage() {
                 <h2 id="stay-search-title">숙박 일정과 인원을 선택하세요</h2>
                 <span>성인 {guests}명 · 객실 1개</span>
               </div>
+              <div
+                className="stay-quick-options"
+                role="group"
+                aria-label="빠른 일정 선택"
+              >
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectionMessage('')
+                    updateConditions({
+                      checkIn: today,
+                      checkOut: addDays(today, 1),
+                    })
+                  }}
+                >
+                  오늘부터 1박
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectionMessage('')
+                    updateConditions(upcomingWeekend(today))
+                  }}
+                >
+                  이번 주말
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectionMessage('')
+                    updateConditions({
+                      checkIn: '',
+                      checkOut: '',
+                      guestCount: '',
+                    })
+                  }}
+                >
+                  날짜·인원 초기화
+                </button>
+              </div>
               <form
+                noValidate
+                aria-describedby="stay-selection-feedback"
                 onSubmit={(event) => {
                   event.preventDefault()
+                  if (selectionError) {
+                    setSelectionMessage(selectionError)
+                    return
+                  }
+                  setSelectionMessage(
+                    '선택한 일정과 인원을 반영했습니다. 객실 정보를 확인해주세요.',
+                  )
                   changeTab(false)
                   requestAnimationFrame(() =>
                     list.current?.scrollIntoView({ behavior: 'smooth' }),
@@ -169,8 +233,11 @@ export function RoomListPage() {
                   <input
                     type="date"
                     required
+                    min={today}
+                    aria-invalid={Boolean(checkIn && checkIn < today)}
                     value={checkIn}
                     onChange={(event) => {
+                      setSelectionMessage('')
                       setCheckIn(event.target.value)
                     }}
                   />
@@ -180,37 +247,96 @@ export function RoomListPage() {
                   <input
                     type="date"
                     required
-                    min={
-                      checkIn
-                        ? new Date(Date.parse(checkIn) + 86400000)
-                            .toISOString()
-                            .slice(0, 10)
-                        : undefined
-                    }
+                    min={addDays(
+                      checkIn && checkIn >= today ? checkIn : today,
+                      1,
+                    )}
+                    disabled={!checkIn || checkIn < today}
+                    aria-invalid={Boolean(checkOut && checkOut <= checkIn)}
                     value={checkOut}
-                    onChange={(event) => setCheckOut(event.target.value)}
+                    onChange={(event) => {
+                      setSelectionMessage('')
+                      setCheckOut(event.target.value)
+                    }}
                   />
                 </label>
-                <label>
-                  인원
-                  <select
-                    value={guests}
-                    onChange={(event) => setGuests(event.target.value)}
-                  >
-                    {Number(guests) > 10 && (
-                      <option value={guests}>성인 {guests}명 · 객실 1개</option>
-                    )}
-                    {Array.from({ length: 10 }, (_, index) => (
-                      <option key={index} value={index + 1}>
-                        성인 {index + 1}명 · 객실 1개
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <button type="submit" title="날짜별 재고 기능 연결 전입니다">
-                  가능 객실 확인
+                <div className="stay-guest-field">
+                  <label htmlFor="stay-guest-count">인원 (객실 1개)</label>
+                  <div className="stay-guest-stepper">
+                    <button
+                      type="button"
+                      aria-label="인원 줄이기"
+                      disabled={Number(guests) <= 1}
+                      onClick={() => {
+                        setSelectionMessage('')
+                        setGuests(
+                          String(
+                            Math.max(
+                              1,
+                              Math.min(maxGuests, (Number(guests) || 2) - 1),
+                            ),
+                          ),
+                        )
+                      }}
+                    >
+                      −
+                    </button>
+                    <input
+                      id="stay-guest-count"
+                      type="number"
+                      inputMode="numeric"
+                      min={1}
+                      max={maxGuests}
+                      step={1}
+                      value={guests}
+                      aria-describedby="stay-guest-help"
+                      aria-invalid={Number(guests) > maxGuests}
+                      onChange={(event) => {
+                        setSelectionMessage('')
+                        updateConditions({ guestCount: event.target.value })
+                      }}
+                    />
+                    <button
+                      type="button"
+                      aria-label="인원 늘리기"
+                      disabled={Number(guests) >= maxGuests}
+                      onClick={() => {
+                        setSelectionMessage('')
+                        setGuests(
+                          String(
+                            Math.min(
+                              maxGuests,
+                              Math.max(1, (Number(guests) || 0) + 1),
+                            ),
+                          ),
+                        )
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                  <small id="stay-guest-help">
+                    성인 1~{maxGuests}명 · 객실별 최대 정원 기준
+                  </small>
+                </div>
+                <button
+                  type="submit"
+                  title="날짜별 재고 조회 없이 선택 조건을 반영합니다"
+                >
+                  선택 조건 적용
                 </button>
               </form>
+              <p
+                id="stay-selection-feedback"
+                role="status"
+                aria-live="polite"
+                className="stay-selection-feedback"
+              >
+                {selectionError || selectionMessage}
+              </p>
+              {!selectionError && (
+                <p className="stay-selected-summary">{schedule}</p>
+              )}
               <p className="stay-search-note">
                 일정 선택은 비교용이며, 날짜별 재고·총액 조회는 예약 기능 연결
                 후 제공됩니다.
@@ -305,7 +431,15 @@ export function RoomListPage() {
                       선택 일정 {schedule} · 기본 1박 요금 표시
                     </p>
                   )}
-                  <RoomListSection key={accommodationId} rooms={stay.rooms} />
+                  <RoomListSection
+                    key={accommodationId}
+                    rooms={stay.rooms}
+                    guestCount={
+                      Number.isInteger(Number(guests)) && Number(guests) > 0
+                        ? Number(guests)
+                        : undefined
+                    }
+                  />
                 </section>
                 <section id="stay-intro" className="stay-info">
                   <h2>{stay.accommodationName}에서 머무는 시간</h2>

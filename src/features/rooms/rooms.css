@@ -1673,3 +1673,87 @@
   font-size: 13px;
   text-decoration: none;
 }
+
+:where(.stay-detail) .stay-guest-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+:where(.stay-detail) .stay-guest-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dce2e3;
+  border-radius: 6px;
+  overflow: hidden;
+}
+:where(.stay-detail) .stay-guest-stepper button {
+  min-width: 40px;
+  width: 40px;
+  padding: 8px;
+  background: #f4f7f6;
+  color: #30383a;
+  border: 0;
+  border-radius: 0;
+}
+:where(.stay-detail) .stay-guest-stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+:where(.stay-detail) .stay-guest-stepper input {
+  width: 100%;
+  min-width: 40px;
+  text-align: center;
+  border: 0;
+  padding: 8px;
+}
+:where(.stay-detail) .stay-guest-field small {
+  color: #63716d;
+  font-size: 11px;
+}
+:where(.stay-detail) .stay-selection-feedback {
+  color: #6d5140;
+  font-size: 13px;
+  margin: 12px 0;
+}
+:where(.stay-detail) .stay-selected-summary {
+  color: #41665b;
+  font-size: 13px;
+  padding: 12px;
+  background: #f0f6f3;
+}
+:where(.stay-detail) .stay-search input[aria-invalid='true'] {
+  outline: 1px solid #ac664c;
+}
+
+:where(.stay-detail) .stay-quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+:where(.stay-detail) .stay-quick-options button {
+  padding: 8px 12px;
+  border: 1px solid #dce5e0;
+  border-radius: 6px;
+  background: #f5f8f6;
+  color: #3b6053;
+  font-size: 12px;
+}
+:where(.stay-detail) .room-capacity-summary {
+  padding: 12px;
+  background: #f1f6f3;
+  color: #3b6053;
+  font-size: 13px;
+}
+:where(.stay-detail) .room-capacity-summary small {
+  display: block;
+  margin-top: 6px;
+  color: #65756d;
+}
+:where(.stay-detail) .room-capacity-status {
+  color: #3b6053;
+  font-size: 12px;
+}
+:where(.stay-detail) .room-capacity-status[data-fits='false'] {
+  color: #94583d;
+}

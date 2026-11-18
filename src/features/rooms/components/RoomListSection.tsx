@@ -5,9 +5,11 @@ import '../rooms.css'
 
 export function RoomListSection({
   rooms,
+  guestCount,
   onSelectRoom,
 }: {
   rooms: Room[]
+  guestCount?: number
   onSelectRoom?: (room: Room) => void
 }) {
   const [audioOnly, setAudioOnly] = useState(false)
@@ -35,6 +37,16 @@ export function RoomListSection({
           객실 {sorted.length}개{audioOnly && ` / 전체 ${rooms.length}개`}
         </span>
       </div>
+      {guestCount !== undefined && (
+        <p className="room-capacity-summary" role="status">
+          성인 {guestCount}명 정원 충족 객실 유형{' '}
+          {rooms.filter((room) => room.maxCapacity >= guestCount).length}개 /
+          전체 {rooms.length}개
+          <small>
+            객실 정원 기준 안내이며, 선택 날짜의 실제 빈방 수는 아닙니다.
+          </small>
+        </p>
+      )}
       {sorted.length === 0 ? (
         <p className="room-state" role="status">
           {audioOnly
@@ -44,7 +56,12 @@ export function RoomListSection({
       ) : (
         <div className="room-list">
           {(showAll || audioOnly ? sorted : sorted.slice(0, 2)).map((room) => (
-            <RoomCard key={room.id} room={room} onSelectRoom={onSelectRoom} />
+            <RoomCard
+              key={room.id}
+              room={room}
+              guestCount={guestCount}
+              onSelectRoom={onSelectRoom}
+            />
           ))}
         </div>
       )}

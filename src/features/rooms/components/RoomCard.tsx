@@ -32,9 +32,11 @@ const money = (value: string) =>
 
 export function RoomCard({
   room,
+  guestCount,
   onSelectRoom,
 }: {
   room: Room
+  guestCount?: number
   onSelectRoom?: (room: Room) => void
 }) {
   const facilities = room.facilities ?? []
@@ -120,6 +122,16 @@ export function RoomCard({
           {bedSummary && ` · ${bedSummary}`}
           {room.areaSqm && ` · ${Number(room.areaSqm)}㎡`}
         </p>
+        {guestCount !== undefined && (
+          <p
+            className="room-capacity-status"
+            data-fits={guestCount <= room.maxCapacity}
+          >
+            {guestCount <= room.maxCapacity
+              ? `성인 ${guestCount}명 정원 충족`
+              : `선택 인원 초과 · 이 객실은 최대 ${room.maxCapacity}명`}
+          </p>
+        )}
         <p className="room-booking-status">일정 선택 후 예약 가능 여부 확인</p>
         <details className="room-more">
           <summary>
