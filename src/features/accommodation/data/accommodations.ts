@@ -8,6 +8,8 @@ export const accommodations: Accommodation[] = [
     location: '제주 애월',
     pricePerNight: 180000,
     image: '/images/generated.png',
+    regionName: '제주도',
+    categoryName: '감성스테이',
   },
   {
     id: 2,
@@ -15,6 +17,8 @@ export const accommodations: Accommodation[] = [
     location: '강릉 안목',
     pricePerNight: 145000,
     image: '/images/generated-1.png',
+    regionName: '강원도',
+    categoryName: '호텔',
   },
   {
     id: 3,
@@ -22,6 +26,8 @@ export const accommodations: Accommodation[] = [
     location: '경주 황남',
     pricePerNight: 165000,
     image: '/images/generated-2.png',
+    regionName: '경북',
+    categoryName: '한옥',
   },
   {
     id: 4,
@@ -29,5 +35,7 @@ export const accommodations: Accommodation[] = [
     location: '경기 양평',
     pricePerNight: 128000,
     image: '/images/generated-3.png',
+    regionName: '경기',
+    categoryName: '호텔',
   },
 ]

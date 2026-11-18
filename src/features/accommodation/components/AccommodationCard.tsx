@@ -1,20 +1,38 @@
 import type { Accommodation } from '@/features/accommodation/types'
+import {
+  getImageSrc,
+  handleImageError,
+} from '@/features/accommodation/utils/imageFallback'
 
 interface AccommodationCardProps {
   accommodation: Accommodation
   isFavorite: boolean
   onToggleFavorite: (id: number) => void
+  /** 숙소(사진 또는 이름)를 눌렀을 때 호출됩니다. "최근 본 숙소" 기록에 씁니다. */
+  onView: (id: number) => void
 }
 
+/**
+ * 숙소 카드 한 장 (기능명세서 STAY-001 "숙소 카드 표시")
+ * 대표 사진 · 숙소명 · 지역/주소 · 최저 1박 요금을 보여 줍니다.
+ * 사진이 없거나 깨지면 "이미지 업로드" 안내 이미지가 나옵니다.
+ */
 export function AccommodationCard({
   accommodation,
   isFavorite,
   onToggleFavorite,
+  onView,
 }: AccommodationCardProps) {
   return (
     <article className="stay">
       <div className="photo">
-        <img src={accommodation.image} alt={`${accommodation.name} 전경`} />
+        <img
+          src={getImageSrc(accommodation.image)}
+          alt={`${accommodation.name} 전경`}
+          loading="lazy"
+          onError={handleImageError}
+          onClick={() => onView(accommodation.id)}
+        />
         <button
           type="button"
           className="favorite"
@@ -37,13 +55,29 @@ export function AccommodationCard({
           </svg>
         </button>
       </div>
-      <h3>{accommodation.name}</h3>
-      <small>{accommodation.location}</small>
-      {accommodation.pricePerNight != null ? (
-        <p>₩{accommodation.pricePerNight.toLocaleString('ko-KR')} / 1박</p>
-      ) : (
-        <p>가격 정보 없음</p>
-      )}
+      <h3>
+        <button type="button" onClick={() => onView(accommodation.id)}>
+          {accommodation.name}
+        </button>
+      </h3>
+      <small>
+        {accommodation.regionName
+          ? `${accommodation.regionName} · ${accommodation.location}`
+          : accommodation.location}
+      </small>
+      <p className="stay-price">
+        {accommodation.pricePerNight != null ? (
+          <>
+            <strong>
+              {accommodation.pricePerNight.toLocaleString('ko-KR')}원
+            </strong>
+            <span> / 1박</span>
+          </>
+        ) : (
+          // 서버가 아직 요금을 주지 않는 숙소(판매 중인 객실 없음)
+          <span>가격 정보 없음</span>
+        )}
+      </p>
     </article>
   )
 }

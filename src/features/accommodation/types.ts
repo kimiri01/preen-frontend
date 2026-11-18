@@ -5,6 +5,10 @@ export interface Accommodation {
   /** 판매 중인 객실이 없으면 서버가 null을 준다. */
   pricePerNight: number | null
   image: string
+  /** 지역 이름 (예: 제주도). 카드에 주소와 함께 표시 */
+  regionName: string
+  /** 카테고리 이름 (예: 호텔). 카드 이미지 위 배지로 표시 */
+  categoryName: string
 }
 
 /** 숙박 유형 카테고리 (GET /api/categories 응답 항목) */
@@ -36,6 +40,14 @@ export interface AccommodationSummaryResponse {
   categoryName: string
   thumbnailUrl: string | null
   minNightlyPrice: number | null
+}
+
+/** 카테고리 묶음 하나 (GET /api/accommodations/by-category 응답 항목) */
+export interface CategoryAccommodationsResponse {
+  categoryId: number
+  categoryCode: string
+  categoryName: string
+  accommodations: AccommodationSummaryResponse[]
 }
 
 /**
