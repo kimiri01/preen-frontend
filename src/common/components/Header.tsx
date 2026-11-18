@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 
 /**
  * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
@@ -162,7 +163,7 @@ export function Header({ menuPanels = {} }: HeaderProps) {
           </svg>
           로그인
         </button>
-        <button type="button">
+        <Link to="/signup">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -182,16 +183,9 @@ export function Header({ menuPanels = {} }: HeaderProps) {
             <line x1="22" x2="16" y1="11" y2="11"></line>
           </svg>
           회원가입
-        </button>
+        </Link>
         {openPanel && (
-          <div
-            id={MENU_PANEL_ID}
-            className="header-menu-panel"
-            // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
-            onClick={(event) => {
-              if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
-            }}
-          >
+          <div id={MENU_PANEL_ID}>
             {openPanel}
           </div>
         )}

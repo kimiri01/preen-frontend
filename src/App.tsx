@@ -6,6 +6,7 @@ import {
 } from '@/features/accommodation/public'
 import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
+import { authRoutes } from '@/features/auth/public'
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
         }}
       />
     ),
-    children: [...mainRoutes, ...accommodationRoutes],
+    children: [...mainRoutes, ...accommodationRoutes, ...authRoutes],
   },
 ])
 
