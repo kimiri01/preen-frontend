@@ -105,7 +105,7 @@ export function useSignupDetails(
     agreements,
     toggleAgreement,
     toggleAll,
-    maxBirthDate: latestBirthDate,
+    birthValid,
     submit,
     error,
     pending: mutation.isPending,
