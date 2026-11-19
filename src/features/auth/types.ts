@@ -33,3 +33,19 @@ export interface SignupResponse {
   role: 'GUEST' | 'HOST' | 'ADMIN'
   status: string
 }
+
+export interface LoginRequest {
+  email: string
+  password: string
+  rememberMe: boolean
+}
+
+export interface AccessTokenResponse {
+  accessToken: string
+}
+
+export interface CurrentMember {
+  userId: number
+  name: string
+  role: 'GUEST' | 'HOST' | 'ADMIN'
+}
