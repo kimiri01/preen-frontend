@@ -9,3 +9,9 @@ export function calcTotalPrice(nights, pricePerNight, discountRate) {
   // 할인 전 금액에서 할인 금액을 빼서 최종 금액을 돌려준다
   return total - total * discountRate;
 }
+
+// src/copilotReviewTest.js
+export function getUser(id) {
+  const users = JSON.parse(localStorage.getItem("users"));
+  return users.find(u => u.id == id).name;
+}
