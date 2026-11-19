@@ -1,8 +1,10 @@
 
+/* 내 정보 페이지 전체 레이아웃 */
 .my-info-page {
   width: min(100%, 760px);
   margin: 48px auto 80px;
   padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .my-info-page h1 {
@@ -16,6 +18,7 @@
   color: #667085;
 }
 
+/* 기본 정보 카드 */
 .my-info-page section {
   padding: 32px;
   border: 1px solid #e5e7eb;
@@ -26,29 +29,98 @@
 .my-info-page h2 {
   margin-bottom: 28px;
   font-size: 22px;
+  font-weight: 600;
 }
 
+/* 조회 화면의 회원정보 */
 .my-info-page section > div {
   margin-bottom: 24px;
 }
 
-.my-info-page section > div p:first-child {
+.my-info-page section > div > p:first-child {
   margin-bottom: 8px;
   font-weight: 600;
 }
 
-.my-info-page section > div p:last-child {
+.my-info-page section > div > p:last-child {
   padding: 14px 16px;
   border-radius: 8px;
   background: #f8fafc;
   color: #667085;
 }
 
-.my-info-page button {
+/* 조회 화면의 정보 수정 버튼 */
+.my-info-page section > button {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: #d0d5dd;
-  color: #667085;
-  cursor: not-allowed;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+/* 내 정보 수정 폼 */
+.my-info-page form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.my-info-page form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-info-page form label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.my-info-page form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #fff;
+  color: #101828;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.my-info-page form input:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.my-info-page form > div:last-child {
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.my-info-page form button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #f2f4f7;
+  color: #344054;
+}
+
+.my-info-page form button[type='submit'] {
+  background: #2563eb;
+  color: #fff;
+}
+
+.my-info-page form [role='alert'] {
+  color: #d92d20;
+  font-size: 14px;
+}
+
+/* 조회 화면의 정보 수정 버튼 */
+.my-info-page section > button {
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
 }
