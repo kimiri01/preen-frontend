@@ -1857,3 +1857,21 @@
   border: 0;
   border-radius: 10px;
 }
+
+:where(.stay-detail) .music-track-collection {
+  margin: 24px 0;
+  padding: 16px;
+  border: 1px solid #e2e5e8;
+  border-radius: 8px;
+}
+:where(.stay-detail) .music-track-collection summary {
+  cursor: pointer;
+}
+:where(.stay-detail) .music-track-collection ul {
+  list-style: none;
+  padding: 0;
+}
+:where(.stay-detail) .music-track-collection li {
+  padding: 12px 0;
+  border-top: 1px solid #e2e5e8;
+}

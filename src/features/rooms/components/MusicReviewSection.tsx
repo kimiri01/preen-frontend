@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@/common/types/api'
+import type { ApiResponse, PageResponse } from '@/common/types/api'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQueries, useQuery } from '@tanstack/react-query'
@@ -30,16 +30,25 @@ export function useMusicReviews(
   rating = 0,
   sort = 'latest',
   page = 0,
+  size = 20,
 ) {
   return useQuery({
-    queryKey: ['music-reviews', id, rating, sort, page],
-    queryFn: async ({ signal }) =>
-      (
-        await http.get<ApiResponse<ReviewList>>(
-          `/api/accommodations/${encodeURIComponent(id)}/music-reviews?rating=${rating}&sort=${sort}&page=${page}`,
-          { signal },
-        )
-      ).data,
+    queryKey: ['music-reviews', id, rating, sort, page, size],
+    queryFn: async ({ signal }): Promise<ReviewList> => {
+      const response = await http.get<ApiResponse<PageResponse<MusicReview>>>(
+        `/api/accommodations/${encodeURIComponent(id)}/reviews?rating=${rating}&sort=${sort}&page=${page}&size=${size}`,
+        { signal },
+      )
+      const result = response.data
+      return {
+        accommodationId: id,
+        total: result.totalElements,
+        filteredTotal: result.totalElements,
+        page: result.page,
+        pageSize: result.size,
+        reviews: result.content,
+      }
+    },
     enabled: isValidStayId(id),
     retry: (count, error) =>
       !(error instanceof HttpError && error.status < 500) && count < 1,
@@ -62,12 +71,23 @@ export function MusicReviewSection({
   const rawPage = params.get('reviewPage') ?? ''
   const page =
     /^\d{1,5}$/.test(rawPage) && Number(rawPage) <= 10000 ? Number(rawPage) : 0
-  const update = (patch: { rating?: number; sort?: string; page?: number }) => {
+  const size = [10, 20, 50].includes(Number(params.get('reviewSize')))
+    ? Number(params.get('reviewSize'))
+    : 20
+  const update = (patch: {
+    rating?: number
+    sort?: string
+    page?: number
+    size?: number
+  }) => {
     setParams((previous) => {
       const next = new URLSearchParams(previous)
       const nextRating = patch.rating ?? rating
       const nextSort = patch.sort ?? sort
       const nextPage = patch.page ?? 0
+      const nextSize = patch.size ?? size
+      if (nextSize !== 20) next.set('reviewSize', String(nextSize))
+      else next.delete('reviewSize')
       if (nextRating) next.set('rating', String(nextRating))
       else next.delete('rating')
       if (nextSort !== 'latest') next.set('reviewSort', nextSort)
@@ -82,7 +102,27 @@ export function MusicReviewSection({
   const setSort = (value: string) => update({ sort: value })
   const setPage = (value: number) => update({ page: value })
   const [playing, setPlaying] = useState<string | null>(null)
-  const query = useMusicReviews(accommodationId, rating, sort, page)
+  const summary = useMusicReviews(accommodationId)
+  const query = useMusicReviews(accommodationId, rating, sort, page, size)
+  const trackCollection = useQuery({
+    queryKey: ['music-review-tracks', accommodationId],
+    queryFn: async ({ signal }) =>
+      (
+        await http.get<
+          ApiResponse<
+            {
+              spotifyTrackId: string
+              reviewCount: number
+              latestCreatedAt: string
+            }[]
+          >
+        >(`/api/accommodations/${encodeURIComponent(accommodationId)}/tracks`, {
+          signal,
+        })
+      ).data,
+    enabled: isValidStayId(accommodationId),
+    retry: false,
+  })
   const trackIds = [
     ...new Set(
       (query.data?.reviews ?? []).map((review) => review.spotifyTrackId),
@@ -108,17 +148,17 @@ export function MusicReviewSection({
 
   useEffect(() => {
     setPlaying(null)
-  }, [accommodationId, rating, sort, page])
+  }, [accommodationId, rating, sort, page, size])
   return (
     <section className="music-reviews" aria-labelledby="music-review-heading">
       <h2 id="music-review-heading">이곳에 머문 사람들이 고른 음악</h2>
       <p className="music-review-caption">
-        음악 리뷰 {query.data?.total ?? '—'}개 · 한 곡과 별점으로 남기는
+        음악 리뷰 {summary.data?.total ?? '—'}개 · 한 곡과 별점으로 남기는
         머무름입니다. 텍스트 리뷰는 작성하지 않습니다.
       </p>
       <p className="music-filter-count" role="status" aria-live="polite">
         {query.data
-          ? `전체 ${query.data.total}개 · ${rating ? `${rating}점` : '전체 별점'} 리뷰 ${query.data.filteredTotal}개`
+          ? `전체 ${summary.data?.total ?? '—'}개 · ${rating ? `${rating}점` : '전체 별점'} 리뷰 ${query.data.filteredTotal}개`
           : '리뷰 건수를 확인하고 있습니다.'}
       </p>
       <div className="music-review-toolbar">
@@ -153,6 +193,19 @@ export function MusicReviewSection({
             <option value="latest">최신순 ↓</option>
             <option value="rating-desc">별점 높은 순</option>
             <option value="rating-asc">별점 낮은 순</option>
+          </select>
+        </label>
+        <label>
+          페이지당 리뷰{' '}
+          <select
+            value={size}
+            onChange={(event) => update({ size: Number(event.target.value) })}
+          >
+            {[10, 20, 50].map((value) => (
+              <option key={value} value={value}>
+                {value}개
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -325,6 +378,61 @@ export function MusicReviewSection({
           </>
         )
       )}
+      <details className="music-track-collection">
+        <summary>이 숙소의 음악 모음 · 중복 없이 최대 50곡</summary>
+        <p>
+          현재 별점 필터와 별개로, 숙소의 공개 리뷰에 남겨진 곡을 최근 등록
+          순으로 보여줍니다.
+        </p>
+        {trackCollection.isPending ? (
+          <p>음악 모음을 불러오고 있습니다.</p>
+        ) : trackCollection.isError ? (
+          <p>
+            음악 모음을 불러오지 못했습니다. 리뷰 목록은 계속 이용할 수
+            있습니다.
+          </p>
+        ) : trackCollection.data?.length ? (
+          <ul>
+            {trackCollection.data.map((track, index) => {
+              const valid = /^[A-Za-z0-9]{22}$/.test(track.spotifyTrackId)
+              const key = `track:${track.spotifyTrackId}`
+              const title =
+                tracks[trackIds.indexOf(track.spotifyTrackId)]?.data?.title ||
+                `음악 ${index + 1}`
+              return (
+                <li key={track.spotifyTrackId}>
+                  <p>
+                    이 곡을 남긴 리뷰 {track.reviewCount}개 · 최근{' '}
+                    {track.latestCreatedAt.slice(0, 10)}
+                  </p>
+                  {valid && (
+                    <button
+                      type="button"
+                      aria-expanded={playing === key}
+                      onClick={() => setPlaying(playing === key ? null : key)}
+                    >
+                      {title} · Spotify로 듣기
+                    </button>
+                  )}
+                  {valid && playing === key && (
+                    <iframe
+                      title={`${title} Spotify 플레이어`}
+                      src={`https://open.spotify.com/embed/track/${track.spotifyTrackId}`}
+                      width="100%"
+                      height="152"
+                      allow="encrypted-media; fullscreen; picture-in-picture"
+                      referrerPolicy="no-referrer"
+                      allowFullScreen
+                    />
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+        ) : (
+          <p>아직 등록된 곡이 없습니다.</p>
+        )}
+      </details>
       <aside className="music-review-guide">
         <h3>나의 머무름도 음악으로 남겨보세요.</h3>
         <p>

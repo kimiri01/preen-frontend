@@ -1,23 +1,14 @@
-# 음악 리뷰 별점 필터링 (Moon)
+# REVIEW-003 음악 리뷰·별점·트랙 모음 — 최신 구현
 
-## 기능
-Must13 음악 리뷰 화면에서 전체 또는 1~5점 리뷰를 조회합니다.
-선택 버튼, 전체/필터 결과 건수, 빈 결과 안내, 최신순/별점순 정렬을 제공합니다.
-별점·정렬을 바꾸면 첫 페이지로 돌아가고 Spotify 플레이어를 닫습니다.
+작업 브랜치 feature/review-track-list_Moon. Must13 화면에서 공개·완료 예약 리뷰를 조회합니다.
 
-주소의 rating(1~5), reviewSort(latest/rating-desc/rating-asc), reviewPage(0부터)에
-선택 상태를 저장합니다. 새로고침·뒤로가기에도 상태가 유지됩니다.
-날짜·인원·음악 탭 파라미터는 유지합니다. 잘못된 주소 값은 기본값으로 조회합니다.
-비어 있는 페이지 번호를 열면 첫 페이지로 이동할 수 있습니다.
+- GET /api/accommodations/{id}/reviews?rating=&sort=&page=&size= : 공통 PageResponse(content/page/size/totalElements/totalPages/hasNext).
+- 기본20개/최대50개. UI는10/20/50개 선택. rating/reviewSort/reviewPage/reviewSize를 URL에 유지.
+- 별점/정렬/크기 변경 시 첫 페이지로 이동. 전체 건수와 필터 건수 구분, 빈 결과/조회 실패 안내.
+- GET /api/accommodations/{id}/tracks : 곡별 중복 제거, 최근 등록 순 최대50곡, reviewCount/latestCreatedAt 포함.
+- 음악 모음은 별점 필터와 별개로 숙소 전체 공개 리뷰 기준. 한 번에 플레이어1개만 열기.
+- 기존 /music-reviews API(10개, total/filteredTotal/reviews)는 이전 호출자용으로 유지.
+- 곡 메타데이터는 공식oEmbed 일시 조회, 음악 재생은 Spotify 공식iframe. DB에 메타데이터 저장하지 않음.
 
-API: GET /api/accommodations/{id}/music-reviews?rating=5&sort=latest&page=0
-팀 ApiResponse.data의 total, filteredTotal, page, pageSize, reviews를 사용합니다.
-숙소별 공개 리뷰 중 이용 완료 예약만 조회합니다. 페이지당10개입니다.
-
-## 확인
-2026-11-18 로컬 예시 리뷰4개에서 5점2개, 2점0개, 전체4개 확인.
-새로고침 후5점 유지, 별점 낮은 순 정렬과 전체 복귀 확인.
-프론트 빌드와 백엔드 테스트17개 통과.
-
-로그인·예약 완료 검증이 필요한 리뷰 작성은 별도 담당 기능입니다.
-선행 Moon 통합 브랜치에 의존합니다. PR 리뷰에서 기존 작업과 함께 비교하세요.
+검증: 페이지 기본/경계/잘못된size, 숨김·미완료 제외, 트랙 중복집계·최근정렬·50개 한도, 원래 필터 회귀 테스트 통과.
+정식 로그인/검색은 관련 기능과 연결 대기. 팀 공통 PageResponse 파일은 수정하지 않았습니다.

@@ -146,6 +146,9 @@ function ReviewWriteForm() {
                 queryKey: ['music-reviews', result.accommodationId],
               })
               await client.invalidateQueries({
+                queryKey: ['music-review-tracks', result.accommodationId],
+              })
+              await client.invalidateQueries({
                 queryKey: ['review-write-context'],
               })
             } catch (error) {
