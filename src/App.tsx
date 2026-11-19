@@ -1,3 +1,4 @@
+import { roomRoutes } from '@/features/rooms/routes'
 import { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Layout } from '@/common/components/Layout'
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     Component: AppLayout,
-    children: [...mainRoutes, ...accommodationRoutes, ...authRoutes],
+    children: [...roomRoutes, ...mainRoutes, ...accommodationRoutes, ...authRoutes],
   },
 ])
 
