@@ -5,7 +5,11 @@ import {
   todayKst,
   upcomingWeekend,
 } from '@/common/utils/date'
-import { validateStaySelection, roomGuestLimit } from '../utils/staySelection'
+import {
+  validateStaySelection,
+  roomGuestLimit,
+  MAX_STAY_NIGHTS,
+} from '../utils/staySelection'
 import { addRecentlyViewed } from '@/features/accommodation/hooks/useRecentlyViewed'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
@@ -64,7 +68,11 @@ export function RoomListPage() {
   const setCheckIn = (value: string) =>
     updateConditions({
       checkIn: value,
-      ...(!value || (checkOut && checkOut <= value) ? { checkOut: '' } : {}),
+      ...(!value ||
+      (checkOut &&
+        (checkOut <= value || checkOut > addDays(value, MAX_STAY_NIGHTS)))
+        ? { checkOut: '' }
+        : {}),
     })
   const setCheckOut = (value: string) => updateConditions({ checkOut: value })
   const setGuests = (value: string) => updateConditions({ guestCount: value })
@@ -251,8 +259,15 @@ export function RoomListPage() {
                       checkIn && checkIn >= today ? checkIn : today,
                       1,
                     )}
+                    max={
+                      checkIn ? addDays(checkIn, MAX_STAY_NIGHTS) : undefined
+                    }
                     disabled={!checkIn || checkIn < today}
-                    aria-invalid={Boolean(checkOut && checkOut <= checkIn)}
+                    aria-invalid={Boolean(
+                      checkOut &&
+                      (checkOut <= checkIn ||
+                        checkOut > addDays(checkIn, MAX_STAY_NIGHTS)),
+                    )}
                     value={checkOut}
                     onChange={(event) => {
                       setSelectionMessage('')
@@ -338,8 +353,9 @@ export function RoomListPage() {
                 <p className="stay-selected-summary">{schedule}</p>
               )}
               <p className="stay-search-note">
-                일정 선택은 비교용이며, 날짜별 재고·총액 조회는 예약 기능 연결
-                후 제공됩니다.
+                최대 {MAX_STAY_NIGHTS}박까지 선택할 수 있습니다. 일정 선택은
+                비교용이며, 날짜별 재고·총액 조회는 예약 기능 연결 후
+                제공됩니다.
               </p>
             </section>
             {!musicTab && photos.length > 0 && (
