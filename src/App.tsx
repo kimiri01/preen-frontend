@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Layout } from '@/common/components/Layout'
 import {
@@ -6,25 +7,40 @@ import {
 } from '@/features/accommodation/public'
 import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
-import { authRoutes } from '@/features/auth/public'
+import {
+  authRoutes,
+  restoreLogin,
+  useLoginSession,
+} from '@/features/auth/public'
+
+function AppLayout() {
+  const { member, restoring, notice } = useLoginSession()
+
+  return (
+    <Layout
+      headerMenuPanels={{
+        category: <CategoryMenuPanel />,
+        recent: <RecentlyViewedPanel />,
+      }}
+      memberName={member?.name ?? null}
+      restoring={restoring}
+      notice={notice}
+    />
+  )
+}
 
 const router = createBrowserRouter([
   {
     path: '/',
-    // 헤더(Common)는 Feature를 직접 import하지 않으므로,
-    // 헤더 메뉴에 펼쳐질 내용을 여기(App)에서 조합해 넣어 줍니다.
-    element: (
-      <Layout
-        headerMenuPanels={{
-          category: <CategoryMenuPanel />,
-          recent: <RecentlyViewedPanel />,
-        }}
-      />
-    ),
+    Component: AppLayout,
     children: [...mainRoutes, ...accommodationRoutes, ...authRoutes],
   },
 ])
 
 export function App() {
+  useEffect(() => {
+    void restoreLogin()
+  }, [])
+
   return <RouterProvider router={router} />
 }
