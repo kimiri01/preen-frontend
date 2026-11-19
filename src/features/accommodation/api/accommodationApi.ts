@@ -4,8 +4,32 @@ import type {
   Accommodation,
   AccommodationSummaryResponse,
   Category,
+  CategoryAccommodationsResponse,
   Region,
 } from '@/features/accommodation/types'
+
+/** 서버 응답 항목 이름을 화면(숙소 카드)에서 쓰는 이름으로 바꿉니다. */
+function toAccommodation(item: AccommodationSummaryResponse): Accommodation {
+  return {
+    id: item.id,
+    name: item.name,
+    location: item.address,
+    pricePerNight: item.minNightlyPrice,
+    image: item.thumbnailUrl ?? '',
+    regionName: item.regionName,
+    categoryName: item.categoryName,
+  }
+}
+
+/** 카드 뷰에서 카테고리마다 보여 줄 숙소 수 */
+export const CARDS_PER_CATEGORY = 6
+
+/** 서버가 한 번에 돌려주는 최대 숙소 수 (기능명세서 COMMON-004: size 최대 50) */
+export const MAX_PAGE_SIZE = 50
+
+
+export const SERVER_SUPPORTS_KEYWORD_AND_DATES = true
+
 
 /** 숙박 유형 카테고리 목록 조회 */
 export async function fetchCategories(): Promise<Category[]> {
@@ -46,15 +70,36 @@ export async function fetchAccommodations({
     ApiResponse<PageResponse<AccommodationSummaryResponse>>
   >(`/api/accommodations?${params}`)
 
-  // 서버 응답 항목 이름을 화면(숙소 카드)에서 쓰는 이름으로 바꿉니다.
   return {
     ...response.data,
-    content: response.data.content.map((item) => ({
-      id: item.id,
-      name: item.name,
-      location: item.address,
-      pricePerNight: item.minNightlyPrice,
-      image: item.thumbnailUrl ?? '',
-    })),
+    content: response.data.content.map(toAccommodation),
   }
+}
+
+/** "전체 숙소"용 카테고리 묶음 조회. 카테고리마다 숙소를 size개씩 한 번의 요청으로 받아옵니다. */
+export async function fetchAccommodationsByCategory(size: number): Promise<
+  Array<{
+    categoryCode: string
+    categoryName: string
+    accommodations: Accommodation[]
+  }>
+> {
+  const response = await http.get<
+    ApiResponse<CategoryAccommodationsResponse[]>
+  >(`/api/accommodations/by-category?size=${size}`)
+  return response.data.map((group) => ({
+    categoryCode: group.categoryCode,
+    categoryName: group.categoryName,
+    accommodations: group.accommodations.map(toAccommodation),
+  }))
+}
+
+/** 최근 본 숙소 조회. ids는 최근에 본 순서이며, 서버도 같은 순서로 돌려줍니다. */
+export async function fetchRecentAccommodations(
+  ids: number[],
+): Promise<Accommodation[]> {
+  const response = await http.get<ApiResponse<AccommodationSummaryResponse[]>>(
+    `/api/accommodations/recent?ids=${ids.join(',')}`,
+  )
+  return response.data.map(toAccommodation)
 }

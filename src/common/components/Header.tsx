@@ -1,15 +1,78 @@
+import { useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-export function Header() {
+/**
+ * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
+ * 내용은 각 Feature가 만들고 App에서 넣어 줍니다. (Common은 Feature를 import하지 않음)
+ */
+export interface HeaderMenuPanels {
+  /** "전체 카테고리"를 눌렀을 때 */
+  category?: ReactNode
+  /** "최근 본 숙소"를 눌렀을 때 */
+  recent?: ReactNode
+}
+
+type MenuKey = keyof HeaderMenuPanels
+
+interface HeaderProps {
+  menuPanels?: HeaderMenuPanels
+}
+
+const MENU_PANEL_ID = 'header-menu-panel'
+
+export function Header({ menuPanels = {} }: HeaderProps) {
+  // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
+  const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
+  // 패널을 누른 버튼 바로 아래에 맞추기 위한 왼쪽 위치(px, nav 기준)
+  const [panelLeft, setPanelLeft] = useState(0)
+  const navRef = useRef<HTMLElement>(null)
+
+  // 메뉴가 열려 있는 동안: 메뉴 바깥을 누르거나 Esc 키를 누르면 닫습니다.
+  useEffect(() => {
+    if (openMenu === null) return
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) setOpenMenu(null)
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenMenu(null)
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [openMenu])
+
+  // 같은 버튼을 다시 누르면 닫고, 다른 버튼을 누르면 그 메뉴로 바꿉니다.
+  const toggleMenu = (menu: MenuKey, button: HTMLButtonElement) => {
+    setPanelLeft(button.offsetLeft)
+    setOpenMenu((current) => (current === menu ? null : menu))
+  }
+
+  const openPanel = openMenu === null ? null : menuPanels[openMenu]
+
   return (
     <header>
+      {/* 로고를 누르면 첫 홈페이지(조건 없는 "/")로 이동합니다. 열린 메뉴도 닫습니다. */}
       <h1>
-        <Link to="/" className="brand-link">
+        <Link
+          to="/"
+          className="header-logo"
+          aria-label="PREEN 홈으로"
+          onClick={() => setOpenMenu(null)}
+        >
           PREEN
         </Link>
       </h1>
-      <nav aria-label="주 메뉴">
-        <button type="button">
+      <nav aria-label="주 메뉴" ref={navRef}>
+        <button
+          type="button"
+          aria-expanded={openMenu === 'category'}
+          aria-controls={MENU_PANEL_ID}
+          onClick={(event) => toggleMenu('category', event.currentTarget)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -30,7 +93,12 @@ export function Header() {
           </svg>
           전체 카테고리
         </button>
-        <button type="button">
+        <button
+          type="button"
+          aria-expanded={openMenu === 'recent'}
+          aria-controls={MENU_PANEL_ID}
+          onClick={(event) => toggleMenu('recent', event.currentTarget)}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -129,6 +197,19 @@ export function Header() {
           </svg>
           회원가입
         </Link>
+        {openPanel && (
+          <div
+            id={MENU_PANEL_ID}
+            className="header-menu-panel"
+            style={{ left: panelLeft }}
+            // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
+            onClick={(event) => {
+              if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
+            }}
+          >
+            {openPanel}
+          </div>
+        )}
       </nav>
     </header>
   )
