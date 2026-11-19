@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import type { RoomAvailability } from '../hooks/useAvailability'
 import type { Room } from '../types'
 import { RoomCard } from './RoomCard'
 import '../rooms.css'
@@ -7,8 +8,12 @@ export function RoomListSection({
   rooms,
   guestCount,
   onSelectRoom,
+  availability,
+  availabilityRequested,
 }: {
   rooms: Room[]
+  availability?: RoomAvailability[]
+  availabilityRequested?: boolean
   guestCount?: number
   onSelectRoom?: (room: Room) => void
 }) {
@@ -59,6 +64,10 @@ export function RoomListSection({
             <RoomCard
               key={room.id}
               room={room}
+              availability={availability?.find(
+                (item) => item.roomId === room.id,
+              )}
+              availabilityRequested={availabilityRequested}
               guestCount={guestCount}
               onSelectRoom={onSelectRoom}
             />
@@ -115,7 +124,8 @@ export function RoomListSection({
             적용됩니다.
           </li>
           <li>
-            날짜별 판매가격과 잔여 객실은 이 화면의 기본정보와 다를 수 있습니다.
+            조회는 재고 선점이 아닙니다. 예약 시점에 판매가격과 잔여 객실을 다시
+            확인해야 합니다.
           </li>
           <li>
             오디오 이용은 구비 객실의 안내 시간을 따라주세요. 다른 투숙객을 위해

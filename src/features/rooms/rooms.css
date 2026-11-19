@@ -1857,3 +1857,10 @@
   border: 0;
   border-radius: 10px;
 }
+
+/* STAY-005: live query results remain distinct from the base nightly price. */
+.room-period-price { margin: 12px 0; padding: 12px; border: 1px solid #dce6e1; border-radius: 8px; background: #f4f8f6; max-width: 300px; }
+.room-period-price strong { display: block; font-size: 15px; }
+.room-period-price p, .room-period-price small { font-size: 12px; line-height: 1.6; }
+.room-availability-status { margin: 12px 0; padding: 12px 16px; background: #f4f8f6; border-radius: 8px; font-size: 13px; }
+.room-availability-status button { padding: 7px 12px; border: 1px solid #dce6e1; border-radius: 6px; background: white; cursor: pointer; }

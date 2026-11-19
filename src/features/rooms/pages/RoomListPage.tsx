@@ -22,6 +22,7 @@ import {
   useMusicReviews,
 } from '../components/MusicReviewSection'
 import { HttpError } from '@/common/api/http'
+import { useAvailability } from '../hooks/useAvailability'
 import { RoomListSection } from '../components/RoomListSection'
 import { isValidStayId, useRooms } from '../hooks/useRooms'
 import '../rooms.css'
@@ -82,6 +83,12 @@ export function RoomListPage() {
     guests,
     today,
     maxGuests,
+  )
+  const availability = useAvailability(
+    accommodationId,
+    checkIn,
+    checkOut,
+    !selectionError && Boolean(query.data),
   )
   const [selectionMessage, setSelectionMessage] = useState('')
   const schedule = !selectionError
@@ -164,7 +171,9 @@ export function RoomListPage() {
                 {minPrice !== null && (
                   <p>
                     1박 {minPrice.toLocaleString('ko-KR')}원부터
-                    <small>기본 객실 요금 · 날짜별 요금 별도 확인</small>
+                    <small>
+                      기본 1박 요금 · 선택 일정 합계는 객실에서 확인
+                    </small>
                   </p>
                 )}
               </div>
@@ -228,8 +237,9 @@ export function RoomListPage() {
                     return
                   }
                   setSelectionMessage(
-                    '선택한 일정과 인원을 반영했습니다. 객실 정보를 확인해주세요.',
+                    '선택 일정의 재고와 요금을 조회합니다. 객실별 결과를 확인해주세요.',
                   )
+                  void availability.refetch()
                   changeTab(false)
                   requestAnimationFrame(() =>
                     list.current?.scrollIntoView({ behavior: 'smooth' }),
@@ -336,9 +346,9 @@ export function RoomListPage() {
                 </div>
                 <button
                   type="submit"
-                  title="날짜별 재고 조회 없이 선택 조건을 반영합니다"
+                  title="선택 일정의 날짜별 재고와 요금을 다시 조회합니다"
                 >
-                  선택 조건 적용
+                  가능 객실·요금 확인
                 </button>
               </form>
               <p
@@ -353,9 +363,8 @@ export function RoomListPage() {
                 <p className="stay-selected-summary">{schedule}</p>
               )}
               <p className="stay-search-note">
-                최대 {MAX_STAY_NIGHTS}박까지 선택할 수 있습니다. 일정 선택은
-                비교용이며, 날짜별 재고·총액 조회는 예약 기능 연결 후
-                제공됩니다.
+                최대 {MAX_STAY_NIGHTS}박까지 조회합니다. 표시 총액은 기준 인원
+                기준이며 추가 인원 요금은 포함하지 않습니다.
               </p>
             </section>
             {!musicTab && photos.length > 0 && (
@@ -377,6 +386,7 @@ export function RoomListPage() {
               <button
                 type="button"
                 onClick={() => {
+                  void availability.refetch()
                   changeTab(false)
                   requestAnimationFrame(() =>
                     document
@@ -390,6 +400,7 @@ export function RoomListPage() {
               <button
                 type="button"
                 onClick={() => {
+                  void availability.refetch()
                   changeTab(false)
                   requestAnimationFrame(() =>
                     document
@@ -410,6 +421,7 @@ export function RoomListPage() {
               <button
                 type="button"
                 onClick={() => {
+                  void availability.refetch()
                   changeTab(false)
                   requestAnimationFrame(() =>
                     document
@@ -444,12 +456,52 @@ export function RoomListPage() {
                 >
                   {schedule && (
                     <p className="stay-schedule" role="status">
-                      선택 일정 {schedule} · 기본 1박 요금 표시
+                      선택 일정 {schedule} · 날짜별 요금 합계 조회
                     </p>
+                  )}
+                  {schedule && (
+                    <aside
+                      className="room-availability-status"
+                      aria-live="polite"
+                    >
+                      {availability.isFetching ? (
+                        <p role="status">
+                          선택 일정의 재고와 요금을 확인하고 있습니다…
+                        </p>
+                      ) : availability.isError ? (
+                        <p role="alert">
+                          예약 가능 여부·요금을 불러오지 못했습니다. 이전 조회
+                          금액은 사용하지 않습니다.
+                        </p>
+                      ) : availability.data ? (
+                        <p>
+                          조회 시각{' '}
+                          {new Date(
+                            availability.data.checkedAt,
+                          ).toLocaleTimeString('ko-KR')}{' '}
+                          · 예약 시 재고·요금이 다시 확인됩니다.
+                        </p>
+                      ) : null}
+                      <button
+                        type="button"
+                        disabled={availability.isFetching}
+                        onClick={() => void availability.refetch()}
+                      >
+                        재고·요금 다시 조회
+                      </button>
+                    </aside>
                   )}
                   <RoomListSection
                     key={accommodationId}
                     rooms={stay.rooms}
+                    availability={
+                      schedule &&
+                      !availability.isFetching &&
+                      !availability.isError
+                        ? availability.data?.rooms
+                        : undefined
+                    }
+                    availabilityRequested={Boolean(schedule)}
                     guestCount={
                       Number.isInteger(Number(guests)) && Number(guests) > 0
                         ? Number(guests)

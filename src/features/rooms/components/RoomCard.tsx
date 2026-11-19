@@ -1,3 +1,7 @@
+import {
+  availabilityReason,
+  type RoomAvailability,
+} from '../hooks/useAvailability'
 import { useEffect, useId, useRef, useState } from 'react'
 import type { Room } from '../types'
 import { RoomSpotifyPlayer } from './RoomSpotifyPlayer'
@@ -34,7 +38,11 @@ export function RoomCard({
   room,
   guestCount,
   onSelectRoom,
+  availability,
+  availabilityRequested,
 }: {
+  availability?: RoomAvailability
+  availabilityRequested?: boolean
   room: Room
   guestCount?: number
   onSelectRoom?: (room: Room) => void
@@ -132,7 +140,13 @@ export function RoomCard({
               : `선택 인원 초과 · 이 객실은 최대 ${room.maxCapacity}명`}
           </p>
         )}
-        <p className="room-booking-status">일정 선택 후 예약 가능 여부 확인</p>
+        <p className="room-booking-status" role="status">
+          {availabilityRequested
+            ? availability
+              ? availabilityReason[availability.reason]
+              : '선택 일정 조회 대기'
+            : '일정을 선택하면 재고·기간 요금을 조회합니다'}
+        </p>
         <details className="room-more">
           <summary>
             객실 스펙 · 편의시설{room.audio ? ' · Spotify' : ''} 보기
@@ -241,18 +255,43 @@ export function RoomCard({
           {money(room.nightlyPrice)}
           <span>원 / 1박</span>
         </p>
+        {availabilityRequested && (
+          <div className="room-period-price">
+            {availability?.available && availability.totalPrice !== null ? (
+              <>
+                <strong>
+                  {availability.nights}박 기준 인원 요금 합계{' '}
+                  {money(availability.totalPrice)}원
+                </strong>
+                <p>기간 중 최소 잔여 객실 {availability.remainingRooms}개</p>
+                {guestCount !== undefined && guestCount > room.maxCapacity && (
+                  <p role="alert">선택 인원은 객실 최대 정원을 초과합니다.</p>
+                )}
+                <small>추가 인원 요금 별도 · 최종 결제 금액 아님</small>
+              </>
+            ) : (
+              <p>
+                {availability
+                  ? availabilityReason[availability.reason]
+                  : '요금 확인 전입니다. 조회 중이거나 실패하면 금액을 표시하지 않습니다.'}
+              </p>
+            )}
+          </div>
+        )}
         <button
           className="room-reserve-button"
           type="button"
-          disabled={!onSelectRoom}
+          disabled={
+            !onSelectRoom ||
+            !availability?.available ||
+            (guestCount !== undefined && guestCount > room.maxCapacity)
+          }
           onClick={() => onSelectRoom?.(room)}
         >
-          {onSelectRoom ? '객실 선택' : '일정 선택 후 예약'}
+          {onSelectRoom ? '객실 선택' : '예약 연결 준비 중'}
         </button>
         <p className="room-price-note">
-          날짜별 최종 요금과
-          <br />
-          예약 가능 여부는 별도 확인
+          예약 생성은 별도 연결 예정입니다. 조회만으로 예약되지 않습니다.
         </p>
       </div>
       <dialog
