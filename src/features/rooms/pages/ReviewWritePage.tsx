@@ -1,3 +1,4 @@
+import { SpotifyTrackSearch } from '@/features/musicSearch/SpotifyTrackSearch'
 import { useLoginSession } from '@/features/auth/public'
 import { useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
@@ -239,6 +240,7 @@ function ReviewWriteForm() {
                 : '별점을 1~5점 중 선택해주세요.'}
             </p>
           </fieldset>
+          <SpotifyTrackSearch disabled={saving || restoring || !member} selectedId={track} onSelect={song=>{setInput(song.spotifyUrl);setTrack(song.id);setNotice('')}} />
           <fieldset disabled={saving}>
             <legend>머무름에 어울리는 한 곡</legend>
             <label htmlFor="review-track">Spotify 곡 링크 또는 트랙 ID</label>
@@ -269,8 +271,7 @@ function ReviewWriteForm() {
               이 곡 선택
             </button>
             <p>
-              Spotify에서 곡의 ‘공유 → 링크 복사’를 사용할 수 있습니다. 곡 검색
-              기능은 담당 기능 연결 후 제공됩니다.
+              위 검색 결과에서 곡을 선택하거나 Spotify의 곡 링크를 직접 입력할 수 있습니다.
             </p>
             {track && (
               <div className="review-write-preview">

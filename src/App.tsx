@@ -1,3 +1,4 @@
+import { MusicSearchPage } from '@/features/musicSearch/MusicSearchPage'
 import { roomRoutes } from '@/features/rooms/routes'
 import { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     Component: AppLayout,
-    children: [...roomRoutes, ...mainRoutes, ...accommodationRoutes, ...authRoutes],
+    children: [{path:'music/search',Component:MusicSearchPage}, ...roomRoutes, ...mainRoutes, ...accommodationRoutes, ...authRoutes],
   },
 ])
 
