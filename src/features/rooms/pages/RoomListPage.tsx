@@ -119,12 +119,7 @@ export function RoomListPage() {
   const minPrice = stay?.rooms.length
     ? Math.min(...stay.rooms.map((room) => Number(room.nightlyPrice)))
     : null
-  const facilities = [
-    ...new Set(
-      stay?.rooms.flatMap((room) => room.facilities.map((item) => item.name)) ??
-        [],
-    ),
-  ]
+  const facilities = stay?.amenities ?? []
   return (
     <main className="rooms-page stay-detail">
       <Link className="room-list-back" to={listPath}>
@@ -471,6 +466,12 @@ export function RoomListPage() {
                     className="stay-facility-row"
                     aria-label="숙소 시설"
                   >
+                    {facilities.length === 0 && (
+                      <p>
+                        등록된 숙소 편의시설이 없습니다. 객실별 시설은 객실
+                        스펙에서 확인해주세요.
+                      </p>
+                    )}
                     <ul>
                       {facilities.map((name) => (
                         <li key={name}>
@@ -486,6 +487,11 @@ export function RoomListPage() {
                     <div>
                       <h3>{stay.accommodationName}</h3>
                       <p>{address}</p>
+                      {stay.latitude != null && stay.longitude != null && (
+                        <p className="music-review-caption">
+                          위도 {stay.latitude} · 경도 {stay.longitude}
+                        </p>
+                      )}
                       <button
                         type="button"
                         className="music-back-button"
@@ -533,10 +539,38 @@ export function RoomListPage() {
                   </div>
                   <aside className="stay-policy">
                     <h3>예약 전 취소·환불 조건을 확인해주세요</h3>
-                    <p>
-                      취소·환불 규정은 예약 조건에 따라 달라집니다. 예약
-                      기능에서 최종 정책을 확인해주세요.
-                    </p>
+                    {stay.refundPolicy ? (
+                      <>
+                        {stay.refundPolicy.policyText && (
+                          <p>{stay.refundPolicy.policyText}</p>
+                        )}
+                        {stay.refundPolicy.rules.length > 0 ? (
+                          <ul aria-label="숙소 환불정책">
+                            {stay.refundPolicy.rules.map((rule, index) => (
+                              <li key={`${rule.daysBefore}-${index}`}>
+                                체크인 {rule.daysBefore}일 전까지 ·{' '}
+                                {Math.round(Number(rule.refundRate) * 100)}%
+                                환불
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <p>
+                            등록된 세부 환불 비율이 없습니다. 예약 전 숙소
+                            정책을 확인해주세요.
+                          </p>
+                        )}
+                        <p>
+                          정책 버전: {stay.refundPolicy.version} · 실제 예약 시
+                          확정된 정책을 확인해주세요.
+                        </p>
+                      </>
+                    ) : (
+                      <p>
+                        등록된 환불정책이 없습니다. 예약 전 숙소 정책을
+                        확인해주세요.
+                      </p>
+                    )}
                   </aside>
                 </section>
                 <section id="stay-music" className="stay-info stay-music-note">

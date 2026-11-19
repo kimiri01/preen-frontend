@@ -34,6 +34,15 @@ export interface Room {
   images: RoomImage[]
 }
 export interface RoomList {
+  latitude?: string | null
+  longitude?: string | null
+  amenities?: string[]
+  refundPolicy?: {
+    id: string
+    version: string
+    policyText: string | null
+    rules: { daysBefore: number; refundRate: number }[]
+  } | null
   categoryCode: string
   categoryName: string
   regionCode: string
