@@ -4,14 +4,30 @@ import type { HeaderMenuPanels } from '@/common/components/Header'
 import { Footer } from '@/common/components/Footer'
 
 interface LayoutProps {
-  /** 헤더 메뉴를 눌렀을 때 펼쳐질 내용. App에서 각 Feature의 화면을 넣어 줍니다. */
   headerMenuPanels?: HeaderMenuPanels
+  memberName: string | null
+  restoring: boolean
+  notice?: string
 }
 
-export function Layout({ headerMenuPanels }: LayoutProps) {
+export function Layout({
+  headerMenuPanels,
+  memberName,
+  restoring,
+  notice,
+}: LayoutProps) {
   return (
     <div className="page">
-      <Header menuPanels={headerMenuPanels} />
+      <Header
+        menuPanels={headerMenuPanels}
+        memberName={memberName}
+        restoring={restoring}
+      />
+      {notice && (
+        <p className="session-notice" role="status">
+          {notice}
+        </p>
+      )}
       <Outlet />
       <Footer />
     </div>
