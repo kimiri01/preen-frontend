@@ -1,0 +1,82 @@
+.music-search-page {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+.spotify-search {
+  margin: 24px 0;
+  padding: 20px;
+  border: 1px solid #dfe5e2;
+  border-radius: 10px;
+}
+.spotify-search-input {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.spotify-search-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #ccd5cf;
+  border-radius: 6px;
+}
+.spotify-search button {
+  padding: 9px 16px;
+  border: 1px solid #bbc9c1;
+  border-radius: 6px;
+  background: #f4f8f5;
+  cursor: pointer;
+}
+.spotify-search button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.spotify-search-attribution {
+  color: #5c7165;
+  font-size: 13px;
+}
+.spotify-search ul {
+  list-style: none;
+  padding: 0;
+}
+.spotify-search li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e9e6;
+}
+.spotify-search li img,
+.spotify-search li > span {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.spotify-search li > div {
+  flex: 1;
+  min-width: 0;
+}
+.spotify-search li p {
+  font-size: 13px;
+  color: #68746e;
+}
+.spotify-search li a {
+  font-size: 12px;
+  color: #356c52;
+}
+.spotify-search button[aria-pressed='true'] {
+  background: #dbeae1;
+}
+@media (max-width: 560px) {
+  .spotify-search {
+    padding: 14px;
+  }
+  .spotify-search li {
+    flex-wrap: wrap;
+  }
+  .spotify-search li > div {
+    min-width: 120px;
+  }
+}
