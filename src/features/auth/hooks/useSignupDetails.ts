@@ -43,17 +43,12 @@ export function useSignupDetails(
     agreements[0] &&
     agreements[1]
 
-  // 가입 폼을 검사하고, 가입용 토큰과 입력 정보를 서버에 보냄.
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-
-    // Hook의 검사, 중복 제출 여부, 브라우저의 폼 유효성을 확인.
     if (!valid || busy.current || !event.currentTarget.checkValidity()) return
-
     busy.current = true
     setError('')
     try {
-      // 가입용 토큰과 가입 정보를 signup API 함수에 넘기고 결과를 기다린다.
       await mutation.mutateAsync({
         email,
         signupToken,
@@ -66,13 +61,10 @@ export function useSignupDetails(
         marketingAgreed: agreements[2],
         termsVersion: SIGNUP_TERMS_VERSION,
       })
-
-      // 가입에 성공하면 비밀번호 입력값을 비우고 완료 콜백을 실행.
       setPassword('')
       setConfirmation('')
       onComplete()
     } catch (cause) {
-      // HTTP 에러 응답에서 문자열 메시지를 꺼낼 수 있는지 확인.
       if (
         cause instanceof HttpError &&
         typeof cause.data === 'object' &&
@@ -113,7 +105,7 @@ export function useSignupDetails(
     agreements,
     toggleAgreement,
     toggleAll,
-    birthValid,
+    maxBirthDate: latestBirthDate,
     submit,
     error,
     pending: mutation.isPending,

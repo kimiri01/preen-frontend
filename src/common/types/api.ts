@@ -1,7 +1,5 @@
 export interface HttpRequestOptions extends Omit<RequestInit, 'body'> {
   body?: unknown
-  auth?: boolean
-  sameOrigin?: boolean
 }
 
 /** 백엔드 공통 응답 형식 (기능명세서 COMMON-004) */
@@ -21,3 +19,4 @@ export interface PageResponse<T> {
   totalPages: number
   hasNext: boolean
 }
+

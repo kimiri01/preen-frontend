@@ -17,13 +17,11 @@ type MenuKey = keyof HeaderMenuPanels
 
 interface HeaderProps {
   menuPanels?: HeaderMenuPanels
-  memberName: string | null
-  restoring: boolean
 }
 
 const MENU_PANEL_ID = 'header-menu-panel'
 
-export function Header({ menuPanels = {}, memberName, restoring, }: HeaderProps) {
+export function Header({ menuPanels = {} }: HeaderProps) {
   // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
   // 패널을 누른 버튼 바로 아래에 맞추기 위한 왼쪽 위치(px, nav 기준)
@@ -158,56 +156,47 @@ export function Header({ menuPanels = {}, memberName, restoring, }: HeaderProps)
           </svg>
           장바구니
         </button>
-        {memberName !== null ? (
-          <>
-            <span className="header-member">{memberName}님</span>
-            <Link to="/logout">로그아웃</Link>
-          </>
-        ) : !restoring ? (
-          <>
-            <Link to="/login">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-log-in"
-                aria-hidden="true"
-              >
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                <polyline points="10 17 15 12 10 7"></polyline>
-                <line x1="15" x2="3" y1="12" y2="12"></line>
-              </svg>
-              로그인
-            </Link>
-            <Link to="/signup">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="lucide lucide-user-plus"
-                aria-hidden="true"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <line x1="19" x2="19" y1="8" y2="14"></line>
-                <line x1="22" x2="16" y1="11" y2="11"></line>
-              </svg>
-              회원가입
-            </Link>
-          </>
-        ) : null}
+        <button type="button">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-log-in"
+            aria-hidden="true"
+          >
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            <polyline points="10 17 15 12 10 7"></polyline>
+            <line x1="15" x2="3" y1="12" y2="12"></line>
+          </svg>
+          로그인
+        </button>
+        <Link to="/signup">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-user-plus"
+            aria-hidden="true"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <line x1="19" x2="19" y1="8" y2="14"></line>
+            <line x1="22" x2="16" y1="11" y2="11"></line>
+          </svg>
+          회원가입
+        </Link>
         {openPanel && (
           <div
             id={MENU_PANEL_ID}

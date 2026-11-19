@@ -1,8 +1,27 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { getApiError } from '@/common/api/getApiError'
+import { HttpError } from '@/common/api/http'
 import { emailVerificationApi } from '@/features/auth/api/emailVerification'
 import type { EmailChallenge, EmailProof } from '@/features/auth/types'
+
+function getApiError(error: unknown) {
+  if (
+    error instanceof HttpError &&
+    typeof error.data === 'object' &&
+    error.data !== null
+  ) {
+    const data = error.data as { code?: string; message?: string }
+    return {
+      code: data.code,
+      message:
+        data.message ?? '요청을 처리하지 못했습니다. 다시 시도해 주세요.',
+    }
+  }
+  return {
+    code: undefined,
+    message: '서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.',
+  }
+}
 
 export function useSignupEmail() {
   const [email, setEmail] = useState('')
@@ -50,26 +69,18 @@ export function useSignupEmail() {
     setNotice('')
   }
 
-  // 인증번호를 발송하고 인증 화면과 재발송 대기 시간을 갱신합니다.
-  // 실패하면 오류 메시지를 표시하고, 요청이 끝나면 중복 요청 방지를 해제합니다.
   async function sendCode() {
     if (busy.current) return
     busy.current = true
     setError('')
     setNotice('')
     try {
-      // 이메일 앞, 뒤 공백 제거 및 소문자 변경
       const normalizedEmail = email.trim().toLowerCase()
-
-      // 1. 정리한 이메일을 넘겨 인증번호 발송 API 실행
-      // 2. 서버가 돌려준 인증 요청 ID, 만료 시각, 재발송 대기 시간을 response에 저장해둠
       const response = await sendMutation.mutateAsync(normalizedEmail)
-
-      // 응답을 받은 직후의 시각을 밀리초 단위로 기록
       const receivedAt = Date.now()
       setEmail(normalizedEmail)
-      setChallenge(response) // 지금 방송한 번호를 확인하는 데 필요한 정보
-      setProof(null) // 번호를 맞혔을 때 받는 인증 성공 정보
+      setChallenge(response)
+      setProof(null)
       setCode('')
       setBlocked(false)
       setNow(receivedAt)
@@ -78,11 +89,9 @@ export function useSignupEmail() {
     } catch (cause) {
       const failure = getApiError(cause)
       setError(failure.message)
-
-      // 재발송이 너무 빠르면, 현재 시각부터 60초 뒤에 다시 보낼 수 있도록 설정.
       if (failure.code === 'RESEND_TOO_SOON') {
         setResendAt(Date.now() + 60_000)
-        setNow(Date.now()) // 남은 대기 시간을 계산해 기준 시각을 갱신.
+        setNow(Date.now())
       }
     } finally {
       busy.current = false
@@ -102,30 +111,22 @@ export function useSignupEmail() {
     await sendCode()
   }
 
-  // 입력한 인증번호를 서버에서 검증하고, 성공하면 가입용 토큰을 저장.
   async function submitCode(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault() // 폼 제출로 페이지가 새로고침되는 것을 막음.
-
-    // 처리 중, 발생 기록 없음, 시간 만료, 입력 차단, 이미 인증 완료 중 하나라도 해당하면 종료.
+    event.preventDefault()
     if (busy.current || !challenge || remaining === 0 || blocked || verified)
       return
-
-    // 인증번호가 숫자 6자리 형식이 아니면 오류 메시지를 표시하고 종료.
     if (!/^[0-9]{6}$/.test(code)) {
       setError('인증번호는 숫자 6자리로 입력해 주세요.')
       return
     }
-
     busy.current = true
     setError('')
     setNotice('')
-
     try {
-      // 인증번호 검증 API를 호출하고 서버 응답을 대기.
       const response = await verifyMutation.mutateAsync({
-        email, // 인증 번호를 받은 이메일 주소
-        verificationId: challenge.verificationId, // 발송 응답에서 저장해 둔 인증 요청 ID
-        code, // 사용자가 입력한 인증번호
+        email,
+        verificationId: challenge.verificationId,
+        code,
       })
       setProof(response)
       setNow(Date.now())
@@ -134,8 +135,6 @@ export function useSignupEmail() {
     } catch (cause) {
       const failure = getApiError(cause)
       setError(failure.message)
-
-      // 시도 횟수 초과, 번호 만료, 이미 검증 완료인 경우 추가 검증을 막음.
       if (
         [
           'CODE_ATTEMPTS_EXCEEDED',
