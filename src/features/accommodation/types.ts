@@ -101,4 +101,21 @@ export interface RefundRule {
   daysBefore: number
   /** 0~1 */
   refundRate: number
+=======
+/** [kny] 숙소 상세페이지 (GET /api/accommodations/{id} 응답) */
+export interface AccommodationDetailResponse {
+  id: number
+  name: string
+  /** 숙소 소개. 첫 줄은 강조 문구로 보여 준다. 없으면 null */
+  description: string | null
+  address: string
+  regionId: number
+  regionName: string | null
+  categoryId: number
+  categoryName: string | null
+  /** 첫 번째가 대표 사진. 사진이 없으면 빈 배열 */
+  imageUrls: string[]
+  /** 시설/서비스 이름 목록 (예: 와이파이). 없으면 빈 배열 */
+  amenities: string[]
+>>>>>>> origin/test/accommo-detail-page
 }

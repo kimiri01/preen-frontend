@@ -143,6 +143,17 @@ function nightsBetween(checkIn: string, checkOut: string) {
 const mockAvailability = (checkIn: string, checkOut: string): MockRoomAvailability[] => {
   const nights = nightsBetween(checkIn, checkOut)
   return [
+    // 실서버 테스트용: 숙소 15 / 객실 15 (1박 106,000원, 기준 2명, 최대 4명)
+    {
+      roomId: 15,
+      roomName: '기본 객실',
+      capacity: 2,
+      maxCapacity: 4,
+      extraPersonFee: 0,
+      nights,
+      available: true,
+      totalPrice: 106000 * nights,
+    },
     {
       roomId: 2,
       roomName: '오션뷰 스탠다드',
