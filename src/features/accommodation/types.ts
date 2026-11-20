@@ -7,6 +7,8 @@ export interface Accommodation {
   image: string
   /** 지역 이름 (예: 제주도). 카드에 주소와 함께 표시 */
   regionName: string
+  /** [kny] 지역 ID. 화면용 지역 이름(예: 제주도)을 ID로 찾을 때 씀. 예시 데이터에는 없음 */
+  regionId?: number
   /** 카테고리 이름 (예: 호텔). 카드 이미지 위 배지로 표시 */
   categoryName: string
 }

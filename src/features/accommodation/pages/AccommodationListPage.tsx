@@ -11,6 +11,7 @@ import {
 
 import { useCategories } from '@/features/accommodation/hooks/useCategories'
 import { useRegions } from '@/features/accommodation/hooks/useRegions'
+import { regionLabel } from '@/features/accommodation/regionUtils'
 import type {
   SearchConditions,
   SearchRequest,
@@ -106,7 +107,7 @@ export function AccommodationListPage() {
       ? '이번 주말'
       : !conditions.view && category
         ? category.name
-        : (region?.name ?? '전체 지역')
+        : (region ? regionLabel(region) : '전체 지역')
 
   const unsupported =
     !SERVER_SUPPORTS_KEYWORD_AND_DATES &&
@@ -138,7 +139,7 @@ export function AccommodationListPage() {
                 aria-pressed={province?.id === item.id}
                 onClick={() => update({ regionId: item.id })}
               >
-                {item.name}
+                {regionLabel(item)}
               </button>
             ))}
           </div>
@@ -150,7 +151,7 @@ export function AccommodationListPage() {
                 aria-pressed={region?.id === province.id}
                 onClick={() => update({ regionId: province.id })}
               >
-                {province.name} 전체
+                {regionLabel(province)} 전체
               </button>
               {districts.map((item) => (
                 <button
@@ -224,7 +225,7 @@ export function AccommodationListPage() {
                   checked={province?.id === item.id}
                   onChange={() => update({ regionId: item.id })}
                 />
-                {item.name}
+                {regionLabel(item)}
               </label>
             ))}
           </fieldset>
