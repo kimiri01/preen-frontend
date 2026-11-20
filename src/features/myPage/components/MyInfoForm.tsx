@@ -1,24 +1,34 @@
 
 import { useState, type FormEvent } from 'react'
+import {
+  updateMyInfo,
+  type MyInfo,
+} from '@/features/myPage/api/myInfo'
 
 type MyInfoFormProps = {
   initialName: string
   initialBirthDate: string
   onCancel: () => void
+  onSaved: (updatedInfo: MyInfo) => void
 }
 
 export function MyInfoForm({
   initialName,
   initialBirthDate,
   onCancel,
+  onSaved,
 }: MyInfoFormProps) {
   const [name, setName] = useState(initialName)
   const [birthDate, setBirthDate] = useState(initialBirthDate)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    // 저장 중에는 중복 제출 방지
+    if (isSaving) return
 
     setError('')
     setSuccess('')
@@ -66,22 +76,38 @@ export function MyInfoForm({
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
-    const inputDate = new Date(
-      year,
-      month - 1,
-      day
-    )
+    const inputDate = new Date(year, month - 1, day)
 
     if (inputDate >= today) {
       setError('생년월일은 오늘 이전 날짜여야 합니다.')
       return
     }
 
-    // 입력값 검증 성공
-    // 실제 API 저장 기능은 아직 연결되지 않았음
-    setSuccess(
-      '입력값이 올바릅니다. 실제 회원정보 저장 기능은 아직 연결되지 않았습니다.'
-    )
+    // 입력값 검증을 통과한 경우 서버에 저장 요청
+    setIsSaving(true)
+
+    try {
+      const response = await updateMyInfo({
+        name: trimmedName,
+        birthDate,
+      })
+
+      if (!response.success || !response.data) {
+        setError('회원정보 저장에 실패했습니다.')
+        return
+      }
+
+      setSuccess('회원정보가 수정되었습니다.')
+
+      // 부모 페이지에 수정된 회원정보 전달
+      onSaved(response.data)
+    } catch {
+      setError(
+        '회원정보 저장에 실패했습니다. 로그인 상태를 확인해 주세요.',
+      )
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   return (
@@ -93,6 +119,7 @@ export function MyInfoForm({
           type="text"
           value={name}
           maxLength={101}
+          disabled={isSaving}
           onChange={(event) => {
             setName(event.target.value)
             setError('')
@@ -107,6 +134,7 @@ export function MyInfoForm({
           id="my-info-birth-date"
           type="date"
           value={birthDate}
+          disabled={isSaving}
           onChange={(event) => {
             setBirthDate(event.target.value)
             setError('')
@@ -128,12 +156,19 @@ export function MyInfoForm({
       )}
 
       <div>
-        <button type="button" onClick={onCancel}>
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={isSaving}
+        >
           취소
         </button>
 
-        <button type="submit">
-          입력값 확인
+        <button
+          type="submit"
+          disabled={isSaving}
+        >
+          {isSaving ? '저장 중...' : '정보 저장'}
         </button>
       </div>
     </form>
