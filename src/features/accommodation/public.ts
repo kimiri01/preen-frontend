@@ -11,4 +11,5 @@ export type {
   Accommodation,
   AccommodationFilter,
   RefundRule,
+  
 } from '@/features/accommodation/types'

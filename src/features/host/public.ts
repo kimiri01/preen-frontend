@@ -1,0 +1,1 @@
+export { hostRoute } from './routes';

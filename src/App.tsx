@@ -8,6 +8,8 @@ import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
 import { reservationRoutes } from './features/reservation/routes'
 import { authRoutes } from '@/features/auth/public'
+import { hostRoute } from './features/host/routes'
+
 
 const router = createBrowserRouter([
   {
@@ -27,7 +29,10 @@ const router = createBrowserRouter([
       ...accommodationRoutes,
       ...reservationRoutes,
       ...authRoutes,
+      
     ],
+  },{
+    ...hostRoute, path: '/host',
   },
 ])
 

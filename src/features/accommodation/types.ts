@@ -101,7 +101,8 @@ export interface RefundRule {
   daysBefore: number
   /** 0~1 */
   refundRate: number
-=======
+}
+
 /** [kny] 숙소 상세페이지 (GET /api/accommodations/{id} 응답) */
 export interface AccommodationDetailResponse {
   id: number
@@ -117,5 +118,5 @@ export interface AccommodationDetailResponse {
   imageUrls: string[]
   /** 시설/서비스 이름 목록 (예: 와이파이). 없으면 빈 배열 */
   amenities: string[]
->>>>>>> origin/test/accommo-detail-page
+
 }
