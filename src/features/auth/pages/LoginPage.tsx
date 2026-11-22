@@ -87,6 +87,9 @@ export function LoginPage() {
           {pending ? '로그인 중…' : '로그인'}
         </button>
         <p className="login-description">
+          비밀번호를 잊으셨나요? <Link to="/password-reset/request">비밀번호 재설정</Link>
+        </p>
+        <p className="login-description">
           아직 회원이 아니신가요? <Link to="/signup">회원가입</Link>
         </p>
       </form>
