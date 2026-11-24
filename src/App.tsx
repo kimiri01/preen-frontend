@@ -7,6 +7,7 @@ import {
 } from '@/features/accommodation/public'
 import { accommodationRoutes } from '@/features/accommodation/public'
 import { mainRoutes } from '@/features/mainPage/public'
+
 import {
   authRoutes,
   restoreLogin,
@@ -29,11 +30,22 @@ function AppLayout() {
   )
 }
 
+import { reservationRoutes } from './features/reservation/routes'
+
+
 const router = createBrowserRouter([
   {
     path: '/',
+
     Component: AppLayout,
-    children: [...mainRoutes, ...accommodationRoutes, ...authRoutes],
+    children: [
+      ...mainRoutes,
+      ...accommodationRoutes,
+      ...authRoutes,
+      ...reservationRoutes ,
+    
+    ],
+
   },
 ])
 
