@@ -39,10 +39,7 @@ export function statusOf(error: unknown): number | undefined {
   return error instanceof HttpError ? error.status : undefined
 }
 
-/**
- * 에러 코드별 문구 → 서버 message → 일반 문구 순으로 고른다.
- * 네트워크 오류와 5xx는 항상 일반 문구를 쓴다.
- */
+/** 에러 코드별 문구 → 서버 message → 일반 문구 순으로 안내 문구를 고른다. */
 export function getErrorMessage(
   error: unknown,
   messages: Record<string, string> = {},
@@ -65,7 +62,6 @@ export function fieldErrorsOf(error: unknown): Record<string, string> {
   if (typeof data !== 'object' || data === null || Array.isArray(data)) {
     return {}
   }
-  // 문자열 값만 필드 오류로 인정한다.
   return Object.fromEntries(
     Object.entries(data).filter(
       (entry): entry is [string, string] => typeof entry[1] === 'string',

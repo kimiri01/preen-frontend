@@ -49,10 +49,7 @@ export function isIsoDate(value: string | null | undefined): value is string {
   return toIso(toUtcDate(value)) === value
 }
 
-/**
- * 이번 주말: 다가오는 토요일 체크인, 일요일 체크아웃.
- * 오늘이 토요일이면 오늘, 일요일이면 다음 주 토요일.
- */
+/** 이번 주말(다가오는 토요일 체크인, 일요일 체크아웃)을 돌려준다. */
 export function upcomingWeekend(today: string = todayKst()) {
   const weekday = weekdayOf(today)
   const offset = weekday === 6 ? 0 : weekday === 0 ? 6 : 6 - weekday

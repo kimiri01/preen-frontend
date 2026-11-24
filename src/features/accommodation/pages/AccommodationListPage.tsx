@@ -79,7 +79,6 @@ export function AccommodationListPage() {
     (item) => item.id === conditions.categoryId,
   )
   const region = regions.data?.find((item) => item.id === conditions.regionId)
-  // 선택한 지역이 시·군·구면 그 시·도, 시·도면 자기 자신.
   const province = region?.parentId
     ? regions.data?.find((item) => item.id === region.parentId)
     : region
@@ -169,7 +168,6 @@ export function AccommodationListPage() {
         </section>
       )}
 
-      {/* 조건이 바뀌면 입력값을 조건에 맞춰 다시 채운다. */}
       <SearchBar
         key={toSearchParams({ ...conditions, page: 1 }).toString()}
         conditions={conditions}

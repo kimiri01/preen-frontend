@@ -52,12 +52,7 @@ export interface CategoryAccommodationsResponse {
   accommodations: AccommodationSummaryResponse[]
 }
 
-/**
- * 카테고리 바에서 고른 조회 조건입니다. 한 번에 하나만 적용됩니다.
- * - all      : 전체 숙소
- * - category : 숙박 유형 하나 (categoryCode 예: HOTEL)
- * - region   : "지역으로 찾기". regionCode가 null이면 아직 지역을 고르지 않은 상태
- */
+/** 카테고리 바에서 고른 조회 조건 (전체 / 숙박 유형 / 지역) */
 export type AccommodationFilter =
   | { type: 'all' }
   | { type: 'category'; categoryCode: string }

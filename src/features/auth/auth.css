@@ -231,6 +231,7 @@
 .signup-complete .signup-submit {
   margin-top: 12px;
   min-width: 240px;
+  text-decoration: none;
 }
 
 .signup-details-fields {

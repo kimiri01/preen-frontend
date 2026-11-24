@@ -5,10 +5,7 @@ import {
   handleImageError,
 } from '@/features/accommodation/utils/imageFallback'
 
-/**
- * 헤더의 "최근 본 숙소"를 눌렀을 때 펼쳐지는 목록입니다.
- * 숙소 카드의 사진이나 이름을 누른 숙소가 최근 순서대로 최대 10개까지 나옵니다.
- */
+/** 헤더의 "최근 본 숙소"를 눌렀을 때 펼쳐지는 목록 */
 export function RecentlyViewedPanel() {
   const { hasRecentIds, accommodations, status } =
     useRecentlyViewedAccommodations()

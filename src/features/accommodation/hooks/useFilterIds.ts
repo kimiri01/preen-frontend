@@ -8,12 +8,7 @@ export interface SearchScope {
   regionId?: number
 }
 
-/**
- * [kny] 카테고리 바의 선택값(고정 코드: HOTEL, SEOUL 등)을 서버 ID로 바꿉니다.
- * 홈 검색 바가 "지금 고른 탭" 안에서 검색하도록 넘겨줄 때 씁니다.
- * - 전체 숙소 / 지역 미선택 / 서버가 꺼져 ID를 못 찾음 → 빈 값(조건 없이 검색)
- * 기존 useAccommodations의 코드→ID 변환 규칙과 같습니다. (그 파일은 건드리지 않음)
- */
+/** 카테고리 바의 고정 코드(HOTEL, SEOUL 등)를 서버 ID로 바꿉니다. */
 export function useFilterIds(filter: AccommodationFilter): SearchScope {
   const categories = useCategories()
   const regions = useRegions()

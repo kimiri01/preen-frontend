@@ -14,7 +14,6 @@ export function CategoryBar({ filter, onChangeFilter }: CategoryBarProps) {
     <>
       <nav className="categories" aria-label="숙박 유형">
         {categoryBarItems.map((item) => {
-          // 버튼 종류에 따라 "선택됨 여부"와 "눌렀을 때 바뀔 조건"이 다릅니다.
           let isSelected: boolean
           let nextFilter: AccommodationFilter
           if (item.kind === 'all') {
@@ -27,7 +26,6 @@ export function CategoryBar({ filter, onChangeFilter }: CategoryBarProps) {
             nextFilter = { type: 'category', categoryCode: item.categoryCode }
           } else {
             isSelected = filter.type === 'region'
-            // 이미 지역을 고른 상태에서 다시 눌러도 고른 지역은 유지합니다.
             nextFilter =
               filter.type === 'region'
                 ? filter

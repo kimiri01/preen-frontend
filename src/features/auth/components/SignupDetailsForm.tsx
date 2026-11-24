@@ -44,11 +44,19 @@ export function SignupDetailsForm({
             type="date"
             autoComplete="bday"
             required
-            max={form.maxBirthDate}
+            aria-invalid={Boolean(form.birthDate && !form.birthValid)}
+            aria-describedby="signup-birth-help"
             value={form.birthDate}
             onChange={(e) => form.setBirthDate(e.target.value)}
           />
-          <p className="signup-notice">만 14세 이상부터 가입할 수 있습니다.</p>
+          <p
+            id="signup-birth-help"
+            className={
+              form.birthDate && !form.birthValid ? 'signup-error' : 'signup-notice'
+            }
+          >
+            만 14세 이상부터 가입할 수 있습니다.
+          </p>
         </div>
         <div className="signup-field">
           <label htmlFor="signup-password">비밀번호</label>

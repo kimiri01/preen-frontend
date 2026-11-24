@@ -43,9 +43,12 @@ export function useSignupDetails(
     agreements[0] &&
     agreements[1]
 
+  // 가입 폼을 검사하고, 가입용 토큰과 입력 정보를 서버에 보냄.
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
     if (!valid || busy.current || !event.currentTarget.checkValidity()) return
+
     busy.current = true
     setError('')
     try {
@@ -61,6 +64,7 @@ export function useSignupDetails(
         marketingAgreed: agreements[2],
         termsVersion: SIGNUP_TERMS_VERSION,
       })
+
       setPassword('')
       setConfirmation('')
       onComplete()
@@ -105,7 +109,7 @@ export function useSignupDetails(
     agreements,
     toggleAgreement,
     toggleAll,
-    maxBirthDate: latestBirthDate,
+    birthValid,
     submit,
     error,
     pending: mutation.isPending,

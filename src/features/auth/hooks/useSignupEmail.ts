@@ -1,27 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { HttpError } from '@/common/api/http'
+import { getApiError } from '@/common/api/getApiError'
 import { emailVerificationApi } from '@/features/auth/api/emailVerification'
 import type { EmailChallenge, EmailProof } from '@/features/auth/types'
-
-function getApiError(error: unknown) {
-  if (
-    error instanceof HttpError &&
-    typeof error.data === 'object' &&
-    error.data !== null
-  ) {
-    const data = error.data as { code?: string; message?: string }
-    return {
-      code: data.code,
-      message:
-        data.message ?? '요청을 처리하지 못했습니다. 다시 시도해 주세요.',
-    }
-  }
-  return {
-    code: undefined,
-    message: '서버에 연결하지 못했습니다. 잠시 후 다시 시도해 주세요.',
-  }
-}
 
 export function useSignupEmail() {
   const [email, setEmail] = useState('')
@@ -69,6 +50,7 @@ export function useSignupEmail() {
     setNotice('')
   }
 
+  // 인증번호를 발송하고 인증 화면과 재발송 대기 시간을 갱신합니다.
   async function sendCode() {
     if (busy.current) return
     busy.current = true
@@ -76,7 +58,9 @@ export function useSignupEmail() {
     setNotice('')
     try {
       const normalizedEmail = email.trim().toLowerCase()
+
       const response = await sendMutation.mutateAsync(normalizedEmail)
+
       const receivedAt = Date.now()
       setEmail(normalizedEmail)
       setChallenge(response)
@@ -89,6 +73,7 @@ export function useSignupEmail() {
     } catch (cause) {
       const failure = getApiError(cause)
       setError(failure.message)
+
       if (failure.code === 'RESEND_TOO_SOON') {
         setResendAt(Date.now() + 60_000)
         setNow(Date.now())
@@ -111,17 +96,22 @@ export function useSignupEmail() {
     await sendCode()
   }
 
+  // 입력한 인증번호를 서버에서 검증하고, 성공하면 가입용 토큰을 저장.
   async function submitCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
     if (busy.current || !challenge || remaining === 0 || blocked || verified)
       return
+
     if (!/^[0-9]{6}$/.test(code)) {
       setError('인증번호는 숫자 6자리로 입력해 주세요.')
       return
     }
+
     busy.current = true
     setError('')
     setNotice('')
+
     try {
       const response = await verifyMutation.mutateAsync({
         email,
@@ -135,6 +125,7 @@ export function useSignupEmail() {
     } catch (cause) {
       const failure = getApiError(cause)
       setError(failure.message)
+
       if (
         [
           'CODE_ATTEMPTS_EXCEEDED',

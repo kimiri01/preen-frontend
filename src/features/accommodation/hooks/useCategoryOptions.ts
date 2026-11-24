@@ -25,11 +25,7 @@ const fixedLabels = new Map(
   [...fallbackCategories, ...fallbackRegions].map((item) => [item.code, item.label]),
 )
 
-/**
- * "전체 카테고리" 메뉴의 숙박 유형 목록.
- * 서버 목록(GET /api/categories)을 쓰되 코드가 있는 항목만 보여 주고,
- * 서버가 꺼져 있거나 코드 있는 항목이 없으면 고정 목록을 씁니다.
- */
+/** "전체 카테고리" 메뉴의 숙박 유형 목록 (서버가 꺼져 있으면 고정 목록) */
 export function useCategoryMenuItems(): MenuItem[] {
   const { data } = useCategories()
   return toMenuItems(data, fallbackCategories)

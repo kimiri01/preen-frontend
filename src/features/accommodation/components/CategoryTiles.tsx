@@ -10,7 +10,6 @@ const CATEGORY_TILES = [
   { label: '호텔·리조트', image: '/images/category-signature-2.png' },
   { label: '독채·풀빌라', image: '/images/category-signature-3.png' },
   { label: '한옥', image: '/images/category-signature-4.png' },
-  // 백엔드 카테고리에 없다. 협의 전까지 동작 없음.
   { label: '감성 스테이', image: '/images/category-signature-5.png' },
   { label: '게스트하우스', image: '/images/category-signature-6.png' },
 ]
@@ -60,7 +59,6 @@ export function CategoryTiles({ conditions }: CategoryTilesProps) {
   const categories = useCategories()
   const view = conditions?.view
   const categoryId = view ? undefined : conditions?.categoryId
-  // 주말 타일에서 다른 타일로 옮길 때는 주말 날짜를 끌고 가지 않는다.
   const carry =
     view === 'weekend'
       ? { guestCount: conditions?.guestCount }

@@ -1,0 +1,91 @@
+.login-page {
+  align-items: center;
+  justify-content: center;
+  min-height: 540px;
+  padding-block: 48px;
+  gap: 24px;
+}
+
+.login-page h2 {
+  font-size: 32px;
+}
+
+.login-description {
+  color: #606870;
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: center;
+}
+
+.login-form,
+.logout-actions {
+  width: min(100%, 500px);
+  display: grid;
+  gap: 20px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.login-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  color: var(--text);
+}
+
+.login-form .login-remember {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login-remember input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--text);
+}
+
+.login-primary,
+.logout-actions a {
+  padding: 14px 16px;
+  border-radius: 7px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.login-primary {
+  background: var(--text);
+  color: var(--paper);
+}
+
+.login-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.logout-actions {
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.logout-actions a {
+  color: inherit;
+  border: 1px solid var(--border);
+  text-decoration: none;
+}
+
+.login-description a {
+  color: var(--text);
+}
+
+.login-error {
+  color: #a22b34;
+  font-size: 14px;
+}

@@ -1,8 +1,4 @@
-/**
- * "지역으로 찾기"에서 고를 수 있는 지역 5개입니다. (팀에서 고정하기로 한 구성)
- * regionCode는 백엔드 region 테이블의 code와 같아야 합니다.
- * (백엔드: AccommodationDataInitializer 의 REGIONS)
- */
+/** "지역으로 찾기"에서 고를 수 있는 고정 지역 5개 */
 export interface RegionItem {
   label: string
   regionCode: string
