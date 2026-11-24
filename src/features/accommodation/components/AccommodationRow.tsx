@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { formatPrice } from '@/common/utils/format'
 import { FALLBACK_IMAGE } from '@/features/accommodation/components/AccommodationSearchCard'
+import { useRegionLabel } from '@/features/accommodation/hooks/useRegionLabel'
 import type { AccommodationSummaryResponse } from '@/features/accommodation/types'
 
 interface AccommodationRowProps {
@@ -18,6 +19,8 @@ export function AccommodationRow({
   isFavorite,
   onToggleFavorite,
 }: AccommodationRowProps) {
+  // [kny] 카테고리 바와 같은 지역 이름(예: 제주도)으로 표시
+  const toRegionLabel = useRegionLabel()
   return (
     <li className="stay-row">
       <div className="photo stay-row-photo">
@@ -52,7 +55,7 @@ export function AccommodationRow({
       </div>
       <div className="stay-row-info">
         <small>
-          {accommodation.regionName} · {accommodation.categoryName}
+          {toRegionLabel(accommodation.regionId, accommodation.regionName)} · {accommodation.categoryName}
         </small>
         <h3>
           <Link to={to}>{accommodation.name}</Link>

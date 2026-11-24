@@ -1,9 +1,11 @@
+import { useNavigate } from 'react-router-dom'
 import '@/features/accommodation/accommodation.css'
 import { AccommodationCard } from '@/features/accommodation/components/AccommodationCard'
 import { useAccommodations } from '@/features/accommodation/hooks/useAccommodations'
 import { useAccommodationsByCategory } from '@/features/accommodation/hooks/useAccommodationsByCategory'
 import { useFavorites } from '@/features/accommodation/hooks/useFavorites'
 import { addRecentlyViewed } from '@/features/accommodation/hooks/useRecentlyViewed'
+import { accommodationDetailPath } from '@/features/accommodation/hooks/useSearchConditions'
 import type {
   Accommodation,
   AccommodationFilter,
@@ -17,6 +19,12 @@ interface AccommodationSectionProps {
 /** 선택한 조건(전체·카테고리·지역)에 맞는 숙소 목록 카드 뷰 */
 export function AccommodationSection({ filter }: AccommodationSectionProps) {
   const { favorites, toggleFavorite } = useFavorites()
+  const navigate = useNavigate()
+  // [kny] 카드를 누르면 "최근 본 숙소"에 기록하고 상세페이지로 이동합니다.
+  const viewAccommodation = (id: number) => {
+    addRecentlyViewed(id)
+    navigate(accommodationDetailPath(id))
+  }
   const isAll = filter.type === 'all'
 
   const single = useAccommodations(filter)
@@ -35,7 +43,7 @@ export function AccommodationSection({ filter }: AccommodationSectionProps) {
           accommodation={accommodation}
           isFavorite={favorites.has(accommodation.id)}
           onToggleFavorite={toggleFavorite}
-          onView={addRecentlyViewed}
+          onView={viewAccommodation}
         />
       ))}
     </div>

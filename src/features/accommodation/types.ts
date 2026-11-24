@@ -7,6 +7,8 @@ export interface Accommodation {
   image: string
   /** 지역 이름 (예: 제주도). 카드에 주소와 함께 표시 */
   regionName: string
+  /** [kny] 지역 ID. 화면용 지역 이름(예: 제주도)을 ID로 찾을 때 씀. 예시 데이터에는 없음 */
+  regionId?: number
   /** 카테고리 이름 (예: 호텔). 카드 이미지 위 배지로 표시 */
   categoryName: string
 }
@@ -91,9 +93,29 @@ export interface FavoriteBinding {
   toggle: (accommodationId: number) => void
 }
 
+
 export interface RefundRule {
   /** 체크인 N일 전까지 */
   daysBefore: number
   /** 0~1 */
   refundRate: number
+
+}
+
+/** [kny] 숙소 상세페이지 (GET /api/accommodations/{id} 응답) */
+export interface AccommodationDetailResponse {
+  id: number
+  name: string
+  /** 숙소 소개. 첫 줄은 강조 문구로 보여 준다. 없으면 null */
+  description: string | null
+  address: string
+  regionId: number
+  regionName: string | null
+  categoryId: number
+  categoryName: string | null
+  /** 첫 번째가 대표 사진. 사진이 없으면 빈 배열 */
+  imageUrls: string[]
+  /** 시설/서비스 이름 목록 (예: 와이파이). 없으면 빈 배열 */
+  amenities: string[]
+
 }

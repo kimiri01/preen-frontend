@@ -1,3 +1,4 @@
+import { useRegionLabel } from '@/features/accommodation/hooks/useRegionLabel'
 import type { Accommodation } from '@/features/accommodation/types'
 import {
   getImageSrc,
@@ -19,6 +20,8 @@ export function AccommodationCard({
   onToggleFavorite,
   onView,
 }: AccommodationCardProps) {
+  // [kny] 카테고리 바와 같은 지역 이름(예: 제주도)으로 표시
+  const toRegionLabel = useRegionLabel()
   return (
     <article className="stay">
       <div className="photo">
@@ -58,7 +61,7 @@ export function AccommodationCard({
       </h3>
       <small>
         {accommodation.regionName
-          ? `${accommodation.regionName} · ${accommodation.location}`
+          ? `${toRegionLabel(accommodation.regionId, accommodation.regionName)} · ${accommodation.location}`
           : accommodation.location}
       </small>
       <p className="stay-price">

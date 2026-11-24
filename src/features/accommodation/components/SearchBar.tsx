@@ -50,7 +50,10 @@ export function SearchBar({ conditions, scope }: SearchBarProps) {
     event.preventDefault()
     const text = place.trim()
     const fixedCode = regionItems.find((item) => item.label === text)?.regionCode
-    const fixedRegion = regions.data?.find((item) => item.code === fixedCode)
+    // [kny] 서버 이름(예: 강원, 제주)으로 써도 지역으로 인식한다. (자동완성은 강원도/제주도로 보임)
+    const fixedRegion =
+      regions.data?.find((item) => item.code === fixedCode) ??
+      regions.data?.find((item) => item.name === text)
     const region =
       options.find((option) => option.label === text) ??
       (fixedRegion ? { id: fixedRegion.id, label: text } : undefined)

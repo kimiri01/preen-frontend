@@ -17,6 +17,7 @@ function toAccommodation(item: AccommodationSummaryResponse): Accommodation {
     pricePerNight: item.minNightlyPrice,
     image: item.thumbnailUrl ?? '',
     regionName: item.regionName,
+    regionId: item.regionId,
     categoryName: item.categoryName,
   }
 }
