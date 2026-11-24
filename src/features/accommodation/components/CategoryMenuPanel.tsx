@@ -15,13 +15,9 @@ function toMainPage(filter: AccommodationFilter) {
   return { pathname: '/', search: getFilterSearch(filter) }
 }
 
-/**
- * 헤더의 "전체 카테고리"를 눌렀을 때 펼쳐지는 메뉴입니다.
- * 서버에 등록된 숙박 유형과 지역을 모두 보여 주고, 고르면 메인 페이지 숙소 목록이 그 조건으로 바뀝니다.
- */
+/** 헤더의 "전체 카테고리"를 눌렀을 때 펼쳐지는 메뉴 */
 export function CategoryMenuPanel() {
   const { filter } = useAccommodationFilter()
-  // 서버 목록 중 코드가 있는 항목만 (없으면 고정 목록). 팀원 데이터의 다른 카테고리·지역은 보이지 않습니다.
   const categories = useCategoryMenuItems()
   const regions = useRegionMenuItems()
 

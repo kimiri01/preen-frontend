@@ -12,11 +12,7 @@ interface AccommodationCardProps {
   onView: (id: number) => void
 }
 
-/**
- * 숙소 카드 한 장 (기능명세서 STAY-001 "숙소 카드 표시")
- * 대표 사진 · 숙소명 · 지역/주소 · 최저 1박 요금을 보여 줍니다.
- * 사진이 없거나 깨지면 "이미지 업로드" 안내 이미지가 나옵니다.
- */
+/** 숙소 카드 한 장 (대표 사진·숙소명·지역·최저 1박 요금) */
 export function AccommodationCard({
   accommodation,
   isFavorite,
@@ -74,7 +70,6 @@ export function AccommodationCard({
             <span> / 1박</span>
           </>
         ) : (
-          // 서버가 아직 요금을 주지 않는 숙소(판매 중인 객실 없음)
           <span>가격 정보 없음</span>
         )}
       </p>

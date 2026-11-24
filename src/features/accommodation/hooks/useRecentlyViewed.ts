@@ -2,11 +2,7 @@ import { useSyncExternalStore } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { fetchRecentAccommodations } from '@/features/accommodation/api/accommodationApi'
 
-/**
- * "최근 본 숙소"의 숙소 ID 목록을 브라우저(localStorage)에 보관합니다.
- * 로그인 기능이 아직 없어 서버가 "누가 봤는지" 알 수 없으므로, ID 목록은 브라우저가 기억하고
- * 숙소 정보(이름·가격 등)는 그 ID로 서버에서 받아옵니다.
- */
+/** 최근 본 숙소 ID 목록을 브라우저(localStorage)에 보관하는 키 */
 const STORAGE_KEY = 'preen:recently-viewed'
 const MAX_ITEMS = 10
 
@@ -19,7 +15,6 @@ function loadIds(): number[] {
       .filter((value): value is number => Number.isInteger(value))
       .slice(0, MAX_ITEMS)
   } catch {
-    // 저장소를 쓸 수 없는 환경(사생활 보호 모드 등)에서는 빈 목록으로 시작합니다.
     return []
   }
 }
@@ -48,7 +43,7 @@ export function addRecentlyViewed(id: number) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(recentIds))
   } catch {
-    // 저장에 실패해도 현재 화면에서는 목록이 유지됩니다.
+    // 저장에 실패해도 무시합니다.
   }
   listeners.forEach((listener) => listener())
 }

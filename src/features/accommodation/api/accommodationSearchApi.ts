@@ -15,7 +15,6 @@ export function toQueryString(request: SearchRequest): string {
   if (request.regionId) params.set('regionId', String(request.regionId))
   if (request.keyword) params.set('keyword', request.keyword)
   if (request.guestCount) params.set('guestCount', String(request.guestCount))
-  // 서버는 checkIn·checkOut을 함께 받아야 하므로 둘 다 있을 때만 보낸다.
   if (request.checkIn && request.checkOut) {
     params.set('checkIn', request.checkIn)
     params.set('checkOut', request.checkOut)
@@ -31,6 +30,5 @@ export async function searchAccommodations(
     ApiResponse<PageResponse<AccommodationSummaryResponse>>
   >(`/api/accommodations?${toQueryString(request)}`, { signal })
 
-  // 목록 행(AccommodationRow)이 서버 응답 모양을 그대로 쓰므로 변환하지 않는다.
   return response.data
 }

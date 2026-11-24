@@ -14,17 +14,11 @@ interface AccommodationSectionProps {
   filter: AccommodationFilter
 }
 
-/**
- * 숙소 목록 카드 뷰.
- * - 전체 숙소   : 카테고리별로 묶어서 6개씩
- * - 카테고리 선택: 그 카테고리의 숙소 6개
- * - 지역 선택   : 그 지역의 숙소 전체
- */
+/** 선택한 조건(전체·카테고리·지역)에 맞는 숙소 목록 카드 뷰 */
 export function AccommodationSection({ filter }: AccommodationSectionProps) {
   const { favorites, toggleFavorite } = useFavorites()
   const isAll = filter.type === 'all'
 
-  // 두 Hook 모두 항상 호출하되(React Hook 규칙), 실제 요청은 필요한 쪽만 보냅니다.
   const single = useAccommodations(filter)
   const grouped = useAccommodationsByCategory(isAll)
 

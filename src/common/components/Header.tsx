@@ -2,10 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
-/**
- * 헤더 메뉴를 눌렀을 때 버튼 아래에 펼쳐질 내용입니다.
- * 내용은 각 Feature가 만들고 App에서 넣어 줍니다. (Common은 Feature를 import하지 않음)
- */
+/** 헤더 메뉴를 눌렀을 때 펼쳐질 패널 내용 (App에서 넣어 줌) */
 export interface HeaderMenuPanels {
   /** "전체 카테고리"를 눌렀을 때 */
   category?: ReactNode
@@ -24,13 +21,10 @@ interface HeaderProps {
 const MENU_PANEL_ID = 'header-menu-panel'
 
 export function Header({ menuPanels = {}, memberName, restoring, }: HeaderProps) {
-  // 지금 펼쳐져 있는 메뉴. null이면 모두 닫힌 상태입니다.
   const [openMenu, setOpenMenu] = useState<MenuKey | null>(null)
-  // 패널을 누른 버튼 바로 아래에 맞추기 위한 왼쪽 위치(px, nav 기준)
   const [panelLeft, setPanelLeft] = useState(0)
   const navRef = useRef<HTMLElement>(null)
 
-  // 메뉴가 열려 있는 동안: 메뉴 바깥을 누르거나 Esc 키를 누르면 닫습니다.
   useEffect(() => {
     if (openMenu === null) return
     const handlePointerDown = (event: PointerEvent) => {
@@ -57,7 +51,6 @@ export function Header({ menuPanels = {}, memberName, restoring, }: HeaderProps)
 
   return (
     <header>
-      {/* 로고를 누르면 첫 홈페이지(조건 없는 "/")로 이동합니다. 열린 메뉴도 닫습니다. */}
       <h1>
         <Link
           to="/"
@@ -213,7 +206,6 @@ export function Header({ menuPanels = {}, memberName, restoring, }: HeaderProps)
             id={MENU_PANEL_ID}
             className="header-menu-panel"
             style={{ left: panelLeft }}
-            // 패널 안의 링크를 누르면(예: 카테고리 선택) 메뉴를 닫습니다.
             onClick={(event) => {
               if ((event.target as HTMLElement).closest('a')) setOpenMenu(null)
             }}

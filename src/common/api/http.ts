@@ -57,7 +57,6 @@ async function request<T>(
 ): Promise<T> {
   if (!options.auth) return send<T>(path, options)
 
-  // 보호 API에만 메모리의 Access Token을 붙인다.
   const token = authSession.getToken()
   const version = authSession.getVersion()
   const headers = new Headers(options.headers)

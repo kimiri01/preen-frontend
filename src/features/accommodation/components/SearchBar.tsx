@@ -12,16 +12,9 @@ import '@/features/accommodation/accommodation.css'
 const GUEST_OPTIONS = Array.from({ length: 10 }, (_, index) => index + 1)
 
 interface SearchBarProps {
-  /**
-   * 목록 화면의 현재 조건. 넘기면 그 값으로 채우고 숙박 유형·탐색 화면을 유지한다.
-   * 없으면(홈) 오늘 1박·성인 2명으로 시작한다.
-   */
+  /** 목록 화면의 현재 조건. 없으면(홈) 오늘 1박·성인 2명으로 시작한다. */
   conditions?: Partial<SearchConditions>
-  /**
-   * [kny] 홈 전용. 카테고리 바에서 고른 탭(숙박 유형 또는 지역)의 ID.
-   * 검색할 때 함께 보내서 "고른 탭 안에서" 검색되게 한다.
-   * 입력칸에 지역을 직접 쓰면 그 지역이 탭의 지역보다 우선한다.
-   */
+  /** 홈 전용: 카테고리 바에서 고른 탭 안에서 검색하기 위한 ID */
   scope?: SearchScope
 }
 
@@ -31,7 +24,6 @@ export function SearchBar({ conditions, scope }: SearchBarProps) {
   const regions = useRegions()
   const today = todayKst()
   const options = regionOptions(regions.data)
-  // 지역 목록이 늦게 와도 지역 이름이 채워지도록, 입력 전에는 조건에서 계산한다.
   const [typed, setTyped] = useState<string | null>(null)
   const [checkIn, setCheckIn] = useState(
     conditions ? (conditions.checkIn ?? '') : today,
@@ -56,15 +48,12 @@ export function SearchBar({ conditions, scope }: SearchBarProps) {
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
-    // 입력이 지역 이름과 같으면 지역 조건, 아니면 숙소명 조건이다.
     const text = place.trim()
-    // [kny] 카테고리 바와 같은 이름(예: 강원도, 제주도)으로 써도 지역으로 인식한다.
     const fixedCode = regionItems.find((item) => item.label === text)?.regionCode
     const fixedRegion = regions.data?.find((item) => item.code === fixedCode)
     const region =
       options.find((option) => option.label === text) ??
       (fixedRegion ? { id: fixedRegion.id, label: text } : undefined)
-    // 날짜를 바꾸면 더 이상 "이번 주말" 화면이 아니다.
     const keepView =
       conditions?.view === 'region' ||
       (conditions?.view === 'weekend' &&
