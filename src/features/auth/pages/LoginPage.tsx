@@ -1,5 +1,5 @@
 import { useRef, useState, type FormEvent } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { getApiError } from '@/common/api/getApiError'
 import { signIn, useLoginSession } from '@/features/auth/hooks/useLoginSession'
 import '@/features/auth/login.css'
@@ -7,6 +7,13 @@ import '@/features/auth/login.css'
 export function LoginPage() {
   const { member, restoring } = useLoginSession()
   const navigate = useNavigate()
+
+  //로그인 페이지로 튕긴 사용자를 다시 원래 페이지로 이동시킵니다.
+  const location = useLocation()
+  const from = (location.state as { from?: { pathname: string; search: string } } | null)?.from
+  const redirectTo = from ? from.pathname + from.search : '/'
+
+
   const busy = useRef(false)
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
@@ -22,7 +29,7 @@ export function LoginPage() {
     setError('')
     try {
       await signIn({ email: email.trim(), password, rememberMe })
-      navigate('/', { replace: true })
+      navigate(redirectTo, { replace: true })
     } catch (cause) {
       setError(getApiError(cause).message)
     } finally {
@@ -31,7 +38,7 @@ export function LoginPage() {
     }
   }
 
-  if (member) return <Navigate to="/" replace />
+  if (member) return <Navigate to={redirectTo} replace />
 
   return (
     <main className="login-page">

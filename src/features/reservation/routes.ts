@@ -4,6 +4,7 @@ import { MyReservationsPage } from '@/features/reservation/pages/MyReservationsP
 import { ReservationDetailPage } from '@/features/reservation/pages/ReservationDetailPage'
 import { ReservationNewPage } from '@/features/reservation/pages/ReservationNewPage'
 import { ReservationSuccessPage } from '@/features/reservation/pages/ReservationSuccessPage'
+import { RequireLogin } from '@/features/auth/public'
 
 export const reservationRoutes: RouteObject[] = [
   // {
@@ -18,28 +19,33 @@ export const reservationRoutes: RouteObject[] = [
   //   path: 'me/reservations/:id',
   //   Component: guarded(RequireAuth, ReservationDetailPage),
   // },
-  {
-    path: 'reservations/new',
-    Component: ReservationNewPage,
-  },
-  {
-    path: 'reservations/:id/success',
-    Component: ReservationSuccessPage,
-  },
-  {
-    path: 'reservations/:id/complete',
-    Component: ReservationSuccessPage,
-  },
-  {
-    path: 'me/reservations/:id/success',
-    Component: ReservationSuccessPage,
-  },
-  {
-    path: 'me/reservations',
-    Component: MyReservationsPage,
-  },
-  {
-    path: 'me/reservations/:id',
-    Component: ReservationDetailPage,
-  },
+{
+  Component: RequireLogin,
+    children:[ {
+        path: 'reservations/new',
+        Component: ReservationNewPage,
+      },
+      {
+        path: 'reservations/:id/success',
+        Component: ReservationSuccessPage,
+      },
+      {
+        path: 'reservations/:id/complete',
+        Component: ReservationSuccessPage,
+      },
+      {
+        path: 'me/reservations/:id/success',
+        Component: ReservationSuccessPage,
+      },
+      {
+        path: 'me/reservations',
+        Component: MyReservationsPage,
+      },
+      {
+        path: 'me/reservations/:id',
+        Component: ReservationDetailPage,
+      },
+    ]
+}
+
 ]

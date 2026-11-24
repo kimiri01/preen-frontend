@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams} from 'react-router-dom'
 //import { useSession } from '@/common/auth/session'
 import { FormField } from '@/features/reservation/components/FormField'
 import { NotFoundView } from '@/features/reservation/components/Screens'
@@ -41,8 +41,11 @@ import {
   mockEstimateExtraPersonFee as estimateExtraPersonFee,
   useMockAccommodationDetail as useAccommodationDetail,
   useMockAvailability as useAvailability,
-  useMockSession as useSession,
+
 } from '@/features/reservation/mockDeps'
+
+import { useLoginSession } from '@/features/auth/public'
+
 
 
 
@@ -56,7 +59,15 @@ function positiveInt(value: string | null) {
 export function ReservationNewPage() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
-  const session = useSession()
+
+
+  const {member } = useLoginSession()
+
+  const [guestName, setGuestName ]= useState(member?.name ?? '')
+  const [ guestPhone, setGuestPhone ] = useState('')
+
+
+
   const invalidate = useInvalidateReservations()
   const accommodationId = positiveInt(params.get('accommodationId'))
   const roomId = positiveInt(params.get('roomId'))
@@ -78,14 +89,13 @@ export function ReservationNewPage() {
     checkIn,
     checkOut,
   )
-  const [guestName, setGuestName] = useState(session.user?.name ?? '')
-  const [guestPhone, setGuestPhone] = useState(session.user?.phone ?? '')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState('')
   const [soldOut, setSoldOut] = useState(false)
   const [agreed, setAgreed] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
+  
   if (!valid) {
     return (
       <NotFoundView
