@@ -1,13 +1,8 @@
 import type { ReactNode } from 'react'
 import { formatFullDate, formatPrice, formatShortDate } from '@/common/utils/format'
-import {
-  //FALLBACK_IMAGE,
-  //useAccommodationDetail,
-} from '@/features/accommodation/public'
+import { useAccommodationDetail } from '@/features/accommodation/public'
 import type { Reservation } from '@/features/reservation/types'
 import '@/features/reservation/reservation.css'
-import { useMockAccommodationDetail } from '@/features/reservation/tempUtils'
-
 
 
 export const FALLBACK_IMAGE = '/images/generated.png'
@@ -141,7 +136,7 @@ export function ReservationSummaryCard({
   totalLabel?: string
 }) {
   // 사진과 지역은 예약 응답에 없어 숙소 상세에서 가져온다. 실패해도 요약은 보여준다.
-  const detail = useMockAccommodationDetail(reservation.accommodationId)
+  const detail = useAccommodationDetail(reservation.accommodationId)
   return (
     <StaySummaryCard
       image={detail.data?.imageUrls[0]}

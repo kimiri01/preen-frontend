@@ -13,8 +13,8 @@ import {
 import { formatFullDate, formatTime } from '@/common/utils/format'
 import {
   //RefundPolicyTable,
-  //accommodationDetailPath,
-//  accommodationListPath,
+  accommodationDetailPath,
+  accommodationListPath,
   //useAccommodationDetail,
 } from '@/features/accommodation/public'
 //import {
@@ -36,8 +36,6 @@ import { useInvalidateReservations } from '@/features/reservation/hooks/useReser
 
 import {
   MockRefundPolicyTable as RefundPolicyTable,
-  mockAccommodationDetailPath as accommodationDetailPath,
-  mockAccommodationListPath as accommodationListPath,
   mockEstimateExtraPersonFee as estimateExtraPersonFee,
   useMockAccommodationDetail as useAccommodationDetail,
   useMockAvailability as useAvailability,

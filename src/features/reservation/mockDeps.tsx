@@ -30,35 +30,8 @@ export interface MockAccommodationDetail {
   }
 }
 
-/* ───────── useSession 대체 ───────── */
-export function useMockSession() {
-  return {
-    status: 'authenticated' as const,
-    user: { id: 1, name: '홍길동', phone: '010-1234-5678', role: 'GUEST' as const },
-  }
-}
 
-/* ───────── 경로 헬퍼 대체 ───────── */
-interface PathConditions {
-  checkIn?: string
-  checkOut?: string
-  guestCount?: number
-}
 
-function toQuery(conditions: PathConditions) {
-  const params = new URLSearchParams()
-  if (conditions.checkIn) params.set('checkIn', conditions.checkIn)
-  if (conditions.checkOut) params.set('checkOut', conditions.checkOut)
-  if (conditions.guestCount) params.set('guestCount', String(conditions.guestCount))
-  const query = params.toString()
-  return query ? `?${query}` : ''
-}
-
-export const mockAccommodationDetailPath = (id: number, conditions: PathConditions = {}) =>
-  `/accommodations/${id}${toQuery(conditions)}`
-
-export const mockAccommodationListPath = (conditions: PathConditions = {}) =>
-  `/accommodations${toQuery(conditions)}`
 
 /* ───────── estimateExtraPersonFee 대체 ───────── */
 export function mockEstimateExtraPersonFee(

@@ -1,11 +1,4 @@
 
-/** 서버의 LocalDateTime(Asia/Seoul, 시간대 표기 없음)을 Date로 바꾼다. */
-export function parseKstDateTime(value: string): Date {
-  const trimmed = value.replace(/(\.\d{3})\d+/, '$1')
-  return new Date(`${trimmed}+09:00`)
-}
-
-
 
 
 export const inventoryKeys = {
@@ -26,7 +19,7 @@ export const inventoryKeys = {
 //====================================================
 
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 // 0) 가짜 타입 (accommodation/types.ts를 import하지 않고 이 파일 안에서 정의)
 export interface MockAmenity {
@@ -84,12 +77,6 @@ export interface MockAccommodationDetail {
   refundPolicy?: MockRefundPolicy
 }
 
-// 1) 쿼리 키
-export const mockAccommodationKeys = {
-  all: ['reservation-mock', 'accommodation'] as const,
-  detail: (id: number) => [...mockAccommodationKeys.all, 'detail', id] as const,
-}
-
 // 2) mock 데이터
 export const mockAccommodationDetail = (id: number): MockAccommodationDetail => ({
   id,
@@ -142,22 +129,13 @@ export const mockAccommodationDetail = (id: number): MockAccommodationDetail => 
   },
 })
 
+
 // 3) 조회 훅 (queryFn 반환값이 위 키로 캐시에 저장됨)
 export function useMockAccommodationDetail(id: number | undefined) {
   return useQuery({
-    queryKey: mockAccommodationKeys.detail(id ?? 0),
+    queryKey: ['reservation-mock', 'accommodation', 'detail', id ?? 0],
     queryFn: () => Promise.resolve(mockAccommodationDetail(id as number)),
     enabled: id !== undefined,
     staleTime: Infinity,
   })
-}
-
-// 4) (선택) 캐시에 직접 넣기
-export function useSeedMockAccommodation() {
-  const queryClient = useQueryClient()
-  return (id: number) =>
-    queryClient.setQueryData(
-      mockAccommodationKeys.detail(id),
-      mockAccommodationDetail(id),
-    )
 }
