@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import {
   keepPreviousData,
+  useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query'
@@ -58,6 +59,26 @@ export function useInvalidateReservations() {
     }
 }
 
+/** 예약 생성. 성공·실패 모두 목록과 예약 가능 여부를 다시 불러온다. */
+export function useCreateReservation(accommodationId: number | undefined) {
+  const invalidate = useInvalidateReservations()
+  return useMutation({
+    mutationFn: reservationApi.create,
+    retry: false,
+    onSettled: () => invalidate(accommodationId),
+  })
+}
+
+/** 예약 취소. 성공하면 목록·상세와 예약 가능 여부를 무효화한다. */
+export function useCancelReservation() {
+  const invalidate = useInvalidateReservations()
+  return useMutation({
+    mutationFn: ({ id }: { id: number; accommodationId: number }) =>
+      reservationApi.cancel(id),
+    retry: false,
+    onSuccess: (_result, { accommodationId }) => invalidate(accommodationId),
+  })
+}
 
 /**
  * PENDING 예약의 결제 제한 시간까지 남은 ms. PENDING이 아니면 null.

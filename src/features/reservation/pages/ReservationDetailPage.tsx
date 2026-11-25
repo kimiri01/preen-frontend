@@ -9,13 +9,12 @@ import {
   formatShortDate,
 } from '@/common/utils/format'
 import { nightsBetween } from '@/common/utils/date'
-import { reservationApi } from '@/features/reservation/api/reservationApi'
 import { HoldCountdown } from '@/features/reservation/components/ReservationParts'
 import { reservationErrorMessages } from '@/features/reservation/errorMessages'
 import {
   isHoldExpired,
+  useCancelReservation,
   useHoldRemaining,
-  useInvalidateReservations,
   useReservation,
 } from '@/features/reservation/hooks/useReservations'
 import type { CancelResult } from '@/features/reservation/types'
@@ -38,11 +37,11 @@ export function ReservationDetailPage() {
   const id = Number(params.id)
   const valid = Number.isInteger(id) && id > 0
   const query = useReservation(valid ? id : undefined)
-  const invalidate = useInvalidateReservations()
   const toast = useToast()
   const remaining = useHoldRemaining(query.data)
   const [confirmOpen, setConfirmOpen] = useState(false)
-  const [cancelling, setCancelling] = useState(false)
+  const cancelReservation = useCancelReservation()
+  const cancelling = cancelReservation.isPending
   const [cancelResult, setCancelResult] = useState<CancelResult | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [demoReviewed, setDemoReviewed] = useState(false)
@@ -105,20 +104,21 @@ export function ReservationDetailPage() {
     }
   }
 
-  const handleCancel = async () => {
-    setCancelling(true)
-    try {
-      const result = await reservationApi.cancel(reservation.id)
-      setCancelResult(result)
-      invalidate(reservation.accommodationId)
-      toast.show('예약을 취소했습니다.', 'success')
-    } catch (error) {
-      toast.show(getErrorMessage(error, reservationErrorMessages), 'error')
-      void refetch()
-    } finally {
-      setCancelling(false)
-      setConfirmOpen(false)
-    }
+  const handleCancel = () => {
+    cancelReservation.mutate(
+      { id: reservation.id, accommodationId: reservation.accommodationId },
+      {
+        onSuccess: (result) => {
+          setCancelResult(result)
+          toast.show('예약을 취소했습니다.', 'success')
+        },
+        onError: (error) => {
+          toast.show(getErrorMessage(error, reservationErrorMessages), 'error')
+          void refetch()
+        },
+        onSettled: () => setConfirmOpen(false),
+      },
+    )
   }
 
   // ===== Must 21: 이용 완료 예약 상세 화면 =====

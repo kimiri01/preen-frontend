@@ -21,7 +21,6 @@ import {
 //  estimateExtraPersonFee,
 //  useAvailability,
 //} from '@/features/inventory/public'
-import { reservationApi } from '@/features/reservation/api/reservationApi'
 import {
   CheckoutLayout,
   StaySummaryCard,
@@ -31,7 +30,7 @@ import {
   RESERVATION_ROOM_NOT_AVAILABLE,
   reservationErrorMessages,
 } from '@/features/reservation/errorMessages'
-import { useInvalidateReservations } from '@/features/reservation/hooks/useReservations'
+import { useCreateReservation } from '@/features/reservation/hooks/useReservations'
 
 
 import {
@@ -66,7 +65,6 @@ export function ReservationNewPage() {
 
 
 
-  const invalidate = useInvalidateReservations()
   const accommodationId = positiveInt(params.get('accommodationId'))
   const roomId = positiveInt(params.get('roomId'))
   const guestCount = positiveInt(params.get('guestCount'))
@@ -91,7 +89,8 @@ export function ReservationNewPage() {
   const [formError, setFormError] = useState('')
   const [soldOut, setSoldOut] = useState(false)
   const [agreed, setAgreed] = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const createReservation = useCreateReservation(accommodationId)
+  const submitting = createReservation.isPending
 
   
   if (!valid) {
@@ -166,7 +165,7 @@ export function ReservationNewPage() {
   const freeCancelUntil =
     freeCancelDays !== undefined ? addDays(checkIn, -freeCancelDays) : undefined
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     const next: Record<string, string> = {}
     const name = guestName.trim()
@@ -179,33 +178,33 @@ export function ReservationNewPage() {
     setFormError('')
     if (Object.keys(next).length > 0) return
 
-    setSubmitting(true)
-    try {
-      const reservation = await reservationApi.create({
+    createReservation.mutate(
+      {
         roomId,
         checkIn,
         checkOut,
         guestCount,
         ...(name ? { guestName: name } : {}),
         ...(phone ? { guestPhone: phone } : {}),
-      })
-      invalidate(accommodationId)
-      navigate(`/reservations/${reservation.id}/payment`, { replace: true })
-    } catch (error) {
-      invalidate(accommodationId)
-      const code = errorCodeOf(error)
-      if (
-        code === INVENTORY_SOLD_OUT ||
-        code === RESERVATION_ROOM_NOT_AVAILABLE
-      ) {
-        setSoldOut(true)
-        return
-      }
-      setErrors(fieldErrorsOf(error))
-      setFormError(getErrorMessage(error, reservationErrorMessages))
-    } finally {
-      setSubmitting(false)
-    }
+      },
+      {
+        onSuccess: (reservation) => {
+          navigate(`/reservations/${reservation.id}/payment`, { replace: true })
+        },
+        onError: (error) => {
+          const code = errorCodeOf(error)
+          if (
+            code === INVENTORY_SOLD_OUT ||
+            code === RESERVATION_ROOM_NOT_AVAILABLE
+          ) {
+            setSoldOut(true)
+            return
+          }
+          setErrors(fieldErrorsOf(error))
+          setFormError(getErrorMessage(error, reservationErrorMessages))
+        },
+      },
+    )
   }
 
   return (
