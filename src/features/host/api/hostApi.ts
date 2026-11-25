@@ -1,4 +1,5 @@
-import { http } from '@/features/host/tempApiClient/http'
+import { http } from '@/common/api/http'
+import type { ApiResponse } from '@/common/types/api'
 import type {
   MockAccommodationDetail,
   MockListingStatus,
@@ -83,17 +84,27 @@ export const hostApi = {
 //   }) => http.post<MockRegisterBusinessResponse>('/api/host-businesses', body),
 //   myBusiness: () => http.get<MockBusiness>('/api/host/business'),
 
-  accommodations: () => http.get<HostAccommodationSummary[]>(BASE),
-  accommodation: (id: number) =>
-    http.get<MockAccommodationDetail>(`${BASE}/${id}`),
-  createAccommodation: (body: AccommodationBody) =>
-    http.post<MockAccommodationDetail>(BASE, body),
-  updateAccommodation: (id: number, body: Partial<AccommodationBody>) =>
-    http.patch<MockAccommodationDetail>(`${BASE}/${id}`, body),
-  changeListingStatus: (id: number, listingStatus: MockListingStatus) =>
-    http.patch<MockAccommodationDetail>(`${BASE}/${id}/listing-status`, {
-      listingStatus,
-    }),
+  accommodations: async () =>
+    (await http.get<ApiResponse<HostAccommodationSummary[]>>(BASE)).data,
+  accommodation: async (id: number) =>
+    (await http.get<ApiResponse<MockAccommodationDetail>>(`${BASE}/${id}`))
+      .data,
+  createAccommodation: async (body: AccommodationBody) =>
+    (await http.post<ApiResponse<MockAccommodationDetail>>(BASE, body)).data,
+  updateAccommodation: async (id: number, body: Partial<AccommodationBody>) =>
+    (
+      await http.patch<ApiResponse<MockAccommodationDetail>>(
+        `${BASE}/${id}`,
+        body,
+      )
+    ).data,
+  changeListingStatus: async (id: number, listingStatus: MockListingStatus) =>
+    (
+      await http.patch<ApiResponse<MockAccommodationDetail>>(
+        `${BASE}/${id}/listing-status`,
+        { listingStatus },
+      )
+    ).data,
 
 //   addRoom: (accommodationId: number, body: RoomBody) =>
 //     http.post<MockRoom>(`${BASE}/${accommodationId}/rooms`, body),
