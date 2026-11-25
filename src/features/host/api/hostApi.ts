@@ -126,30 +126,17 @@ export const hostKeys = {
     [...hostKeys.all, 'accommodation', id] as const,
 }
 
-export const HOST_LAST_ACTIVE_ROOM = 'ACCOMMODATION-010'
+export const HOST_LAST_ACTIVE_ROOM = 'LAST_ACTIVE_ROOM'
 
+/** 에러 코드는 백엔드 Enum name으로 전달된다. */
 export const hostErrorMessages: Record<string, string> = {
-  // 사업자 관련 에러 (Enum name이 code로 전달됨)
+  // 사업자
   INVALID_REGISTRATION_NO: '사업자등록번호 형식이 올바르지 않습니다.',
   BUSINESS_ALREADY_REGISTERED: '이미 사업자를 등록한 회원입니다.',
   DUPLICATE_REGISTRATION_NO: '이미 등록된 사업자등록번호입니다.',
   BUSINESS_NOT_FOUND: '등록된 사업자 정보가 없습니다.',
 
-  // 숙소 관련 에러 (코드 번호)
-  'ACCOMMODATION-001': '숙소를 찾을 수 없습니다.',
-  'ACCOMMODATION-002': '본인 소유의 숙소가 아닙니다.',
-  'ACCOMMODATION-003': '존재하지 않는 지역입니다.',
-  'ACCOMMODATION-004': '존재하지 않는 편의시설이 포함되어 있습니다.',
-  'ACCOMMODATION-005': '객실을 찾을 수 없습니다.',
-  'ACCOMMODATION-006': '최대 인원은 기준 인원 이상이어야 합니다.',
-  'ACCOMMODATION-007':
-    '판매 중인 객실과 환불정책을 등록해야 숙소를 공개할 수 있습니다.',
-  'ACCOMMODATION-008': '같은 일수의 환불 규칙이 중복되었습니다.',
-  'ACCOMMODATION-009': '존재하지 않는 카테고리입니다.',
-  'ACCOMMODATION-010':
-    '공개 중인 숙소의 마지막 판매 객실은 중지할 수 없습니다. 숙소를 먼저 숨겨 주세요.',
-
-  // 숙소 관련 에러 (Enum name으로 올 경우 대비)
+  // 숙소
   ACCOMMODATION_NOT_FOUND: '숙소를 찾을 수 없습니다.',
   NOT_OWNER: '본인 소유의 숙소가 아닙니다.',
   REGION_NOT_FOUND: '존재하지 않는 지역입니다.',
