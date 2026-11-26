@@ -2,15 +2,11 @@ import { HttpError } from '@/common/api/http'
 
 export const GENERIC_ERROR_MESSAGE = '잠시 후 다시 시도해 주세요.'
 
-/** 공통 에러 코드 안내 문구 */
+/** 공통 에러 코드 안내 문구 (백엔드 CommonErrorCode Enum name) */
 export const commonErrorMessages: Record<string, string> = {
-  'COMMON-002': '로그인이 필요합니다.',
-  'COMMON-003': '접근 권한이 없습니다.',
-  'COMMON-004': '요청한 대상을 찾을 수 없습니다.',
-  'COMMON-006': '요청 크기가 허용 범위를 넘었습니다.',
-  'STORAGE-001': '비어 있는 파일은 올릴 수 없습니다.',
-  'STORAGE-002': 'JPEG, PNG, GIF, WebP 이미지만 올릴 수 있습니다.',
-  'STORAGE-003': '5MB 이하의 이미지만 올릴 수 있습니다.',
+  INVALID_INPUT: '입력값이 올바르지 않습니다.',
+  TOO_MANY_REQUESTS: '요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.',
+  INTERNAL_ERROR: '요청 처리 중 오류가 발생했습니다.',
 }
 
 /** 서버 오류 응답 본문 { success, code, message, data }. 형식이 다르면 빈 객체로 본다. */
@@ -55,7 +51,7 @@ export function getErrorMessage(
   )
 }
 
-/** COMMON-001의 필드 오류를 돌려준다. */
+/** INVALID_INPUT의 필드 오류를 돌려준다. */
 export function fieldErrorsOf(error: unknown): Record<string, string> {
   if (!(error instanceof HttpError)) return {}
   const { data } = bodyOf(error)
