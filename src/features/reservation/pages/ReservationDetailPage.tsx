@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ErrorState, LoadingBlock } from '@/common/components/StatusViews'
-import { getErrorMessage, statusOf } from '@/common/utils/error'
+import { getErrorMessage, isNotFound } from '@/common/http'
 import {
   formatFullDate,
   formatPrice,
@@ -58,7 +58,7 @@ export function ReservationDetailPage() {
   if (!valid) return <NotFoundView />
   if (query.isPending) return <LoadingBlock fullPage />
   if (query.isError) {
-    if (statusOf(query.error) === 404)
+    if (isNotFound(query.error))
       return <NotFoundView title="예약을 찾을 수 없습니다" />
     return (
       <main className="narrow">

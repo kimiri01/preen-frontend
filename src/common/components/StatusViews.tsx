@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
-import { isNotFound } from '@/common/http'
-import { getErrorMessage } from '@/common/utils/error'
+import { getErrorMessage, isNotFound } from '@/common/http'
 
 export function LoadingBlock({
   fullPage = false,

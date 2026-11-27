@@ -1,5 +1,5 @@
-import { http } from '@/common/api/http'
-import type { PageResponse, ApiResponse } from '@/common/types/api'
+import { http } from '@/common/http'
+import type { PageResponse } from '@/common/types/api'
 import type {
   CancelResult,
   CreateReservationRequest,
@@ -29,36 +29,30 @@ export const RESERVATION_PAGE_SIZE = 10
 
 
 
+/** common/http의 http는 ApiResponse에서 data만 꺼내 돌려준다. 실패는 ApiError로 던진다. */
 export const reservationApi = {
-  create: async (body: CreateReservationRequest) => {
-    const response = await http.post<ApiResponse<Reservation>>('/api/reservations', body, {auth:true})
-    return response.data
-  },
+  create: (body: CreateReservationRequest) =>
+    http.post<Reservation>('/api/reservations', body, { auth: true }),
 
   /** 필터 없음, 최신순. page는 1부터 받아 API의 0부터로 바꾼다. */
-  mine: async (page: number) => {
-    const response = await http.get<ApiResponse<PageResponse<Reservation>>>(
-      `/api/reservations/me?page=${page - 1}&size=${RESERVATION_PAGE_SIZE}`, {auth:true}
-    )
-    return response.data // 👈 response.data를 리턴해야 content와 totalPages가 바로 접근됩니다!
-  },
+  mine: (page: number) =>
+    http.get<PageResponse<Reservation>>(
+      `/api/reservations/me?page=${page - 1}&size=${RESERVATION_PAGE_SIZE}`,
+      { auth: true },
+    ),
 
-  detail: async (id: number) => {
-    const response = await http.get<ApiResponse<Reservation>>(`/api/reservations/${id}`, {auth:true})
-    return response.data
-    },
+  detail: (id: number) =>
+    http.get<Reservation>(`/api/reservations/${id}`, { auth: true }),
 
-    
-  cancel: async (id: number) => {
-    const response = await http.post<ApiResponse<CancelResult>>(
-      `/api/reservations/${id}/cancel`, undefined, { auth: true })
-    return response.data
-  },
+  cancel: (id: number) =>
+    http.post<CancelResult>(`/api/reservations/${id}/cancel`, undefined, {
+      auth: true,
+    }),
 
   /** 호스트 본인 숙소의 예약 목록 (백엔드 미구현) */
-  forHost: async (page: number) => {
-    const response = await http.get<ApiResponse<PageResponse<Reservation>>>(
-      `/api/host/reservations?page=${page - 1}&size=${RESERVATION_PAGE_SIZE}`, { auth: true })
-    return response.data
-  },
+  forHost: (page: number) =>
+    http.get<PageResponse<Reservation>>(
+      `/api/host/reservations?page=${page - 1}&size=${RESERVATION_PAGE_SIZE}`,
+      { auth: true },
+    ),
 }

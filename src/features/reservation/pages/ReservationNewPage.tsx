@@ -5,11 +5,7 @@ import { FormField } from '@/features/reservation/components/FormField'
 import { NotFoundView } from '@/common/components/Screens'
 import { ErrorState, LoadingBlock } from '@/common/components/StatusViews'
 import { addDays, isIsoDate, todayKst } from '@/common/utils/date'
-import {
-  errorCodeOf,
-  fieldErrorsOf,
-  getErrorMessage,
-} from '@/common/utils/error'
+import { fieldErrorsOf, getErrorMessage, isErrorCode } from '@/common/http'
 import { formatFullDate, formatTime } from '@/common/utils/format'
 import {
   //RefundPolicyTable,
@@ -26,8 +22,7 @@ import {
   StaySummaryCard,
 } from '@/features/reservation/components/Checkout'
 import {
-  INVENTORY_SOLD_OUT,
-  RESERVATION_ROOM_NOT_AVAILABLE,
+  RESERVATION_ERROR,
   reservationErrorMessages,
 } from '@/features/reservation/errorMessages'
 import { useCreateReservation } from '@/features/reservation/hooks/useReservations'
@@ -139,7 +134,7 @@ export function ReservationNewPage() {
         <small>
           {room && guestCount > room.maxCapacity
             ? `이 객실의 최대 인원은 ${room.maxCapacity}명입니다.`
-            : reservationErrorMessages[INVENTORY_SOLD_OUT]}
+            : reservationErrorMessages[RESERVATION_ERROR.SOLD_OUT]}
         </small>
         <div className="actions">
           <Link className="btn btn-primary" to={backPath}>
@@ -192,10 +187,13 @@ export function ReservationNewPage() {
           navigate(`/reservations/${reservation.id}/payment`, { replace: true })
         },
         onError: (error) => {
-          const code = errorCodeOf(error)
+          // 전용 UI(D): 매진이면 입력값을 유지한 채 매진 안내로 바꾼다.
           if (
-            code === INVENTORY_SOLD_OUT ||
-            code === RESERVATION_ROOM_NOT_AVAILABLE
+            isErrorCode(
+              error,
+              RESERVATION_ERROR.SOLD_OUT,
+              RESERVATION_ERROR.ROOM_NOT_AVAILABLE,
+            )
           ) {
             setSoldOut(true)
             return
