@@ -1,13 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { App } from '@/App'
+import { queryClient } from '@/common/query/queryClient'
 import '@/common/styles/global.css'
 import { ToastProvider } from './features/reservation/public'
-
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 60_000, retry: 1 } },
-})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
