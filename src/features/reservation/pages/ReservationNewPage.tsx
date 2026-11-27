@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams} from 'react-router-dom'
 //import { useSession } from '@/common/auth/session'
 import { FormField } from '@/features/reservation/components/FormField'
-import { NotFoundView } from '@/features/reservation/components/Screens'
+import { NotFoundView } from '@/common/components/Screens'
 import { ErrorState, LoadingBlock } from '@/common/components/StatusViews'
 import { addDays, isIsoDate, todayKst } from '@/common/utils/date'
 import {

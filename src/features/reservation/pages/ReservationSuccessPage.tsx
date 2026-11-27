@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { LoadingBlock } from '@/common/components/StatusViews'
 import { formatDateTime } from '@/common/utils/format'
-import { NotFoundView } from '@/features/reservation/components/Screens'
+import { NotFoundView } from '@/common/components/Screens'
 import { ReservationSummaryCard } from '@/features/reservation/components/Checkout'
 import { useReservation } from '@/features/reservation/hooks/useReservations'
 import '@/features/reservation/reservation.css'

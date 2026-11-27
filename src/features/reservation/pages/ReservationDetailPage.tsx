@@ -20,7 +20,7 @@ import {
 import type { CancelResult } from '@/features/reservation/types'
 import { ConfirmDialog } from '@/features/reservation/components/Dialog'
 import { useToast } from '@/features/reservation/components/Toast'
-import { NotFoundView } from '@/features/reservation/components/Screens'
+import { NotFoundView } from '@/common/components/Screens'
 import { MockRefundPolicyTable as RefundPolicyTable } from '@/features/reservation/mockDeps'
 import { ReservationSummaryCard } from '@/features/reservation/components/Checkout'
 import { useMockAccommodationDetail } from '@/features/reservation/tempUtils'
