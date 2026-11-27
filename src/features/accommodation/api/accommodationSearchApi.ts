@@ -1,5 +1,5 @@
-import { http } from '@/common/api/http'
-import type { ApiResponse, PageResponse } from '@/common/types/api'
+import { http } from '@/common/http'
+import type { PageResponse } from '@/common/types/api'
 import type {
   AccommodationSummaryResponse,
   SearchRequest,
@@ -22,13 +22,12 @@ export function toQueryString(request: SearchRequest): string {
   return params.toString()
 }
 
-export async function searchAccommodations(
+export function searchAccommodations(
   request: SearchRequest,
   signal?: AbortSignal,
 ): Promise<PageResponse<AccommodationSummaryResponse>> {
-  const response = await http.get<
-    ApiResponse<PageResponse<AccommodationSummaryResponse>>
-  >(`/api/accommodations?${toQueryString(request)}`, { signal })
-
-  return response.data
+  return http.get<PageResponse<AccommodationSummaryResponse>>(
+    `/api/accommodations?${toQueryString(request)}`,
+    { signal },
+  )
 }

@@ -1,15 +1,12 @@
-import { http } from '@/common/api/http'
-import type { ApiResponse } from '@/common/types/api'
+import { http } from '@/common/http'
 import type { AccommodationDetailResponse } from '@/features/accommodation/types'
 
 /** [kny] 숙소 상세 기본 정보 조회 */
-export async function fetchAccommodationDetail(
+export function fetchAccommodationDetail(
   id: number,
   signal?: AbortSignal,
 ): Promise<AccommodationDetailResponse> {
-  const response = await http.get<ApiResponse<AccommodationDetailResponse>>(
-    `/api/accommodations/${id}`,
-    { signal },
-  )
-  return response.data
+  return http.get<AccommodationDetailResponse>(`/api/accommodations/${id}`, {
+    signal,
+  })
 }
