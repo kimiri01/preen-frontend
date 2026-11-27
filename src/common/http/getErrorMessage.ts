@@ -1,4 +1,3 @@
-import { getErrorMessage as getLegacyErrorMessage } from '@/common/utils/error' // TODO ⑨: 모든 도메인 교체 후 삭제
 import { ApiError, CLIENT_ERROR_CODE, isApiError } from './ApiError'
 
 export const GENERIC_ERROR_MESSAGE = '잠시 후 다시 시도해 주세요.'
@@ -40,8 +39,8 @@ export function getErrorMessage(
     error: unknown,
     messages: Record<string, string> ={},
 ): string {
-    // ⑨ 교체 중: 아직 기존 http(HttpError)를 쓰는 도메인은 기존 함수로 처리
-    if(!isApiError(error)) return getLegacyErrorMessage(error, messages)
+    // http 밖에서 난 에러(코드 버그 등)는 일반 문구
+    if(!isApiError(error)) return GENERIC_ERROR_MESSAGE
 
     const {code, status, message } = error
     if(status ===0) return clientErrorMessages[code] ?? GENERIC_ERROR_MESSAGE
