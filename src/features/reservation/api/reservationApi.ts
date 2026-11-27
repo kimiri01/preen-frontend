@@ -4,6 +4,7 @@ import type {
   CancelResult,
   CreateReservationRequest,
   Reservation,
+  ReservationStatus,
 } from '@/features/reservation/types'
 
 export const RESERVATION_PAGE_SIZE = 10
@@ -34,12 +35,21 @@ export const reservationApi = {
   create: (body: CreateReservationRequest) =>
     http.post<Reservation>('/api/reservations', body, { auth: true }),
 
-  /** 필터 없음, 최신순. page는 1부터 받아 API의 0부터로 바꾼다. */
-  mine: (page: number) =>
-    http.get<PageResponse<Reservation>>(
-      `/api/reservations/me?page=${page - 1}&size=${RESERVATION_PAGE_SIZE}`,
+  /**
+   * 최신순. page는 1부터 받아 API의 0부터로 바꾼다.
+   * status를 넘기면 서버가 그 상태만 골라 페이지를 나눈다. (없으면 전체)
+   */
+  mine: (page: number, status?: ReservationStatus) => {
+    const params = new URLSearchParams({
+      page: String(page - 1),
+      size: String(RESERVATION_PAGE_SIZE),
+    })
+    if (status) params.set('status', status)
+    return http.get<PageResponse<Reservation>>(
+      `/api/reservations/me?${params}`,
       { auth: true },
-    ),
+    )
+  },
 
   detail: (id: number) =>
     http.get<Reservation>(`/api/reservations/${id}`, { auth: true }),

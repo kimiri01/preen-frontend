@@ -20,6 +20,8 @@ export const reservationRoutes: RouteObject[] = [
   //   Component: guarded(RequireAuth, ReservationDetailPage),
   // },
 {
+  // 예약 정책(방향 B): 로그인만 확인하고 호스트·게스트 모두 예약 화면에 들어갈 수 있다.
+  // 호스트가 본인 숙소를 예약하는 것만 예약 생성 시점에 서버가 막는다(SELF_RESERVATION_NOT_ALLOWED).
   Component: RequireLogin,
     children:[ {
         path: 'reservations/new',

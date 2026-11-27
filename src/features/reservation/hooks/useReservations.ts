@@ -8,22 +8,27 @@ import {
 import { parseKstDateTime } from '@/common/utils/date'
 import { inventoryKeys } from '@/features/reservation/tempUtils'
 import { reservationApi } from '@/features/reservation/api/reservationApi'
-import type { Reservation } from '@/features/reservation/types'
+import type {
+  Reservation,
+  ReservationStatus,
+} from '@/features/reservation/types'
 
 
 
 export const reservationKeys = {
   all: ['reservation'] as const,
-  mine: (page: number) => [...reservationKeys.all, 'mine', page] as const,
+  mine: (page: number, status?: ReservationStatus) =>
+    [...reservationKeys.all, 'mine', status ?? 'ALL', page] as const,
   host: (page: number) => [...reservationKeys.all, 'host', page] as const,
   detail: (id: number) => [...reservationKeys.all, 'detail', id] as const,
 }
 
 
-export function useMyReservations(page: number) {
+/** status를 넘기면 그 상태의 예약만 (서버에서 필터 후 페이지 나눔) */
+export function useMyReservations(page: number, status?: ReservationStatus) {
   return useQuery({
-    queryKey: reservationKeys.mine(page),
-    queryFn: () => reservationApi.mine(page),
+    queryKey: reservationKeys.mine(page, status),
+    queryFn: () => reservationApi.mine(page, status),
     placeholderData: keepPreviousData,
   })
 }

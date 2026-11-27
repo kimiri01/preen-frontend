@@ -6,9 +6,10 @@ import {
   isHoldExpired,
   useMyReservations,
 } from '@/features/reservation/hooks/useReservations'
+import type { ReservationStatus } from '@/features/reservation/types'
 import '@/features/reservation/reservation.css'
 
-type FilterStatus = 'ALL' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED'
+type FilterStatus = 'ALL' | Extract<ReservationStatus, 'CONFIRMED' | 'COMPLETED' | 'CANCELLED'>
 
 const FILTER_TABS: { key: FilterStatus; label: string }[] = [
   { key: 'ALL', label: '전체' },
@@ -17,11 +18,22 @@ const FILTER_TABS: { key: FilterStatus; label: string }[] = [
   { key: 'CANCELLED', label: '취소 완료' },
 ]
 
+/** 주소의 status가 탭에 없는 값이면 전체로 본다. */
+function parseTab(value: string | null): FilterStatus {
+  return FILTER_TABS.some((tab) => tab.key === value)
+    ? (value as FilterStatus)
+    : 'ALL'
+}
+
 export function MyReservationsPage() {
   const [params, setParams] = useSearchParams()
   const page = Math.max(1, Number(params.get('page')) || 1)
-  const currentTab = (params.get('status') as FilterStatus) || 'ALL'
-  const query = useMyReservations(page)
+  const currentTab = parseTab(params.get('status'))
+  // 상태 필터는 서버가 먼저 걸고 페이지를 나눈다. (2페이지에만 있던 취소 건도 취소 탭 1페이지에 보임)
+  const query = useMyReservations(
+    page,
+    currentTab === 'ALL' ? undefined : currentTab,
+  )
   const items = query.data?.content ?? []
 
   const handleTabClick = (key: FilterStatus) => {
@@ -32,7 +44,8 @@ export function MyReservationsPage() {
     setParams(nextParams)
   }
 
-  // 선택된 탭 상태에 맞춰 목록 필터링
+  // TODO(백엔드 status 필터 지원 후 삭제): 서버가 status를 무시하는 동안 다른 상태가 섞이지 않게 거른다.
+  // 서버가 지원하면 이미 걸러진 목록이라 아무것도 빠지지 않는다.
   const displayedItems = items.filter((item) => {
     if (currentTab === 'ALL') return true
     return item.status === currentTab
@@ -68,7 +81,8 @@ export function MyReservationsPage() {
         isError={query.isError}
         error={query.error}
         onRetry={() => void query.refetch()}
-        isEmpty={items.length === 0}
+        // 전체 탭이 비었을 때만 "예약 내역 없음". 상태 탭이 비면 아래 "해당 상태 없음"으로 안내
+        isEmpty={currentTab === 'ALL' && items.length === 0}
         empty={
           <EmptyState
             title="예약 내역이 없습니다"
