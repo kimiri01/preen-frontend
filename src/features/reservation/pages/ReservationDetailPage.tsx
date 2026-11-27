@@ -19,7 +19,6 @@ import {
 } from '@/features/reservation/hooks/useReservations'
 import type { CancelResult } from '@/features/reservation/types'
 import { ConfirmDialog } from '@/features/reservation/components/Dialog'
-import { useToast } from '@/features/reservation/components/Toast'
 import { NotFoundView } from '@/common/components/Screens'
 import { MockRefundPolicyTable as RefundPolicyTable } from '@/features/reservation/mockDeps'
 import { ReservationSummaryCard } from '@/features/reservation/components/Checkout'
@@ -37,12 +36,12 @@ export function ReservationDetailPage() {
   const id = Number(params.id)
   const valid = Number.isInteger(id) && id > 0
   const query = useReservation(valid ? id : undefined)
-  const toast = useToast()
   const remaining = useHoldRemaining(query.data)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const cancelReservation = useCancelReservation()
   const cancelling = cancelReservation.isPending
   const [cancelResult, setCancelResult] = useState<CancelResult | null>(null)
+  const [cancelError, setCancelError] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
   const [demoReviewed, setDemoReviewed] = useState(false)
   const expired = remaining === 0
@@ -105,15 +104,14 @@ export function ReservationDetailPage() {
   }
 
   const handleCancel = () => {
+    setCancelError('')
     cancelReservation.mutate(
       { id: reservation.id, accommodationId: reservation.accommodationId },
       {
-        onSuccess: (result) => {
-          setCancelResult(result)
-          toast.show('예약을 취소했습니다.', 'success')
-        },
+        // 성공 안내는 아래 "환불 안내" 박스와 바뀐 예약 상태가 대신한다.
+        onSuccess: (result) => setCancelResult(result),
         onError: (error) => {
-          toast.show(getErrorMessage(error, reservationErrorMessages), 'error')
+          setCancelError(getErrorMessage(error, reservationErrorMessages))
           void refetch()
         },
         onSettled: () => setConfirmOpen(false),
@@ -479,6 +477,13 @@ export function ReservationDetailPage() {
             )}
             <p>이후 취소 시 숙소 규정에 따른 취소 수수료가 발생합니다.</p>
           </div>
+
+          {/* 예약 취소 실패 안내 */}
+          {cancelError && (
+            <p className="form-error" role="alert">
+              {cancelError}
+            </p>
+          )}
 
           {/* 관리 버튼 */}
           <div className="actions" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
