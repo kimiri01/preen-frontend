@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { ErrorState, LoadingBlock } from '@/common/components/StatusViews'
-import { getErrorMessage, isNotFound } from '@/common/http'
+import { QueryPage } from '@/common/components/QueryPage'
+import { EmptyState } from '@/common/components/StatusViews'
+import { getErrorMessage } from '@/common/http'
 import {
   formatFullDate,
   formatPrice,
@@ -17,7 +18,7 @@ import {
   useHoldRemaining,
   useReservation,
 } from '@/features/reservation/hooks/useReservations'
-import type { CancelResult } from '@/features/reservation/types'
+import type { CancelResult, Reservation } from '@/features/reservation/types'
 import { ConfirmDialog } from '@/features/reservation/components/Dialog'
 import { NotFoundView } from '@/common/components/Screens'
 import { MockRefundPolicyTable as RefundPolicyTable } from '@/features/reservation/mockDeps'
@@ -36,7 +37,43 @@ export function ReservationDetailPage() {
   const id = Number(params.id)
   const valid = Number.isInteger(id) && id > 0
   const query = useReservation(valid ? id : undefined)
-  const remaining = useHoldRemaining(query.data)
+  const { refetch } = query
+
+  // 주소 id 오류는 QueryPage 전에 거른다. (비활성 query는 계속 로딩 상태)
+  if (!valid) return <NotFoundView />
+
+  return (
+    <QueryPage
+      query={query}
+      errorMessages={reservationErrorMessages}
+      notFound={
+        <EmptyState
+          title="예약을 찾을 수 없습니다"
+          action={
+            <Link className="btn" to="/me/reservations">
+              내 예약 목록
+            </Link>
+          }
+        />
+      }
+    >
+      {(reservation) => (
+        // refetch는 TanStack이 주는 안정된 함수를 그대로 넘긴다. (새 함수로 감싸면 useEffect가 매 렌더 다시 돈다)
+        <ReservationDetail reservation={reservation} refetch={refetch} />
+      )}
+    </QueryPage>
+  )
+}
+
+/** 예약 데이터가 있을 때의 화면. 데이터에 의존하는 hook이 있어 페이지와 분리했다. */
+function ReservationDetail({
+  reservation,
+  refetch,
+}: {
+  reservation: Reservation
+  refetch: () => Promise<unknown>
+}) {
+  const remaining = useHoldRemaining(reservation)
   const [confirmOpen, setConfirmOpen] = useState(false)
   const cancelReservation = useCancelReservation()
   const cancelling = cancelReservation.isPending
@@ -45,33 +82,15 @@ export function ReservationDetailPage() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [demoReviewed, setDemoReviewed] = useState(false)
   const expired = remaining === 0
-  const { refetch } = query
 
   // 숙소 상세 mock (체크인/아웃 시각, 주소, 이미지 등)
-  const accomDetail = useMockAccommodationDetail(query.data?.accommodationId ?? 0)
+  const accomDetail = useMockAccommodationDetail(reservation.accommodationId)
 
   // 제한 시간이 끝나면 예약을 다시 조회한다.
   useEffect(() => {
     if (expired) void refetch()
   }, [expired, refetch])
 
-  if (!valid) return <NotFoundView />
-  if (query.isPending) return <LoadingBlock fullPage />
-  if (query.isError) {
-    if (isNotFound(query.error))
-      return <NotFoundView title="예약을 찾을 수 없습니다" />
-    return (
-      <main className="narrow">
-        <ErrorState
-          error={query.error}
-          messages={reservationErrorMessages}
-          onRetry={() => void refetch()}
-        />
-      </main>
-    )
-  }
-
-  const reservation = query.data
   const wasPaid = reservation.status === 'CONFIRMED'
   const isExpired = isHoldExpired(reservation)
   const cancellable =
