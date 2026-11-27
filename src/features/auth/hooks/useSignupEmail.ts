@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { getApiError } from '@/common/api/getApiError'
+import { getErrorMessage, isErrorCode } from '@/common/http'
 import { emailVerificationApi } from '@/features/auth/api/emailVerification'
+import { AUTH_ERROR, authErrorMessages } from '@/features/auth/errorMessages'
 import type { EmailChallenge, EmailProof } from '@/features/auth/types'
 
 export function useSignupEmail() {
@@ -71,10 +72,9 @@ export function useSignupEmail() {
       setResendAt(receivedAt + response.resendAfterSeconds * 1000)
       setNotice('인증번호를 발송했습니다. 메일함을 확인해 주세요.')
     } catch (cause) {
-      const failure = getApiError(cause)
-      setError(failure.message)
+      setError(getErrorMessage(cause, authErrorMessages))
 
-      if (failure.code === 'RESEND_TOO_SOON') {
+      if (isErrorCode(cause, AUTH_ERROR.RESEND_TOO_SOON)) {
         setResendAt(Date.now() + 60_000)
         setNow(Date.now())
       }
@@ -123,15 +123,15 @@ export function useSignupEmail() {
       setCode('')
       setNotice('이메일 인증이 완료되었습니다.')
     } catch (cause) {
-      const failure = getApiError(cause)
-      setError(failure.message)
+      setError(getErrorMessage(cause, authErrorMessages))
 
       if (
-        [
-          'CODE_ATTEMPTS_EXCEEDED',
-          'CODE_EXPIRED',
-          'CODE_ALREADY_VERIFIED',
-        ].includes(failure.code ?? '')
+        isErrorCode(
+          cause,
+          AUTH_ERROR.CODE_ATTEMPTS_EXCEEDED,
+          AUTH_ERROR.CODE_EXPIRED,
+          AUTH_ERROR.CODE_ALREADY_VERIFIED,
+        )
       ) {
         setBlocked(true)
       }

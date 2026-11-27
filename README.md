@@ -22,8 +22,9 @@ public/images/                  기존 시안 이미지
 └── image-upload-placeholder.png  숙소 사진이 없거나 깨졌을 때 보여 주는 "이미지 업로드" 안내 이미지
 src/
 ├── common/
-│   ├── api/http.ts              공통 HTTP 클라이언트와 HttpError
-│   ├── components/              Layout, Header, Footer
+│   ├── http/                    공통 HTTP 클라이언트와 ApiError (docs/error-handling.md)
+│   ├── query/queryClient.ts     TanStack Query 재시도 규칙
+│   ├── components/              Layout, Header, Footer, StatusViews, QueryPage, Screens
 │   ├── styles/                  공통 스타일과 반응형 레이아웃
 │   └── types/                   공통 요청 타입
 ├── features/
@@ -53,7 +54,7 @@ src/
 - 다른 Feature의 코드는 해당 Feature의 `public.ts`를 통해서만 사용합니다.
 - 페이지는 `pages/`, 기능 UI는 `components/`, 상태 로직은 `hooks/`, 타입은 `types.ts`에 둡니다.
 - 새로운 페이지는 Feature의 `routes.ts`에서 정의하고 공개 진입점을 통해 App에서 조합합니다.
-- 서버 연동 시 URL과 메서드는 Feature의 `api/`에 정의하고 `@/common/api/http`를 사용합니다.
+- 서버 연동 시 URL과 메서드는 Feature의 `api/`에 정의하고 `@/common/http`를 사용합니다. 에러 처리 기준은 [docs/error-handling.md](docs/error-handling.md)를 따릅니다.
 - 서버 상태는 Feature의 Custom Hook에서 TanStack Query로 관리하고, 조회 조건을 Query Key에 포함합니다.
 
 ## 현재 구현 범위
@@ -64,7 +65,7 @@ src/
 
 TanStack Query Provider는 설정되어 있으며, 정적 예시 데이터에 불필요한 서버 요청은 하지 않습니다.
 백엔드 계약이 정해지면 Feature의 `api/`와 조회·변경 Hook을 추가하세요.
-공통 HTTP 클라이언트는 JSON 요청, 응답 처리, HTTP 오류, 쿠키 전송을 지원합니다.
+공통 HTTP 클라이언트는 JSON 요청, 응답 처리, 쿠키 전송을 지원하고 모든 실패를 `ApiError`로 던집니다.
 보호 API를 호출할 때 공통 `http`에 `{ auth: true }`를 넘기면 Access Token을 붙입니다. 예를 들어 `http.get('/api/favorites', { auth: true })`처럼 호출합니다. Access Token은 메모리에 저장하며, 만료되면 Refresh 쿠키로 한 번 재발급해 요청을 다시 보냅니다.
 
 ## 로컬 로그인 확인

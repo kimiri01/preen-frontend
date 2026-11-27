@@ -1,7 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { getApiError } from '@/common/api/getApiError'
+import { getErrorMessage } from '@/common/http'
+import { authErrorMessages } from '@/features/auth/errorMessages'
 import { confirmPasswordReset } from '@/features/auth/api/passwordReset'
 import '@/features/auth/login.css'
 
@@ -81,7 +82,7 @@ export function PasswordResetPage() {
         )}
         {change.isError && (
           <p className="login-error" role="alert">
-            {getApiError(change.error).message}
+            {getErrorMessage(change.error, authErrorMessages)}
           </p>
         )}
         <p className="login-description">

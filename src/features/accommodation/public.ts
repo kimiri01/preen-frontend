@@ -10,4 +10,10 @@ export { accommodationListPath } from '@/features/accommodation/hooks/useSearchC
 export type {
   Accommodation,
   AccommodationFilter,
+  RefundRule,
 } from '@/features/accommodation/types'
+
+
+
+export { accommodationDetailPath } from '@/features/accommodation/hooks/useSearchConditions'
+export { useAccommodationDetail } from '@/features/accommodation/hooks/useAccommodationDetail'

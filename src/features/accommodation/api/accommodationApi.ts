@@ -1,5 +1,5 @@
-import { http } from '@/common/api/http'
-import type { ApiResponse, PageResponse } from '@/common/types/api'
+import { http } from '@/common/http'
+import type { PageResponse } from '@/common/types/api'
 import type {
   Accommodation,
   AccommodationSummaryResponse,
@@ -33,15 +33,13 @@ export const SERVER_SUPPORTS_KEYWORD_AND_DATES = true
 
 
 /** 숙박 유형 카테고리 목록 조회 */
-export async function fetchCategories(): Promise<Category[]> {
-  const response = await http.get<ApiResponse<Category[]>>('/api/categories')
-  return response.data
+export function fetchCategories(): Promise<Category[]> {
+  return http.get<Category[]>('/api/categories')
 }
 
 /** 지역 목록 조회 */
-export async function fetchRegions(): Promise<Region[]> {
-  const response = await http.get<ApiResponse<Region[]>>('/api/regions')
-  return response.data
+export function fetchRegions(): Promise<Region[]> {
+  return http.get<Region[]>('/api/regions')
 }
 
 export interface FetchAccommodationsParams {
@@ -67,13 +65,13 @@ export async function fetchAccommodations({
   if (categoryId !== null) params.set('categoryId', String(categoryId))
   if (regionId !== null) params.set('regionId', String(regionId))
 
-  const response = await http.get<
-    ApiResponse<PageResponse<AccommodationSummaryResponse>>
-  >(`/api/accommodations?${params}`)
+  const result = await http.get<PageResponse<AccommodationSummaryResponse>>(
+    `/api/accommodations?${params}`,
+  )
 
   return {
-    ...response.data,
-    content: response.data.content.map(toAccommodation),
+    ...result,
+    content: result.content.map(toAccommodation),
   }
 }
 
@@ -85,10 +83,10 @@ export async function fetchAccommodationsByCategory(size: number): Promise<
     accommodations: Accommodation[]
   }>
 > {
-  const response = await http.get<
-    ApiResponse<CategoryAccommodationsResponse[]>
-  >(`/api/accommodations/by-category?size=${size}`)
-  return response.data.map((group) => ({
+  const groups = await http.get<CategoryAccommodationsResponse[]>(
+    `/api/accommodations/by-category?size=${size}`,
+  )
+  return groups.map((group) => ({
     categoryCode: group.categoryCode,
     categoryName: group.categoryName,
     accommodations: group.accommodations.map(toAccommodation),
@@ -99,8 +97,8 @@ export async function fetchAccommodationsByCategory(size: number): Promise<
 export async function fetchRecentAccommodations(
   ids: number[],
 ): Promise<Accommodation[]> {
-  const response = await http.get<ApiResponse<AccommodationSummaryResponse[]>>(
+  const items = await http.get<AccommodationSummaryResponse[]>(
     `/api/accommodations/recent?ids=${ids.join(',')}`,
   )
-  return response.data.map(toAccommodation)
+  return items.map(toAccommodation)
 }

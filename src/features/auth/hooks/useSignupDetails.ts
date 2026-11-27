@@ -1,8 +1,9 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { HttpError } from '@/common/api/http'
+import { getErrorMessage } from '@/common/http'
 import { SIGNUP_TERMS_VERSION } from '@/features/auth/data/signupTerms'
 import { signup } from '@/features/auth/api/signup'
+import { authErrorMessages } from '@/features/auth/errorMessages'
 
 export function useSignupDetails(
   email: string,
@@ -69,19 +70,7 @@ export function useSignupDetails(
       setConfirmation('')
       onComplete()
     } catch (cause) {
-      if (
-        cause instanceof HttpError &&
-        typeof cause.data === 'object' &&
-        cause.data !== null &&
-        'message' in cause.data &&
-        typeof cause.data.message === 'string'
-      ) {
-        setError(cause.data.message)
-      } else {
-        setError(
-          '회원가입 요청을 완료하지 못했습니다. 서버 연결을 확인한 후 다시 시도해 주세요.',
-        )
-      }
+      setError(getErrorMessage(cause, authErrorMessages))
     } finally {
       busy.current = false
     }
