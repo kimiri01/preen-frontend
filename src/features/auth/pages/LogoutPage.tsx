@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { getApiError } from '@/common/api/getApiError'
+import { getErrorMessage } from '@/common/http'
+import { authErrorMessages } from '@/features/auth/errorMessages'
 import { signOut, useLoginSession } from '@/features/auth/hooks/useLoginSession'
 import '@/features/auth/login.css'
 
@@ -20,7 +21,7 @@ export function LogoutPage() {
       await signOut()
       navigate('/', { replace: true })
     } catch (cause) {
-      setError(getApiError(cause).message)
+      setError(getErrorMessage(cause, authErrorMessages))
     } finally {
       busy.current = false
       setPending(false)

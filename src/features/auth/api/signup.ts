@@ -1,9 +1,6 @@
-import type { ApiResponse } from '@/common/types/api'
-import { http } from '@/common/api/http'
+import { http } from '@/common/http'
 import type { SignupRequest, SignupResponse } from '@/features/auth/types'
 
 export function signup(request: SignupRequest) {
-  return http
-    .post<ApiResponse<SignupResponse>>('/api/auth/signup', request)
-    .then((response) => response.data)
+  return http.post<SignupResponse>('/api/auth/signup', request)
 }

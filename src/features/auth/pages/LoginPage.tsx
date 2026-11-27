@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useLocation } from 'react-router-dom'
-import { getApiError } from '@/common/api/getApiError'
+import { getErrorMessage } from '@/common/http'
+import { authErrorMessages } from '@/features/auth/errorMessages'
 import { signIn, useLoginSession } from '@/features/auth/hooks/useLoginSession'
 import '@/features/auth/login.css'
 
@@ -31,7 +32,7 @@ export function LoginPage() {
       await signIn({ email: email.trim(), password, rememberMe })
       navigate(redirectTo, { replace: true })
     } catch (cause) {
-      setError(getApiError(cause).message)
+      setError(getErrorMessage(cause, authErrorMessages))
     } finally {
       busy.current = false
       setPending(false)

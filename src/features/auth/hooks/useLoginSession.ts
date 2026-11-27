@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from 'react'
-import { getApiError } from '@/common/api/getApiError'
 import { authSession } from '@/common/auth/accessToken'
+import { getErrorMessage, isErrorCode } from '@/common/http'
 import { loginApi } from '@/features/auth/api/login'
+import { AUTH_ERROR, authErrorMessages } from '@/features/auth/errorMessages'
 import type { CurrentMember, LoginRequest } from '@/features/auth/types'
 
 type Session = {
@@ -63,11 +64,14 @@ function refreshAccessToken() {
     })
     .catch((error) => {
       if (startingGeneration === authSession.getVersion()) {
-        const failure = getApiError(error)
-        if (failure.code === 'SESSION_INVALID') {
+        if (isErrorCode(error, AUTH_ERROR.SESSION_INVALID)) {
           markSessionInvalid()
         } else {
-          clearSession(session.member ? failure.message : undefined)
+          clearSession(
+            session.member
+              ? getErrorMessage(error, authErrorMessages)
+              : undefined,
+          )
         }
       }
       throw error
