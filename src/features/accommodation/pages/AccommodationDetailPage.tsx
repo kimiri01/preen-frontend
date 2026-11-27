@@ -1,11 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { HttpError } from '@/common/api/http'
-import {
-  EmptyState,
-  ErrorState,
-  LoadingBlock,
-} from '@/common/components/StatusViews'
+import { QueryPage } from '@/common/components/QueryPage'
+import { EmptyState } from '@/common/components/StatusViews'
 import {
   parseAccommodationId,
   useAccommodationDetail,
@@ -71,133 +67,133 @@ export function AccommodationDetailPage() {
     </button>
   )
 
-  if (
-    id === null ||
-    (query.error instanceof HttpError && query.error.status === 404)
-  ) {
-    return (
-      <main className="page stay-detail">
-        {backButton}
-        <EmptyState
-          title="숙소를 찾을 수 없습니다"
-          description="삭제되었거나 공개되지 않은 숙소입니다."
-          action={
-            <Link className="btn" to="/">
-              메인으로
-            </Link>
-          }
-        />
-      </main>
-    )
-  }
-  if (query.isPending) {
-    return (
-      <main className="page stay-detail">
-        <LoadingBlock fullPage label="숙소 정보를 불러오는 중입니다" />
-      </main>
-    )
-  }
-  if (query.isError) {
-    return (
-      <main className="page stay-detail">
-        {backButton}
-        <ErrorState error={query.error} onRetry={() => query.refetch()} />
-      </main>
-    )
-  }
-
-  const stay = query.data
-  const images = stay.imageUrls.slice(0, MAX_THUMBNAILS)
-  const mainImage = images[selectedImage] ?? images[0]
-  const badges = [stay.categoryName, stay.regionName].filter(Boolean)
-  const intro = splitDescription(stay.description)
-
-  return (
+  // 로딩·404·에러 화면도 숙소 상세 틀과 "이전으로" 버튼을 유지한다.
+  const frame = (content: ReactNode) => (
     <main className="page stay-detail">
       {backButton}
-
-      <section className="stay-detail-gallery" aria-label={`${stay.name} 사진`}>
-        <div className="stay-detail-main-photo">
-          <img
-            src={getImageSrc(mainImage)}
-            alt={`${stay.name} 사진 ${selectedImage + 1}`}
-            onError={handleImageError}
-          />
-        </div>
-        {images.length > 1 && (
-          <ul className="stay-detail-thumbnails">
-            {images.map((url, index) => (
-              <li key={`${url}-${index}`}>
-                <button
-                  type="button"
-                  aria-label={`${index + 1}번째 사진 보기`}
-                  aria-pressed={index === selectedImage}
-                  onClick={() => setSelectedImage(index)}
-                >
-                  <img
-                    src={getImageSrc(url)}
-                    alt=""
-                    loading="lazy"
-                    onError={handleImageError}
-                  />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <section className="stay-detail-summary">
-        {badges.length > 0 && (
-          <p className="stay-detail-badges">
-            {badges.map((badge) => (
-              <span key={badge}>{badge}</span>
-            ))}
-          </p>
-        )}
-        <h1>{stay.name}</h1>
-        <p className="muted">{stay.address}</p>
-      </section>
-
-      <section
-        className="stay-detail-section"
-        aria-labelledby="stay-detail-intro-title"
-      >
-        <h2 id="stay-detail-intro-title">숙소 소개</h2>
-        {intro.body.length === 0 && !intro.headline ? (
-          <p className="muted">숙소 소개가 아직 등록되지 않았습니다.</p>
-        ) : (
-          <>
-            {intro.headline && (
-              <p className="stay-detail-headline">
-                <span aria-hidden="true">ⓘ</span>
-                {intro.headline}
-              </p>
-            )}
-            <div className="stay-detail-description">
-              {intro.body.map((line, index) => (
-                <p key={index}>{line}</p>
-              ))}
-            </div>
-          </>
-        )}
-      </section>
-
-      <section
-        className="stay-detail-section"
-        aria-labelledby="stay-detail-amenity-title"
-      >
-        <h2 id="stay-detail-amenity-title">시설/서비스</h2>
-        {stay.amenities.length === 0 ? (
-          <p className="muted">등록된 시설/서비스 정보가 없습니다.</p>
-        ) : (
-          <ul className="stay-detail-amenities">
-            {stay.amenities.map((amenity) => (
-              <li key={amenity}>{amenity}</li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {content}
     </main>
+  )
+  const notFound = (
+    <EmptyState
+      title="숙소를 찾을 수 없습니다"
+      description="삭제되었거나 공개되지 않은 숙소입니다."
+      action={
+        <Link className="btn" to="/">
+          메인으로
+        </Link>
+      }
+    />
+  )
+
+  // 주소 id 오류는 QueryPage 전에 거른다. (비활성 query는 계속 로딩 상태)
+  if (id === null) return frame(notFound)
+
+  return (
+    <QueryPage
+      query={query}
+      frame={frame}
+      notFound={notFound}
+      loadingLabel="숙소 정보를 불러오는 중입니다"
+    >
+      {(stay) => {
+        const images = stay.imageUrls.slice(0, MAX_THUMBNAILS)
+        const mainImage = images[selectedImage] ?? images[0]
+        const badges = [stay.categoryName, stay.regionName].filter(Boolean)
+        const intro = splitDescription(stay.description)
+
+        return (
+          <main className="page stay-detail">
+            {backButton}
+
+            <section
+              className="stay-detail-gallery"
+              aria-label={`${stay.name} 사진`}
+            >
+              <div className="stay-detail-main-photo">
+                <img
+                  src={getImageSrc(mainImage)}
+                  alt={`${stay.name} 사진 ${selectedImage + 1}`}
+                  onError={handleImageError}
+                />
+              </div>
+              {images.length > 1 && (
+                <ul className="stay-detail-thumbnails">
+                  {images.map((url, index) => (
+                    <li key={`${url}-${index}`}>
+                      <button
+                        type="button"
+                        aria-label={`${index + 1}번째 사진 보기`}
+                        aria-pressed={index === selectedImage}
+                        onClick={() => setSelectedImage(index)}
+                      >
+                        <img
+                          src={getImageSrc(url)}
+                          alt=""
+                          loading="lazy"
+                          onError={handleImageError}
+                        />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <section className="stay-detail-summary">
+              {badges.length > 0 && (
+                <p className="stay-detail-badges">
+                  {badges.map((badge) => (
+                    <span key={badge}>{badge}</span>
+                  ))}
+                </p>
+              )}
+              <h1>{stay.name}</h1>
+              <p className="muted">{stay.address}</p>
+            </section>
+
+            <section
+              className="stay-detail-section"
+              aria-labelledby="stay-detail-intro-title"
+            >
+              <h2 id="stay-detail-intro-title">숙소 소개</h2>
+              {intro.body.length === 0 && !intro.headline ? (
+                <p className="muted">숙소 소개가 아직 등록되지 않았습니다.</p>
+              ) : (
+                <>
+                  {intro.headline && (
+                    <p className="stay-detail-headline">
+                      <span aria-hidden="true">ⓘ</span>
+                      {intro.headline}
+                    </p>
+                  )}
+                  <div className="stay-detail-description">
+                    {intro.body.map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
+                </>
+              )}
+            </section>
+
+            <section
+              className="stay-detail-section"
+              aria-labelledby="stay-detail-amenity-title"
+            >
+              <h2 id="stay-detail-amenity-title">시설/서비스</h2>
+              {stay.amenities.length === 0 ? (
+                <p className="muted">등록된 시설/서비스 정보가 없습니다.</p>
+              ) : (
+                <ul className="stay-detail-amenities">
+                  {stay.amenities.map((amenity) => (
+                    <li key={amenity}>{amenity}</li>
+                  ))}
+                </ul>
+              )}
+            </section>
+          </main>
+        )
+      }}
+    </QueryPage>
   )
 }

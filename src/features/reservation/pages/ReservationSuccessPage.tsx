@@ -1,9 +1,12 @@
 import { Link, useParams } from 'react-router-dom'
-import { LoadingBlock } from '@/common/components/StatusViews'
+import { EmptyState } from '@/common/components/StatusViews'
+import { QueryPage } from '@/common/components/QueryPage'
 import { formatDateTime } from '@/common/utils/format'
 import { NotFoundView } from '@/common/components/Screens'
 import { ReservationSummaryCard } from '@/features/reservation/components/Checkout'
+import { reservationErrorMessages } from '@/features/reservation/errorMessages'
 import { useReservation } from '@/features/reservation/hooks/useReservations'
+import type { Reservation } from '@/features/reservation/types'
 import '@/features/reservation/reservation.css'
 
 export function ReservationSuccessPage() {
@@ -12,14 +15,30 @@ export function ReservationSuccessPage() {
   const valid = Number.isInteger(reservationId) && reservationId > 0
   const query = useReservation(valid ? reservationId : undefined)
 
+  // 주소 id 오류는 QueryPage 전에 거른다. (비활성 query는 계속 로딩 상태)
   if (!valid) return <NotFoundView />
-  if (query.isPending) return <LoadingBlock fullPage />
-  if (query.isError || !query.data) {
-    return <NotFoundView title="예약 정보를 찾을 수 없습니다" />
-  }
 
-  const reservation = query.data
+  return (
+    <QueryPage
+      query={query}
+      errorMessages={reservationErrorMessages}
+      notFound={
+        <EmptyState
+          title="예약 정보를 찾을 수 없습니다"
+          action={
+            <Link className="btn" to="/me/reservations">
+              내 예약 목록
+            </Link>
+          }
+        />
+      }
+    >
+      {(reservation) => <ReservationSuccess reservation={reservation} />}
+    </QueryPage>
+  )
+}
 
+function ReservationSuccess({ reservation }: { reservation: Reservation }) {
   return (
     <main className="checkout">
       <div className="checkout-heading">

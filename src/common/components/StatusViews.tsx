@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { isNotFound } from '@/common/http'
 import { getErrorMessage } from '@/common/utils/error'
 
 export function LoadingBlock({
@@ -70,7 +71,10 @@ export function AsyncView({
   onRetry,
   isEmpty = false,
   empty,
+  notFound,
   errorMessages,
+  fullPage = false,
+  loadingLabel,
   children,
 }: {
   isPending: boolean
@@ -79,14 +83,21 @@ export function AsyncView({
   onRetry?: () => void
   isEmpty?: boolean
   empty?: ReactNode
+  /** 넘기면 404일 때 ErrorState 대신 이걸 보여준다. 안 넘기면 404도 ErrorState */
+  notFound?: ReactNode
   errorMessages?: Record<string, string>
+  /** 로딩을 화면 높이로 크게 보여줄지 (상세 페이지용) */
+  fullPage?: boolean
+  loadingLabel?: string
   children: ReactNode
 }) {
-  if (isPending) return <LoadingBlock />
-  if (isError)
+  if (isPending) return <LoadingBlock fullPage={fullPage} label={loadingLabel} />
+  if (isError) {
+    if (notFound !== undefined && isNotFound(error)) return <>{notFound}</>
     return (
       <ErrorState error={error} messages={errorMessages} onRetry={onRetry} />
     )
+  }
   if (isEmpty) return <>{empty ?? <EmptyState title="결과가 없습니다" />}</>
   return <>{children}</>
 }

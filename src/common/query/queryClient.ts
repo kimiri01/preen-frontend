@@ -1,14 +1,8 @@
 import { QueryClient } from '@tanstack/react-query'
-import { HttpError } from '@/common/api/http' // TODO ⑨: 기존 http 교체 후 삭제
-import { CLIENT_ERROR_CODE, isApiError } from '@/common/http'
+import { CLIENT_ERROR_CODE, isApiError, statusOf } from '@/common/http'
 
 /** 서버·네트워크 일시 오류일 때 최대 재시도 횟수 */
 const MAX_RETRY = 1
-
-function statusOf(error: unknown): number | undefined {
-  if (isApiError(error) || error instanceof HttpError) return error.status
-  return undefined
-}
 
 function isCanceled(error: unknown): boolean {
   if (isApiError(error)) return error.code === CLIENT_ERROR_CODE.CANCELED
